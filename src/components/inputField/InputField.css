@@ -1,0 +1,20 @@
+.text-field-enter {
+    opacity: 0;
+    transform: translateZ(-20%);
+}
+
+.text-field-enter-active {
+    opacity: 1;
+    transform: translateZ(0);
+    transition: opacity 250ms, transform 250ms;
+}
+
+.text-field-exit {
+    opacity: 1;
+}
+
+.text-field-exit-active {
+    opacity: 0;
+    transform: translateZ(-20%);
+    transition: opacity 250ms, transform 250ms;
+}

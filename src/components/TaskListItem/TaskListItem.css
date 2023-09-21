@@ -1,0 +1,20 @@
+.todo-additional-container-enter {
+    opacity: 0;
+    transform: translateY(-20%);
+}
+
+.todo-additional-container-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms, transform 500ms;
+}
+
+.todo-additional-container-exit {
+    opacity: 1;
+}
+
+.todo-additional-container-exit-active {
+    opacity: 0;
+    transform: translateY(-20%);
+    transition: opacity 500ms, transform 500ms;
+}

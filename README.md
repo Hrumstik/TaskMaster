@@ -1,0 +1,1 @@
+My first project, based on React and Redux
