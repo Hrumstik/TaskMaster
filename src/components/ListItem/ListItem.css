@@ -1,14 +1,16 @@
 .listItem {
-    display: block;
-    padding-left: 11%;
-    list-style: none;
-    cursor: pointer;
+  display: block;
+  padding-left: 11%;
+  list-style: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .listItem-active {
-    display: block;
-    padding-left: 11%;
-    background: rgba(37, 100, 207, 0.16);
-    list-style: none;
-    cursor: pointer;
+  display: block;
+  padding-left: 11%;
+  background: rgba(37, 100, 207, 0.16);
+  list-style: none;
+  cursor: pointer;
+  text-decoration: none;
 }

@@ -8,6 +8,15 @@ import { Box, IconButton, Typography } from "@mui/material";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
+const StyledCompletedBox = styled(Box)`
+  display: flex;
+  gap: 22px;
+`;
+
+const StyledTitleOfDoneTasks = styled(Typography)`
+  cursor: pointer;
+`;
+
 export default function DoneTasksList({ tasksArray }) {
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] = useState(false);
   const [doneTasksCount, setDoneTasksCount] = useState(null);
@@ -17,16 +26,6 @@ export default function DoneTasksList({ tasksArray }) {
     const doneTasksArray = tasksArray.filter((task) => task.done === true);
     setDoneTasksCount(doneTasksArray.length);
   }, [tasksArray]);
-
-  const StyledCompletedBox = styled(Box)`
-    display: flex;
-    gap: 22px;
-  `;
-
-  const StyledTitleOfDoneTasks = styled(Typography)`
-    cursor: pointer;
-    font-weight: bold;
-  `;
 
   useEffect(() => {
     countDoneTasks();
@@ -39,12 +38,12 @@ export default function DoneTasksList({ tasksArray }) {
           setVisibilityOfDoneTasks(!visibilityOfDoneTasks);
         }}
       >
-        <StyledTitleOfDoneTasks color="text.primary">
+        <StyledTitleOfDoneTasks color="text.primary" fontWeight="bold">
           <IconButton>
             {visibilityOfDoneTasks ? (
-              <KeyboardArrowDownIcon color="icons.primary" />
+              <KeyboardArrowDownIcon color="primary" />
             ) : (
-              <KeyboardArrowRightOutlinedIcon color="icons.primary" />
+              <KeyboardArrowRightOutlinedIcon color="primary" />
             )}
           </IconButton>
           Completed {doneTasksCount ? doneTasksCount : null}

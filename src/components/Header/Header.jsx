@@ -1,81 +1,90 @@
-import { Box, IconButton, Typography } from '@mui/material';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../../reducers/featuresSlice';
+import { Box, IconButton, Typography } from "@mui/material";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../../reducers/featuresSlice";
+import styled from "styled-components";
+
+const StyledHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 18px;
+  padding-left: 18px;
+  margin-bottom: 37px;
+`;
+
+const StyledTitleSection = styled(Box)`
+  display: flex;
+  gap: 9px;
+  cursor: pointer;
+`;
 
 export default function Header({ text, icon }) {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [showPrintFeature, setShowPrintFeature] = useState(false);
-    const litghtThemeState = useSelector((state) => state.features.showLightTheme);
-    const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showPrintFeature, setShowPrintFeature] = useState(false);
 
-    // !
+  const litghtThemeState = useSelector(
+    ({ features }) => features.showLightTheme
+  );
 
-    return (
-        <header style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            paddingRight: '18px',
-            paddingLeft: '18px',
-            marginBottom: '37px'
-        }}>
-            <Box sx={{ display: 'flex', gap: '9px', cursor: 'pointer' }}>
-                <Typography variant='h1' sx={{ fontSize: '22px', color: 'text.secondary' }}>
-                    <IconButton >
-                        {icon}
-                    </IconButton>
-                    {text}
-                </Typography>
-                <Typography
-                    onClick={(event) => {
-                        setShowPrintFeature(true)
-                        setAnchorEl(event.currentTarget)
-                    }}
-                    sx={{ color: 'text.secondary' }}>...</Typography>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={showPrintFeature}
+  const dispatch = useDispatch();
 
-                    onClose={(event) => {
-                        setShowPrintFeature(false)
-                        setAnchorEl(event.null)
-                    }}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}>
-                    <MenuItem
-                        onClick={() => {
-                            setShowPrintFeature(false)
-                            window.print()
-                        }}>Print list</MenuItem>
-                </Menu>
-            </Box>
-            <Box sx={{ display: 'flex', gap: '30px', cursor: 'pointer' }}>
-                <IconButton
-                    onClick={() => { dispatch(toggleTheme()) }}>
-                    {litghtThemeState
-                        ? <ModeNightIcon sx={{
-                            fontSize: 40,
-                            color: "icons.secondary"
-                        }} />
-                        : <LightModeIcon sx={{
-                            fontSize: 40,
-                            color: "icons.secondary"
-                        }} />}
-                </IconButton>
-            </Box>
+  const showPrintMenu = (event) => {
+    setShowPrintFeature(true);
+    setAnchorEl(event.currentTarget);
+  };
 
-        </header>
-    )
+  const printThePage = () => {
+    setShowPrintFeature(false);
+    window.print();
+  };
+
+  return (
+    <StyledHeader>
+      <StyledTitleSection>
+        <Typography variant="h1" color="text.secondary" fontSize="22px">
+          <IconButton>{icon}</IconButton>
+          {text}
+        </Typography>
+        <Typography onClick={showPrintMenu} color="text.secondary">
+          ...
+        </Typography>
+        <Menu
+          anchorEl={anchorEl}
+          open={showPrintFeature}
+          onClose={() => setShowPrintFeature(false)}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <MenuItem onClick={printThePage}>Print list</MenuItem>
+        </Menu>
+      </StyledTitleSection>
+      <IconButton onClick={() => dispatch(toggleTheme())}>
+        {litghtThemeState ? (
+          <ModeNightIcon
+            sx={{
+              fontSize: 40,
+              color: "icons.secondary",
+            }}
+          />
+        ) : (
+          <LightModeIcon
+            sx={{
+              fontSize: 40,
+              color: "icons.secondary",
+            }}
+          />
+        )}
+      </IconButton>
+    </StyledHeader>
+  );
 }
-
-// !

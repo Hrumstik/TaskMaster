@@ -1,5 +1,5 @@
 import "./TaskListItem.css";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
 import dayjs from "dayjs";
@@ -28,6 +28,32 @@ import Typography from "@mui/material/Typography";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers";
+import styled from "styled-components";
+import { useTheme } from "@mui/material/styles";
+
+const StyledMainTaskContainer = styled(Box)`
+  margin-left: 18px;
+  background-color: ${({ theme }) => theme.palette.background.paper};
+`;
+
+const StyledBasicTaskContainer = styled(Box)`
+  height: 57px;
+  background-color: ${({ theme }) => theme.palette.background.paper};
+  padding-left: 32px;
+  display: flex;
+  align-content: center;
+  box-shadow: ${({ focusedTask }) =>
+    focusedTask ? "0px 55px 8px -5px rgba(0, 0, 0, 0.25)" : "none"};
+`;
+
+const StyledAdditionalTaskContainer = styled(Box)`
+  background-color: ${({ theme }) => theme.palette.background.paper};
+  display: flex;
+  gap: 15px;
+  height: 57px;
+  padding-left: 29px;
+  box-shadow: 0px 4px 8px -3px rgba(0, 0, 0, 0.25);
+`;
 
 export default function TaskListItem({ text, checked }) {
   const [focusedTask, setFocusedTask] = useState(false);
@@ -36,8 +62,6 @@ export default function TaskListItem({ text, checked }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [changingTheNameOfTask, setChangingTheNameOfTask] = useState(false);
   const [valueOfInput, setTheValueOfInput] = useState(text);
-  const [indexOfTheTask, setTheIndexOfTheTask] = useState(null);
-  const [idOfTheTask, setTheIdOfTheTask] = useState(null);
 
   const openAdditionalContainer = () => {
     setFocusedTask(true);
@@ -47,111 +71,121 @@ export default function TaskListItem({ text, checked }) {
     setFocusedTask(false);
   };
 
-  const tasks = useSelector((state) => state.tasks.tasks);
+  const tasks = useSelector(({ tasks }) => tasks.tasks);
 
   const findIndexOfTheTask = useCallback(() => {
-    return tasks.findIndex((task) => task.name === text);
+    return tasks.findIndex(({ name }) => name === text);
   }, [tasks, text]);
 
   const findIdOfTheTask = useCallback(() => {
-    const index = tasks.findIndex((task) => task.name === text);
+    const index = tasks.findIndex(({ name }) => name === text);
     return tasks[index].id;
   }, [tasks, text]);
 
-  useEffect(() => {
-    setTheIndexOfTheTask(findIndexOfTheTask());
-  }, [tasks, findIndexOfTheTask]);
-
-  useEffect(() => {
-    setTheIdOfTheTask(findIdOfTheTask());
-  }, [tasks, findIdOfTheTask]);
+  const indexOfTheTask = findIndexOfTheTask();
+  const idOfTheTask = findIdOfTheTask();
 
   const { request } = useHttp();
 
   const dispatch = useDispatch();
 
+  const theme = useTheme();
+
+  const handleSaveTodoName = (e) => {
+    if (e.key === "Enter") {
+      dispatch(
+        changeTheNameOfTask({
+          id: tasks[indexOfTheTask].id,
+          newName: valueOfInput,
+        })
+      );
+      request(
+        `http://localhost:3001/tasks/${idOfTheTask}`,
+        "PUT",
+        JSON.stringify({
+          ...tasks[indexOfTheTask],
+          name: valueOfInput,
+        })
+      );
+      setChangingTheNameOfTask(false);
+    }
+    if (e.key === "Escape") {
+      setChangingTheNameOfTask(false);
+    }
+  };
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    dispatch(setAsDoneTask(text));
+    request(
+      `http://localhost:3001/tasks/${idOfTheTask}`,
+      "PUT",
+      JSON.stringify({
+        ...tasks[indexOfTheTask],
+        done: !tasks[indexOfTheTask].done,
+      })
+    );
+  };
+
+  const handeleSaveTaskDate = (e) => {
+    if (e.key === "Enter") {
+      dispatch(
+        setTheDateOfPerfomingTheTask({
+          name: text,
+          date: dayjs(date).format("DD.MM.YYYY"),
+        })
+      );
+      request(
+        `http://localhost:3001/tasks/${idOfTheTask}`,
+        "PUT",
+        JSON.stringify({
+          ...tasks[indexOfTheTask],
+          date: dayjs(date).format("DD.MM.YYYY"),
+        })
+      );
+      setShowCalendar(false);
+      setFocusedTask(false);
+    }
+  };
+
+  const handleSaveTaskAsImportant = () => {
+    dispatch(setAsImportantTask(text));
+    request(
+      `http://localhost:3001/tasks/${idOfTheTask}`,
+      "PUT",
+      JSON.stringify({
+        ...tasks[indexOfTheTask],
+        important: !tasks[indexOfTheTask].important,
+      })
+    );
+  };
+
+  const handleDeleteTask = () => {
+    dispatch(deleteTask(text));
+    request(`http://localhost:3001/tasks/${idOfTheTask}`, "DELETE");
+  };
+
+  const handleDeleteTheTask = () => {
+    setChangingTheNameOfTask(true);
+    setFocusedTask(false);
+  };
+
   return (
-    <Box sx={{ mb: "18px", bgcolor: "background.paper" }}>
-      {changingTheNameOfTask ? (
-        <Box
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              dispatch(
-                changeTheNameOfTask({
-                  id: tasks[indexOfTheTask].id,
-                  newName: valueOfInput,
-                })
-              );
-              request(
-                `http://localhost:3001/tasks/${idOfTheTask}`,
-                "PUT",
-                JSON.stringify({
-                  ...tasks[indexOfTheTask],
-                  name: valueOfInput,
-                })
-              );
-              setChangingTheNameOfTask(false);
-            }
-            if (e.key === "Escape") {
-              setChangingTheNameOfTask(false);
-            }
-          }}
-        >
-          <TextField
-            value={valueOfInput}
-            onChange={(e) => {
-              setTheValueOfInput(e.target.value);
-            }}
-            fullWidth={true}
-            variant="outlined"
-            placeholder={text}
-            helperText="Rename your task"
-          />
-        </Box>
-      ) : (
+    <StyledMainTaskContainer theme={theme}>
+      {!changingTheNameOfTask ? (
         <>
-          <Box
-            sx={{
-              height: "57px",
-              bgcolor: "background.paper",
-              paddingLeft: "32px",
-              display: "flex",
-              alignContent: "center",
-              boxShadow: focusedTask
-                ? "0px 55px 8px -5px rgba(0, 0, 0, 0.25)"
-                : "none",
-            }}
-          >
+          <StyledBasicTaskContainer theme={theme} focusedTask={focusedTask}>
             <FormControlLabel
               sx={{ width: "100%" }}
               control={
                 <Checkbox
                   checked={checked}
-                  onChange={() => {
-                    setIsChecked(!isChecked);
-                    dispatch(setAsDoneTask(text));
-                    request(
-                      `http://localhost:3001/tasks/${idOfTheTask}`,
-                      "PUT",
-                      JSON.stringify({
-                        ...tasks[indexOfTheTask],
-                        done: !tasks[indexOfTheTask].done,
-                      })
-                    );
-                  }}
-                  icon={
-                    <RadioButtonUncheckedIcon
-                      sx={{ color: "icons.secondary" }}
-                    />
-                  }
-                  checkedIcon={
-                    <CheckCircleIcon sx={{ color: "icons.secondary" }} />
-                  }
+                  onChange={handleCheckboxChange}
+                  icon={<RadioButtonUncheckedIcon color="icons.secondary" />}
+                  checkedIcon={<CheckCircleIcon color="icons.secondary" />}
                 />
               }
-              label={
-                <Typography sx={{ color: "text.primary" }}>{text}</Typography>
-              }
+              label={<Typography color="text.primary">{text}</Typography>}
             />
 
             <IconButton
@@ -169,7 +203,7 @@ export default function TaskListItem({ text, checked }) {
                 />
               )}
             </IconButton>
-          </Box>
+          </StyledBasicTaskContainer>
 
           <CSSTransition
             in={focusedTask}
@@ -177,75 +211,29 @@ export default function TaskListItem({ text, checked }) {
             classNames="todo-additional-container"
             unmountOnExit
           >
-            <Box
-              sx={{
-                bgcolor: "background.paper",
-                display: "flex",
-                gap: "15px",
-                height: "57px",
-                paddingLeft: "29px",
-                boxShadow: "0px 4px 8px -3px rgba(0, 0, 0, 0.25)",
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  dispatch(
-                    setTheDateOfPerfomingTheTask({
-                      name: text,
-                      date: dayjs(date).format("DD.MM.YYYY"),
-                    })
-                  );
-                  request(
-                    `http://localhost:3001/tasks/${idOfTheTask}`,
-                    "PUT",
-                    JSON.stringify({
-                      ...tasks[indexOfTheTask],
-                      date: dayjs(date).format("DD.MM.YYYY"),
-                    })
-                  );
-                  setShowCalendar(false);
-                  setFocusedTask(false);
-                }
-              }}
+            <StyledAdditionalTaskContainer
+              theme={theme}
+              onKeyDown={handeleSaveTaskDate}
             >
               {showCalendar ? (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateField
-                    autoFocus={true}
-                    onChange={(newValue) => {
-                      setDate(newValue);
-                    }}
+                    autoFocus
+                    onChange={(newValue) => setDate(newValue)}
                     format="DD.MM.YYYY"
                     value={date}
                     label="Set date"
                   />
                 </LocalizationProvider>
               ) : (
-                <IconButton
-                  onClick={() => {
-                    setShowCalendar(true);
-                  }}
-                >
+                <IconButton onClick={() => setShowCalendar(true)}>
                   <DateRangeOutlinedIcon
                     sx={{ fontSize: 25, color: "icons.primary" }}
                   />
                 </IconButton>
               )}
-              <IconButton
-                onClick={() => {
-                  dispatch(setAsImportantTask(text));
-                  request(
-                    `http://localhost:3001/tasks/${idOfTheTask}`,
-                    "PUT",
-                    JSON.stringify({
-                      ...tasks[indexOfTheTask],
-                      important: !tasks[indexOfTheTask].important,
-                    })
-                  );
-                }}
-              >
-                {indexOfTheTask !== null &&
-                tasks[indexOfTheTask] &&
-                tasks[indexOfTheTask].important ? (
+              <IconButton onClick={handleSaveTaskAsImportant}>
+                {tasks[indexOfTheTask].important ? (
                   <StarIcon
                     sx={{
                       fontSize: 25,
@@ -258,31 +246,29 @@ export default function TaskListItem({ text, checked }) {
                   />
                 )}
               </IconButton>
-              <IconButton
-                onClick={() => {
-                  dispatch(deleteTask(text));
-                  request(
-                    `http://localhost:3001/tasks/${idOfTheTask}`,
-                    "DELETE"
-                  );
-                }}
-              >
+              <IconButton onClick={handleDeleteTask}>
                 <DeleteOutlineIcon
                   sx={{ fontSize: 25, color: "icons.primary" }}
                 />
               </IconButton>
-              <IconButton
-                onClick={() => {
-                  setChangingTheNameOfTask(true);
-                  setFocusedTask(false);
-                }}
-              >
+              <IconButton onClick={handleDeleteTheTask}>
                 <CreateIcon sx={{ fontSize: 25, color: "icons.primary" }} />
               </IconButton>
-            </Box>
+            </StyledAdditionalTaskContainer>
           </CSSTransition>
         </>
+      ) : (
+        <Box onKeyDown={handleSaveTodoName}>
+          <TextField
+            value={valueOfInput}
+            onChange={(e) => setTheValueOfInput(e.target.value)}
+            fullWidth
+            variant="outlined"
+            placeholder={text}
+            helperText="Rename your task"
+          />
+        </Box>
       )}
-    </Box>
+    </StyledMainTaskContainer>
   );
 }
