@@ -1,32 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "45a25209-8ace-4086-8009-aee10771f35c",
-      "name": "Аd",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "47ee2b53-ad42-4b3f-a0d5-e0d9b95f600d",
-      "name": "Пососи",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "2609c138-80db-46db-b437-ccd271765a9d",
-      "name": "ЯЯЯЯя",
-      "date": null,
-      "done": true,
-      "important": false
-    },
-    {
-      "id": "2c986fc5-c41f-4d64-ba25-3b718f1cbe1b",
-      "name": "Апельсин",
-      "date": null,
-      "done": true,
-      "important": false
-    }
-  ]
+  "tasks": []
 }

@@ -1,79 +1,84 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useFeatures from "../../hooks/useFeatures";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import { fetchTasks } from "../TaskListItem/tasksSlice";
-import { Box, Container } from "@mui/material";
-import NoTaskScreen from '../NoTaskScreen/NoTaskScreen';
+import { Box } from "@mui/material";
+import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import DoneTasksList from "../DoneTasksList/DoneTasksList";
-import InputField from '../inputField/InputField';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import InputField from "../inputField/InputField";
+import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
+import styled from "styled-components";
+
+const StyledMainTaskListContainer = styled(Box)`
+  height: 86%;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 
 function TasksList() {
-    const tasks = useSelector((state) => state.tasks.tasks);
-    const tasksStatus = useSelector((state) => state.tasks.status)
-    const stateOfInput = useSelector((state) => state.input);
+  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const tasksStatus = useSelector(({ tasks }) => tasks.status);
+  const stateOfInput = useSelector((state) => state.input);
 
-    const { sortedAlphabeticallyAllTasks,
-        importantAllTasks,
-        sortedAlphabeticallyAllTasksWithImportance } = useGroupTasks(tasks);
-    const { renderTasks } = useRenderTasks();
-    const {
-        sortTasksAlphabeticallyState,
-        showImportantTasksState
-    } = useFeatures();
+  const {
+    sortedAlphabeticallyAllTasks,
+    importantAllTasks,
+    sortedAlphabeticallyAllTasksWithImportance,
+  } = useGroupTasks(tasks);
+  const { renderTasks } = useRenderTasks();
+  const { sortTasksAlphabeticallyState, showImportantTasksState } =
+    useFeatures();
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (tasksStatus === 'idle') {
-            dispatch(fetchTasks())
-        }
-    }, [dispatch, tasksStatus])
+  useEffect(() => {
+    if (tasksStatus === "idle") {
+      dispatch(fetchTasks());
+    }
+  }, [dispatch, tasksStatus]);
 
+  const renderingTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyAllTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantAllTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyAllTasksWithImportance
+      : tasks;
 
-    return (
-        <Container
-            sx={{
-                height: '86%',
-                paddingLeft: 2,
-                paddingRight: 2,
-                display: 'flex',
-                flexDirection: 'column',
-            }}>
-
-            {(tasks && tasks.length) || stateOfInput ? (
-                <Box sx={{ height: '100%' }}>
-                    {sortTasksAlphabeticallyState && !showImportantTasksState
-                        ? renderTasks(sortedAlphabeticallyAllTasks) :
-                        !sortTasksAlphabeticallyState && showImportantTasksState
-                            ? renderTasks(importantAllTasks) :
-                            sortTasksAlphabeticallyState && showImportantTasksState
-                                ? renderTasks(sortedAlphabeticallyAllTasksWithImportance) :
-                                renderTasks(tasks)}
-
-                    <DoneTasksList tasksArray={tasks} />
-                </Box>
-            ) : (
-                <NoTaskScreen
-                    text1='Do something'
-                    text2='of the planned for the upcoming'
-                    text3='day.'
-                    text4='Best wishes.'
-                    icon={<SelfImprovementIcon
-                        sx={{
-                            fontSize: 300,
-                            display: 'flex',
-                            alignSelf: 'center',
-                            color: 'icons.secondary'
-                        }}
-                    />}
-                />
-            )}
-            <InputField />
-        </Container>
-    );
+  return (
+    <StyledMainTaskListContainer>
+      {tasks.length || stateOfInput ? (
+        <Box sx={{ height: "100%" }}>
+          {renderTasks(renderingTasks)}
+          <DoneTasksList tasksArray={tasks} />
+        </Box>
+      ) : (
+        <NoTaskScreen
+          firstTitle="Do something"
+          secondTitle="of the planned for the upcoming"
+          thirdTitle="day."
+          fourthTitle="Best wishes."
+          icon={
+            <SelfImprovementIcon
+              sx={{
+                fontSize: 300,
+                display: "flex",
+                alignSelf: "center",
+                color: "icons.secondary",
+              }}
+            />
+          }
+        />
+      )}
+      <Box>
+        <InputField />
+      </Box>
+    </StyledMainTaskListContainer>
+  );
 }
 
 export default TasksList;

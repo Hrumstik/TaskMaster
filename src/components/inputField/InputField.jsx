@@ -18,33 +18,40 @@ export default function InputField() {
   const { request } = useHttp();
 
   const saveTask = () => {
+    const task = makeAnObjectForNewTask(inputValue);
     if (isValid) {
-      dispatch(addTask(inputValue));
-      request(
-        `http://localhost:3001/tasks`,
-        "POST",
-        JSON.stringify(makeAnObjectForNewTask(inputValue))
-      );
+      dispatch(addTask({ name: inputValue, id: task.id }));
+      request(`http://localhost:3001/tasks`, "POST", JSON.stringify(task));
       setInputValue("");
       dispatch(toggleStateOfInput());
     }
   };
 
-  const makeAnObjectForNewTask = (taskName) => {
-    return {
-      id: uuidv4(),
-      name: taskName,
-      date: null,
-      done: false,
-      important: false,
-    };
+  const makeAnObjectForNewTask = (taskName) => ({
+    id: uuidv4(),
+    name: taskName,
+    date: null,
+    done: false,
+    important: false,
+  });
+
+  const validateText = (text) => {
+    return text.length > 2 && text.trim().length > 2;
   };
 
-  const validateText = () => {
-    if (inputValue.length > 2 && inputValue.trim().length > 2) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
+  const handleKeyDownSaveTask = (e) => {
+    if (e.key === "Enter") {
+      setIsValid(validateText(inputValue));
+      if (validateText(inputValue)) {
+        saveTask();
+      }
+    }
+  };
+
+  const handleClickSaveTask = () => {
+    setIsValid(validateText(inputValue));
+    if (validateText(inputValue)) {
+      saveTask();
     }
   };
 
@@ -58,22 +65,10 @@ export default function InputField() {
       <Box sx={{ display: "flex", mb: "25px" }}>
         <TextField
           color="primary"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              validateText();
-              if (isValid) {
-                saveTask();
-              }
-            }
-          }}
-          onBlur={() => {
-            validateText();
-          }}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
+          onKeyDown={handleKeyDownSaveTask}
+          onChange={(e) => setInputValue(e.target.value)}
           value={inputValue}
-          error={isValid ? false : true}
+          error={!isValid}
           label="Write your task"
           variant="filled"
           helperText={
@@ -85,14 +80,9 @@ export default function InputField() {
         />
         <Button
           color="primary"
-          onClick={() => {
-            validateText();
-            if (isValid) {
-              saveTask();
-            }
-          }}
+          onClick={handleClickSaveTask}
           sx={{ ml: "15px" }}
-          size="small"
+          size="medium"
           variant="contained"
           endIcon={<SendIcon />}
         >

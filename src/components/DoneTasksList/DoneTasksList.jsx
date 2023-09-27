@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 const StyledCompletedBox = styled(Box)`
   display: flex;
   gap: 22px;
+  padding-left: 32px;
 `;
 
 const StyledTitleOfDoneTasks = styled(Typography)`
