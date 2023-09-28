@@ -1,18 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "58bc7c42-09f8-400d-9c02-1fe1f8469ad8",
-      "name": "das",
-      "date": "28.09.2023",
-      "done": false,
-      "important": true
-    },
-    {
-      "id": "5f6f0059-4d10-4c3d-816e-cf7343283eab",
-      "name": "Пососи",
-      "date": "29.09.2023",
-      "done": false,
-      "important": false
-    }
-  ]
+  "tasks": []
 }

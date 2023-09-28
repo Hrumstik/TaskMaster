@@ -1,6 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 export default function useFeatures() {
-    const sortTasksAlphabeticallyState = useSelector((state) => state.features.sortTasksAlphabetically);
-    const showImportantTasksState = useSelector((state) => state.features.showImportantTasks);
-    return { sortTasksAlphabeticallyState, showImportantTasksState }
+  const sortTasksAlphabeticallyState = useSelector(
+    ({ features }) => features.sortTasksAlphabetically
+  );
+  const showImportantTasksState = useSelector(
+    ({ features }) => features.showImportantTasks
+  );
+  return { sortTasksAlphabeticallyState, showImportantTasksState };
 }

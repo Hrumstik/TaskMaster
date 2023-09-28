@@ -31,6 +31,7 @@ const ContentContainer = styled(Box)`
 
 export default function MyDay() {
   const tasks = useSelector(({ tasks }) => tasks.tasks);
+
   const stateOfInput = useSelector(({ input }) => input);
 
   const theme = useTheme();

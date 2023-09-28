@@ -4,16 +4,38 @@ import Menu from "../Menu/Menu";
 import Header from "../Header/Header";
 import TaskListItem from "../TaskListItem/TaskListItem";
 import { useSelector } from "react-redux";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import useFeatures from "../../hooks/useFeatures";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useGroupTasks from "../../hooks/useGroupTasks";
+import styled from "styled-components";
+import { useTheme } from "@mui/material/styles";
+
+const AppContainer = styled(Box)`
+  background-color: ${({ theme }) => theme.palette.background.paper};
+  display: flex;
+`;
+
+const MainContainer = styled(Box)`
+  width: 75%;
+`;
+
+const ContentContainer = styled(Box)`
+  height: 86%;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const DateTitle = styled(Typography)`
+  padding-left: 45px;
+`;
 
 export default function Planned() {
-  const tasks = useSelector((state) => state.tasks.tasks);
-  const stateOfInput = useSelector((state) => state.input);
+  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const stateOfInput = useSelector(({ input }) => input);
 
   const {
     todayTasks,
@@ -43,10 +65,57 @@ export default function Planned() {
     useFeatures();
   const { renderTasks, checkTheStatusOfTask } = useRenderTasks();
 
+  const theme = useTheme();
+
+  const renderingTodayTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyTodayTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantTodayTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyTodayTasksWithImportance
+      : todayTasks;
+
+  const renderingTommorovTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyTomorrowTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantTomorrowTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyTomorrowTasksWithImportance
+      : tomorrowTasks;
+
+  const renderingDayAfterTommorovTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyDayAfterTommorowTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantDayAfterTommorowTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyDayAfterTommorowTasksWithImportance
+      : dayAfterTommorowTasks;
+
+  const renderingNextWeekTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyNextWeekTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantNextWeekTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyNextWeekTasksWithImportance
+      : nextWeekTasks;
+
+  const renderingTasksWithoutDate =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyTasksWithoutDate
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantTasksWithoutDate
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyTasksWithoutDateWithImportance
+      : tasksWithoutDate;
+
   return (
-    <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
+    <AppContainer theme={theme}>
       <Menu />
-      <Box sx={{ width: "75%" }}>
+      <MainContainer>
         <Header
           text="Planned"
           icon={
@@ -56,99 +125,53 @@ export default function Planned() {
           }
         />
 
-        <Container
-          sx={{
-            height: "86%",
-            paddingLeft: 2,
-            paddingRight: 2,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <ContentContainer>
           {tasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
               {todayTasks.length && checkTheStatusOfTask(todayTasks) ? (
-                <Box>
-                  <Typography color="text.primary" variant="h5">
+                <Box sx={{ mb: "20px" }}>
+                  <DateTitle color="text.primary" variant="h5">
                     Today tasks:
-                  </Typography>
-                  {sortTasksAlphabeticallyState && !showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyTodayTasks)
-                    : !sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(importantTodayTasks)
-                    : sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyTodayTasksWithImportance)
-                    : renderTasks(todayTasks)}
+                  </DateTitle>
+                  {renderTasks(renderingTodayTasks)}
                 </Box>
               ) : null}
 
               {tomorrowTasks.length && checkTheStatusOfTask(tomorrowTasks) ? (
                 <Box>
-                  <Typography color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" variant="h5">
                     Tomorrow tasks:
-                  </Typography>
-                  {sortTasksAlphabeticallyState && !showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyTomorrowTasks)
-                    : !sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(importantTomorrowTasks)
-                    : sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(
-                        sortedAlphabeticallyTomorrowTasksWithImportance
-                      )
-                    : renderTasks(tomorrowTasks)}
+                  </DateTitle>
+                  {renderTasks(renderingTommorovTasks)}
                 </Box>
               ) : null}
 
               {dayAfterTommorowTasks.length &&
               checkTheStatusOfTask(dayAfterTommorowTasks) ? (
                 <Box>
-                  <Typography color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" variant="h5">
                     Day after tomorrow tasks:
-                  </Typography>
-                  {sortTasksAlphabeticallyState && !showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyDayAfterTommorowTasks)
-                    : !sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(importantDayAfterTommorowTasks)
-                    : sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(
-                        sortedAlphabeticallyDayAfterTommorowTasksWithImportance
-                      )
-                    : renderTasks(dayAfterTommorowTasks)}
+                  </DateTitle>
+                  {renderTasks(renderingDayAfterTommorovTasks)}
                 </Box>
               ) : null}
 
               {nextWeekTasks.length && checkTheStatusOfTask(nextWeekTasks) ? (
                 <Box>
-                  <Typography color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" variant="h5">
                     Next week tasks:
-                  </Typography>
-                  {sortTasksAlphabeticallyState && !showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyNextWeekTasks)
-                    : !sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(importantNextWeekTasks)
-                    : sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(
-                        sortedAlphabeticallyNextWeekTasksWithImportance
-                      )
-                    : renderTasks(nextWeekTasks)}
+                  </DateTitle>
+                  {renderTasks(renderingNextWeekTasks)}
                 </Box>
               ) : null}
 
               {tasksWithoutDate.length &&
               checkTheStatusOfTask(tasksWithoutDate) ? (
                 <Box>
-                  <Typography color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" variant="h5">
                     Tasks without date:
-                  </Typography>
-                  {sortTasksAlphabeticallyState && !showImportantTasksState
-                    ? renderTasks(sortedAlphabeticallyTasksWithoutDate)
-                    : !sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(importantTasksWithoutDate)
-                    : sortTasksAlphabeticallyState && showImportantTasksState
-                    ? renderTasks(
-                        sortedAlphabeticallyTasksWithoutDateWithImportance
-                      )
-                    : renderTasks(tasksWithoutDate)}
+                  </DateTitle>
+                  {renderTasks(renderingTasksWithoutDate)}
                 </Box>
               ) : null}
 
@@ -158,9 +181,9 @@ export default function Planned() {
                     if (!task.done) {
                       return (
                         <>
-                          <Typography color="text.primary" variant="h5">
+                          <DateTitle color="text.primary" variant="h5">
                             Task for the date {task.date}:
-                          </Typography>
+                          </DateTitle>
                           <TaskListItem text={task.name} key={i} />
                         </>
                       );
@@ -190,8 +213,8 @@ export default function Planned() {
           )}
 
           <InputField />
-        </Container>
-      </Box>
-    </Box>
+        </ContentContainer>
+      </MainContainer>
+    </AppContainer>
   );
 }
