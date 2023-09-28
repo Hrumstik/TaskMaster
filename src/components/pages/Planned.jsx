@@ -44,9 +44,9 @@ export default function Planned() {
   const { renderTasks, checkTheStatusOfTask } = useRenderTasks();
 
   return (
-    <Box sx={{ bgcolor: "background.paper" }} className="app">
+    <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
       <Menu />
-      <div className="main">
+      <Box sx={{ width: "75%" }}>
         <Header
           text="Planned"
           icon={
@@ -69,7 +69,7 @@ export default function Planned() {
             <Box sx={{ height: "100%" }}>
               {todayTasks.length && checkTheStatusOfTask(todayTasks) ? (
                 <Box>
-                  <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                  <Typography color="text.primary" variant="h5">
                     Today tasks:
                   </Typography>
                   {sortTasksAlphabeticallyState && !showImportantTasksState
@@ -84,7 +84,7 @@ export default function Planned() {
 
               {tomorrowTasks.length && checkTheStatusOfTask(tomorrowTasks) ? (
                 <Box>
-                  <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                  <Typography color="text.primary" variant="h5">
                     Tomorrow tasks:
                   </Typography>
                   {sortTasksAlphabeticallyState && !showImportantTasksState
@@ -102,7 +102,7 @@ export default function Planned() {
               {dayAfterTommorowTasks.length &&
               checkTheStatusOfTask(dayAfterTommorowTasks) ? (
                 <Box>
-                  <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                  <Typography color="text.primary" variant="h5">
                     Day after tomorrow tasks:
                   </Typography>
                   {sortTasksAlphabeticallyState && !showImportantTasksState
@@ -119,7 +119,7 @@ export default function Planned() {
 
               {nextWeekTasks.length && checkTheStatusOfTask(nextWeekTasks) ? (
                 <Box>
-                  <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                  <Typography color="text.primary" variant="h5">
                     Next week tasks:
                   </Typography>
                   {sortTasksAlphabeticallyState && !showImportantTasksState
@@ -137,7 +137,7 @@ export default function Planned() {
               {tasksWithoutDate.length &&
               checkTheStatusOfTask(tasksWithoutDate) ? (
                 <Box>
-                  <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                  <Typography color="text.primary" variant="h5">
                     Tasks without date:
                   </Typography>
                   {sortTasksAlphabeticallyState && !showImportantTasksState
@@ -155,10 +155,10 @@ export default function Planned() {
               {otherTaks.length ? (
                 <Box>
                   {otherTaks.map((task, i) => {
-                    if (task.done === false) {
+                    if (!task.done) {
                       return (
                         <>
-                          <Typography sx={{ color: "#d0cae8" }} variant="h5">
+                          <Typography color="text.primary" variant="h5">
                             Task for the date {task.date}:
                           </Typography>
                           <TaskListItem text={task.name} key={i} />
@@ -191,7 +191,7 @@ export default function Planned() {
 
           <InputField />
         </Container>
-      </div>
+      </Box>
     </Box>
   );
 }

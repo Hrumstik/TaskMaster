@@ -4,26 +4,49 @@ import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
 import Header from "../Header/Header";
 import { useSelector } from "react-redux";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useFeatures from "../../hooks/useFeatures";
+import styled from "styled-components";
+import { useTheme } from "@mui/material/styles";
+
+const AppContainer = styled(Box)`
+  background-color: ${({ theme }) => theme.palette.background.paper};
+  display: flex;
+`;
+
+const MainContainer = styled(Box)`
+  width: 75%;
+`;
+
+const ContentContainer = styled(Box)`
+  height: 86%;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 
 export default function Important() {
-  const tasks = useSelector((state) => state.tasks.tasks);
-  const stateOfInput = useSelector((state) => state.input);
+  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const stateOfInput = useSelector(({ input }) => input);
+
+  const theme = useTheme();
 
   const { importantAllTasks, sortedAlphabeticallyAllTasksWithImportance } =
     useGroupTasks(tasks);
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState } = useFeatures();
+  const renderingTasks = sortTasksAlphabeticallyState
+    ? sortedAlphabeticallyAllTasksWithImportance
+    : importantAllTasks;
 
   return (
-    <Box sx={{ bgcolor: "background.paper" }} className="app">
+    <AppContainer theme={theme}>
       <Menu />
-      <div className="main">
+      <MainContainer>
         <Header
           text="Important"
           icon={
@@ -33,20 +56,10 @@ export default function Important() {
           }
         />
 
-        <Container
-          sx={{
-            height: "86%",
-            paddingLeft: 2,
-            paddingRight: 2,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <ContentContainer>
           {importantAllTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
-              {sortTasksAlphabeticallyState
-                ? renderTasks(sortedAlphabeticallyAllTasksWithImportance)
-                : renderTasks(importantAllTasks)}
+              {renderTasks(renderingTasks)}
               <DoneTasksList tasksArray={importantAllTasks} />
             </Box>
           ) : (
@@ -68,8 +81,8 @@ export default function Important() {
           )}
 
           <InputField />
-        </Container>
-      </div>
-    </Box>
+        </ContentContainer>
+      </MainContainer>
+    </AppContainer>
   );
 }

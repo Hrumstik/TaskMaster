@@ -5,29 +5,61 @@ import useGroupTasks from "../../hooks/useGroupTasks";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import Menu from "../Menu/Menu";
 import Header from "../Header/Header";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import InputField from "../inputField/InputField";
 import DoneTasksList from "../DoneTasksList/DoneTasksList";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
+import styled from "styled-components";
+import { useTheme } from "@mui/material/styles";
+
+const AppContainer = styled(Box)`
+  background-color: ${({ theme }) => theme.palette.background.paper};
+  display: flex;
+`;
+
+const MainContainer = styled(Box)`
+  width: 75%;
+`;
+
+const ContentContainer = styled(Box)`
+  height: 86%;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 
 export default function MyDay() {
-  const tasks = useSelector((state) => state.tasks.tasks);
-  const stateOfInput = useSelector((state) => state.input);
+  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const stateOfInput = useSelector(({ input }) => input);
+
+  const theme = useTheme();
+
   const {
     todayTasks,
     sortedAlphabeticallyTodayTasks,
     importantTodayTasks,
     sortedAlphabeticallyTodayTasksWithImportance,
   } = useGroupTasks(tasks);
+
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
     useFeatures();
+
   const { renderTasks } = useRenderTasks();
 
+  const renderingTasks =
+    sortTasksAlphabeticallyState && !showImportantTasksState
+      ? sortedAlphabeticallyTodayTasks
+      : !sortTasksAlphabeticallyState && showImportantTasksState
+      ? importantTodayTasks
+      : sortTasksAlphabeticallyState && showImportantTasksState
+      ? sortedAlphabeticallyTodayTasksWithImportance
+      : todayTasks;
+
   return (
-    <Box sx={{ bgcolor: "background.paper" }} className="app">
+    <AppContainer theme={theme}>
       <Menu />
-      <div className="main">
+      <MainContainer>
         <Header
           text="My day"
           icon={
@@ -40,24 +72,10 @@ export default function MyDay() {
           }
         />
 
-        <Container
-          sx={{
-            height: "86%",
-            paddingLeft: 2,
-            paddingRight: 2,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <ContentContainer>
           {todayTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
-              {sortTasksAlphabeticallyState && !showImportantTasksState
-                ? renderTasks(sortedAlphabeticallyTodayTasks)
-                : !sortTasksAlphabeticallyState && showImportantTasksState
-                ? renderTasks(importantTodayTasks)
-                : sortTasksAlphabeticallyState && showImportantTasksState
-                ? renderTasks(sortedAlphabeticallyTodayTasksWithImportance)
-                : renderTasks(todayTasks)}
+              {renderTasks(renderingTasks)}
               <DoneTasksList tasksArray={todayTasks} />
             </Box>
           ) : (
@@ -79,8 +97,8 @@ export default function MyDay() {
           )}
 
           <InputField />
-        </Container>
-      </div>
-    </Box>
+        </ContentContainer>
+      </MainContainer>
+    </AppContainer>
   );
 }
