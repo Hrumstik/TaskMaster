@@ -1,3 +1,4 @@
+import React from "react";
 import ListItem from "../ListItem/ListItem";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
@@ -161,10 +162,7 @@ export default function Menu() {
               onClick={() => {
                 dispatch(deleteAllTask());
                 for (let i = 0; i < tasks.length; i++) {
-                  request(
-                    `http://localhost:3001/tasks/${tasks[i].id}`,
-                    "DELETE"
-                  );
+                  request(tasks[i].id, "DELETE");
                 }
               }}
               divider

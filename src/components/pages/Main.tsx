@@ -1,5 +1,6 @@
+import React from "react";
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
+import { Header } from "../Header/Header";
 import TasksList from "../TasksList/TasksList";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { Box } from "@mui/material";

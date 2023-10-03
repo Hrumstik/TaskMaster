@@ -1,3 +1,4 @@
+import React from "react";
 import "./InputField.css";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,8 +11,12 @@ import { TextField, Box } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 
+interface StateOfInput {
+  input: boolean;
+}
+
 export default function InputField() {
-  const stateOfInput = useSelector((state) => state.input);
+  const stateOfInput = useSelector((state: StateOfInput) => state.input);
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
   const [isValid, setIsValid] = useState(true);
@@ -21,13 +26,13 @@ export default function InputField() {
     const task = makeAnObjectForNewTask(inputValue);
     if (isValid) {
       dispatch(addTask({ name: inputValue, id: task.id }));
-      request(`http://localhost:3001/tasks`, "POST", JSON.stringify(task));
+      request(null, "POST", JSON.stringify(task));
       setInputValue("");
       dispatch(toggleStateOfInput());
     }
   };
 
-  const makeAnObjectForNewTask = (taskName) => ({
+  const makeAnObjectForNewTask = (taskName: string) => ({
     id: uuidv4(),
     name: taskName,
     date: null,
@@ -35,11 +40,11 @@ export default function InputField() {
     important: false,
   });
 
-  const validateText = (text) => {
+  const validateText = (text: string) => {
     return text.length > 2 && text.trim().length > 2;
   };
 
-  const handleKeyDownSaveTask = (e) => {
+  const handleKeyDownSaveTask = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       setIsValid(validateText(inputValue));
       if (validateText(inputValue)) {

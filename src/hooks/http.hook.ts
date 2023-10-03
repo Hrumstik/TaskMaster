@@ -1,14 +1,18 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 export const useHttp = () => {
   const request = async (
-    url,
+    id?: string | null,
     method = "GET",
-    body = null,
+    body: string | null = null,
     headers = { "Content-Type": "application/json" }
   ) => {
+    let url: string = id
+      ? `http://localhost:3001/tasks/${id}`
+      : "http://localhost:3001/tasks/";
+
     try {
-      const config = {
+      const config: AxiosRequestConfig = {
         method,
         url,
         headers,
@@ -21,7 +25,7 @@ export const useHttp = () => {
       const response = await axios(config);
 
       return response.data;
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(e.response ? e.response.data : e.message);
     }
   };

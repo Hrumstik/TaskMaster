@@ -6,7 +6,15 @@ import {
 } from "../components/utils/utils";
 import dayjs from "dayjs";
 
-export default function useGroupTasks(arrTasks) {
+interface Task {
+  id: string;
+  name: string;
+  date: null | string;
+  done: boolean;
+  important: boolean;
+}
+
+const useGroupTasks = (arrTasks: Task[]) => {
   const sortTasksByDate = useCallback(() => {
     const today = dayjs();
     const tomorrow = today.add(1, "day");
@@ -133,4 +141,6 @@ export default function useGroupTasks(arrTasks) {
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
   };
-}
+};
+
+export default useGroupTasks;

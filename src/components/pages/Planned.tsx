@@ -1,8 +1,9 @@
+import React from "react";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
-import TaskListItem from "../TaskListItem/TaskListItem";
+import { Header } from "../Header/Header";
+import { TaskListItem } from "../TaskListItem/TaskListItem";
 import { useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";

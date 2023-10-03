@@ -1,8 +1,14 @@
+import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import { defaultTheme, darkTheme } from "../themes/themes";
 
-export default function CustomThemeProvider({ children }) {
+interface CustomThemeProviderProps {
+  children: ReactNode;
+}
+export default function CustomThemeProvider({
+  children,
+}: CustomThemeProviderProps) {
   const lightThemeState = useSelector(
     ({ features }) => features.showLightTheme
   );

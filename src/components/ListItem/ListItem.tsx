@@ -1,13 +1,20 @@
+import React from "react";
 import "./ListItem.css";
 import { NavLink } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 import styled from "styled-components";
 
+interface ListItemProps {
+  text: string;
+  path: string;
+  icon: React.ReactNode;
+}
+
 const StyledListItem = styled.li`
   height: 54px;
 `;
 
-export default function ListItem({ text, path, icon }) {
+export default function ListItem({ text, path, icon }: ListItemProps) {
   return (
     <StyledListItem className="">
       <NavLink

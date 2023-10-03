@@ -1,8 +1,9 @@
+import React from "react";
 import "./TaskListItem.css";
 import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import {
   setAsDoneTask,
   deleteTask,
@@ -31,12 +32,27 @@ import { DateField } from "@mui/x-date-pickers";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
 
+interface TaskListItemProps {
+  text: string;
+  checked?: boolean;
+}
+
+interface Task {
+  id: string;
+  name: string;
+  date: Date;
+  done: boolean;
+  important: boolean;
+}
+
+type Tasks = Task[];
+
 const StyledMainTaskContainer = styled(Box)`
   margin-left: 18px;
   background-color: ${({ theme }) => theme.palette.background.paper};
 `;
 
-const StyledBasicTaskContainer = styled(Box)`
+const StyledBasicTaskContainer = styled(Box)<{ focusedTask: boolean }>`
   height: 57px;
   background-color: ${({ theme }) => theme.palette.background.paper};
   padding-left: 32px;
@@ -55,13 +71,17 @@ const StyledAdditionalTaskContainer = styled(Box)`
   box-shadow: 0px 4px 8px -3px rgba(0, 0, 0, 0.25);
 `;
 
-export default function TaskListItem({ text, checked }) {
+export const TaskListItem: React.FC<TaskListItemProps> = ({
+  text,
+  checked,
+}) => {
   const [focusedTask, setFocusedTask] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [date, setDate] = useState(dayjs());
+  const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [showCalendar, setShowCalendar] = useState(false);
-  const [changingTheNameOfTask, setChangingTheNameOfTask] = useState(false);
-  const [valueOfInput, setTheValueOfInput] = useState(text);
+  const [changingTheNameOfTask, setChangingTheNameOfTask] =
+    useState<boolean>(false);
+  const [valueOfInput, setTheValueOfInput] = useState<string>(text);
 
   const openAdditionalContainer = () => {
     setFocusedTask(true);
@@ -71,7 +91,7 @@ export default function TaskListItem({ text, checked }) {
     setFocusedTask(false);
   };
 
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const tasks: Tasks = useSelector(({ tasks }) => tasks.tasks);
 
   const findIndexOfTheTask = useCallback(() => {
     return tasks.findIndex(({ name }) => name === text);
@@ -82,7 +102,7 @@ export default function TaskListItem({ text, checked }) {
     return tasks[index].id;
   }, [tasks, text]);
 
-  const indexOfTheTask = findIndexOfTheTask();
+  const indexOfTheTask: number = findIndexOfTheTask();
   const idOfTheTask = findIdOfTheTask();
 
   const { request } = useHttp();
@@ -91,7 +111,7 @@ export default function TaskListItem({ text, checked }) {
 
   const theme = useTheme();
 
-  const handleSaveTodoName = (e) => {
+  const handleSaveTodoName = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       dispatch(
         changeTheNameOfTask({
@@ -100,7 +120,7 @@ export default function TaskListItem({ text, checked }) {
         })
       );
       request(
-        `http://localhost:3001/tasks/${idOfTheTask}`,
+        idOfTheTask,
         "PUT",
         JSON.stringify({
           ...tasks[indexOfTheTask],
@@ -118,7 +138,7 @@ export default function TaskListItem({ text, checked }) {
     setIsChecked(!isChecked);
     dispatch(setAsDoneTask(text));
     request(
-      `http://localhost:3001/tasks/${idOfTheTask}`,
+      idOfTheTask,
       "PUT",
       JSON.stringify({
         ...tasks[indexOfTheTask],
@@ -127,7 +147,7 @@ export default function TaskListItem({ text, checked }) {
     );
   };
 
-  const handeleSaveTaskDate = (e) => {
+  const handeleSaveTaskDate = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       dispatch(
         setTheDateOfPerfomingTheTask({
@@ -136,7 +156,7 @@ export default function TaskListItem({ text, checked }) {
         })
       );
       request(
-        `http://localhost:3001/tasks/${idOfTheTask}`,
+        idOfTheTask,
         "PUT",
         JSON.stringify({
           ...tasks[indexOfTheTask],
@@ -151,7 +171,7 @@ export default function TaskListItem({ text, checked }) {
   const handleSaveTaskAsImportant = () => {
     dispatch(setAsImportantTask(text));
     request(
-      `http://localhost:3001/tasks/${idOfTheTask}`,
+      idOfTheTask,
       "PUT",
       JSON.stringify({
         ...tasks[indexOfTheTask],
@@ -162,7 +182,7 @@ export default function TaskListItem({ text, checked }) {
 
   const handleDeleteTask = () => {
     dispatch(deleteTask(text));
-    request(`http://localhost:3001/tasks/${idOfTheTask}`, "DELETE");
+    request(idOfTheTask, "DELETE");
   };
 
   const handleDeleteTheTask = () => {
@@ -181,8 +201,8 @@ export default function TaskListItem({ text, checked }) {
                 <Checkbox
                   checked={checked}
                   onChange={handleCheckboxChange}
-                  icon={<RadioButtonUncheckedIcon color="icons.secondary" />}
-                  checkedIcon={<CheckCircleIcon color="icons.secondary" />}
+                  icon={<RadioButtonUncheckedIcon color="secondary" />}
+                  checkedIcon={<CheckCircleIcon color="secondary" />}
                 />
               }
               label={<Typography color="text.primary">{text}</Typography>}
@@ -271,4 +291,4 @@ export default function TaskListItem({ text, checked }) {
       )}
     </StyledMainTaskContainer>
   );
-}
+};

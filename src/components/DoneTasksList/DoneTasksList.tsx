@@ -1,5 +1,6 @@
+import React from "react";
 import "./DoneTasksList.css";
-import TaskListItem from "../TaskListItem/TaskListItem";
+import { TaskListItem } from "../TaskListItem/TaskListItem";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { CSSTransition } from "react-transition-group";
@@ -7,6 +8,16 @@ import styled from "styled-components";
 import { Box, IconButton, Typography } from "@mui/material";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
+interface Task {
+  name: string;
+  id: string;
+  done: boolean;
+}
+
+interface DoneTasksListProps {
+  tasksArray: Task[];
+}
 
 const StyledCompletedBox = styled(Box)`
   display: flex;
@@ -18,9 +29,9 @@ const StyledTitleOfDoneTasks = styled(Typography)`
   cursor: pointer;
 `;
 
-export default function DoneTasksList({ tasksArray }) {
+export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] = useState(false);
-  const [doneTasksCount, setDoneTasksCount] = useState(null);
+  const [doneTasksCount, setDoneTasksCount] = useState<null | number>(null);
   const tasks = useSelector(({ tasks }) => tasks.tasks);
 
   const countDoneTasks = useCallback(() => {
@@ -69,4 +80,4 @@ export default function DoneTasksList({ tasksArray }) {
       </CSSTransition>
     </>
   );
-}
+};

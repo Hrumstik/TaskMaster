@@ -1,12 +1,21 @@
+import React from "react";
 import { Typography } from "@mui/material";
 
-export default function NoTaskScreen({
+interface NoTaskScreenProps {
+  firstTitle: string;
+  secondTitle: string;
+  thirdTitle: string;
+  fourthTitle?: string;
+  icon: React.ReactNode;
+}
+
+const NoTaskScreen: React.FC<NoTaskScreenProps> = ({
   firstTitle,
   secondTitle,
   thirdTitle,
   fourthTitle,
   icon,
-}) {
+}) => {
   return (
     <>
       {icon}
@@ -31,4 +40,6 @@ export default function NoTaskScreen({
       </Typography>
     </>
   );
-}
+};
+
+export default NoTaskScreen;

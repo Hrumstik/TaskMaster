@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import LightModeIcon from "@mui/icons-material/LightMode";
@@ -7,6 +8,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../reducers/featuresSlice";
 import styled from "styled-components";
+
+interface HeaderProps {
+  text: string;
+  icon: React.ReactNode;
+}
 
 const StyledHeader = styled.header`
   display: flex;
@@ -22,8 +28,10 @@ const StyledTitleSection = styled(Box)`
   cursor: pointer;
 `;
 
-export default function Header({ text, icon }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
+  const [anchorEl, setAnchorEl] = useState<
+    null | (EventTarget & HTMLDivElement)
+  >(null);
   const [showPrintFeature, setShowPrintFeature] = useState(false);
 
   const litghtThemeState = useSelector(
@@ -32,7 +40,7 @@ export default function Header({ text, icon }) {
 
   const dispatch = useDispatch();
 
-  const showPrintMenu = (event) => {
+  const showPrintMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     setShowPrintFeature(true);
     setAnchorEl(event.currentTarget);
   };
@@ -87,4 +95,4 @@ export default function Header({ text, icon }) {
       </IconButton>
     </StyledHeader>
   );
-}
+};

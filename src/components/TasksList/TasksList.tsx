@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useFeatures from "../../hooks/useFeatures";
@@ -6,10 +6,11 @@ import useGroupTasks from "../../hooks/useGroupTasks";
 import { fetchTasks } from "../TaskListItem/tasksSlice";
 import { Box } from "@mui/material";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
-import DoneTasksList from "../DoneTasksList/DoneTasksList";
+import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
 import InputField from "../inputField/InputField";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import styled from "styled-components";
+import { AppDispatch } from "../store/store";
 
 const StyledMainTaskListContainer = styled(Box)`
   height: 86%;
@@ -18,10 +19,26 @@ const StyledMainTaskListContainer = styled(Box)`
   flex-direction: column;
 `;
 
+interface Task {
+  id: string;
+  name: string;
+  date: null | string;
+  done: boolean;
+  important: boolean;
+}
+
+interface RootState {
+  tasks: {
+    tasks: Task[];
+    status: string;
+  };
+  input: boolean;
+}
+
 function TasksList() {
   const tasks = useSelector(({ tasks }) => tasks.tasks);
   const tasksStatus = useSelector(({ tasks }) => tasks.status);
-  const stateOfInput = useSelector((state) => state.input);
+  const stateOfInput = useSelector((state: RootState) => state.input);
 
   const {
     sortedAlphabeticallyAllTasks,
@@ -32,7 +49,7 @@ function TasksList() {
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
     useFeatures();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (tasksStatus === "idle") {

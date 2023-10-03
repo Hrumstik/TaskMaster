@@ -1,13 +1,14 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import useFeatures from "../../hooks/useFeatures";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
+import { Header } from "../Header/Header";
 import { Box } from "@mui/material";
 import InputField from "../inputField/InputField";
-import DoneTasksList from "../DoneTasksList/DoneTasksList";
+import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import styled from "styled-components";

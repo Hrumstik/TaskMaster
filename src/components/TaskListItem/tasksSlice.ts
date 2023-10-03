@@ -1,6 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+interface Task {
+  id: string;
+  name: string;
+  date: null | string;
+  done: boolean;
+  important: boolean;
+}
+
+interface TasksState {
+  tasks: Task[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null | undefined;
+}
+
+const initialState: TasksState = {
+  tasks: [],
+  status: "idle",
+  error: null,
+};
+
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   try {
     const response = await axios.get("http://localhost:3001/tasks/", {
@@ -15,14 +35,11 @@ export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
 
 const tasksSlice = createSlice({
   name: "tasks",
-  initialState: {
-    tasks: [],
-    status: "idle",
-    error: null,
-  },
+  initialState,
   reducers: {
     addTask: (state, { payload }) => {
       return {
+        ...state,
         tasks: [
           ...state.tasks,
           {
@@ -136,4 +153,4 @@ export const {
   deleteAllTask,
 } = tasksSlice.actions;
 export default tasksSlice.reducer;
-export const getTasksStatus = (state) => state.tasks.status;
+export const getTasksStatus = (state: any) => state.tasks.status;

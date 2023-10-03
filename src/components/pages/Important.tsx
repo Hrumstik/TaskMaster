@@ -1,8 +1,9 @@
-import DoneTasksList from "../DoneTasksList/DoneTasksList";
+import React from "react";
+import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
+import { Header } from "../Header/Header";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
