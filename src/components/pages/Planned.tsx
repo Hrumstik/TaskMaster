@@ -60,6 +60,7 @@ export default function Planned() {
     sortedAlphabeticallyTasksWithoutDate,
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
+    unfinishedTasks,
   } = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
@@ -127,7 +128,7 @@ export default function Planned() {
         />
 
         <ContentContainer>
-          {tasks.length || stateOfInput ? (
+          {unfinishedTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
               {todayTasks.length && checkTheStatusOfTask(todayTasks) ? (
                 <Box sx={{ mb: "20px" }}>

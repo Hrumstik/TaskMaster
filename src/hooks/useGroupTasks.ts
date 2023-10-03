@@ -44,9 +44,9 @@ const useGroupTasks = (arrTasks: Task[]) => {
       );
     });
 
-    const tasksWithoutDate = arrTasks.filter((task) => {
-      return task.date === null;
-    });
+    const tasksWithoutDate = arrTasks.filter(({ date }) => date === null);
+
+    const unfinishedTasks = arrTasks.filter(({ done }) => !done);
 
     const otherTaks = arrTasks.filter((task) => {
       return ![
@@ -65,6 +65,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
       nextWeekTasks,
       tasksWithoutDate,
       otherTaks,
+      unfinishedTasks,
     };
   }, [arrTasks]);
 
@@ -75,6 +76,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
     nextWeekTasks,
     tasksWithoutDate,
     otherTaks,
+    unfinishedTasks,
   } = sortTasksByDate();
 
   const importantAllTasks = showImportantTasks(arrTasks);
@@ -140,6 +142,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
     sortedAlphabeticallyTasksWithoutDate,
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
+    unfinishedTasks,
   };
 };
 

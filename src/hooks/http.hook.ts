@@ -3,9 +3,9 @@ import axios, { AxiosRequestConfig } from "axios";
 export const useHttp = () => {
   const request = async (
     id?: string | null,
-    method = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     body: string | null = null,
-    headers = { "Content-Type": "application/json" }
+    headers: { "Content-Type": string } = { "Content-Type": "application/json" }
   ) => {
     let url: string = id
       ? `http://localhost:3001/tasks/${id}`
