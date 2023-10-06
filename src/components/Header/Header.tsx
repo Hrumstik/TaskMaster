@@ -8,6 +8,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../reducers/featuresSlice";
 import styled from "styled-components";
+import { Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import SearchModal from "../SearchModal/SearchModal";
+import Modal from "@mui/material/Modal";
 
 interface HeaderProps {
   text: string;
@@ -22,10 +27,44 @@ const StyledHeader = styled.header`
   margin-bottom: 37px;
 `;
 
-const StyledTitleSection = styled(Box)`
+const FirstStyledHeaderSection = styled(Box)`
   display: flex;
   gap: 9px;
   cursor: pointer;
+`;
+
+const SecondtyledHeaderSection = styled(Box)`
+  display: flex;
+  width: 20%;
+  height: 100%;
+  justify-content: space-between;
+`;
+
+const SearchTitle = styled(Typography)`
+  color: ${({ theme }) => theme.palette.text.primary};
+`;
+
+const SearchButton = styled.button<{ theme: Theme }>`
+  margin-left: 15px;
+  padding: 0 8px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.palette.background.search};
+  &:hover {
+    border: 3px solid ${({ theme }) => theme.palette.primary.main};
+    background-color: ${({ theme }) => theme.palette.background.search_hover};
+
+    & ${SearchTitle} {
+      color: ${({ theme }) => theme.palette.text.focused};
+    }
+  }
 `;
 
 export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
@@ -33,6 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
     null | (EventTarget & HTMLDivElement)
   >(null);
   const [showPrintFeature, setShowPrintFeature] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
   const litghtThemeState = useSelector(
     ({ features }) => features.showLightTheme
@@ -50,9 +90,11 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
     window.print();
   };
 
+  const theme = useTheme();
+
   return (
     <StyledHeader>
-      <StyledTitleSection>
+      <FirstStyledHeaderSection>
         <Typography variant="h1" color="text.secondary" fontSize="22px">
           <IconButton>{icon}</IconButton>
           {text}
@@ -75,24 +117,33 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
         >
           <MenuItem onClick={printThePage}>Print list</MenuItem>
         </Menu>
-      </StyledTitleSection>
-      <IconButton onClick={() => dispatch(toggleTheme())}>
-        {litghtThemeState ? (
-          <ModeNightIcon
-            sx={{
-              fontSize: 40,
-              color: "icons.secondary",
-            }}
-          />
-        ) : (
-          <LightModeIcon
-            sx={{
-              fontSize: 40,
-              color: "icons.secondary",
-            }}
-          />
-        )}
-      </IconButton>
+      </FirstStyledHeaderSection>
+      <SecondtyledHeaderSection>
+        <IconButton onClick={() => dispatch(toggleTheme())}>
+          {litghtThemeState ? (
+            <ModeNightIcon
+              sx={{
+                fontSize: 40,
+                color: "icons.secondary",
+              }}
+            />
+          ) : (
+            <LightModeIcon
+              sx={{
+                fontSize: 40,
+                color: "icons.secondary",
+              }}
+            />
+          )}
+        </IconButton>
+        <SearchButton theme={theme} onClick={() => setShowSearchModal(true)}>
+          <SearchIcon sx={{ mr: "5px", color: "icons.primary" }} />
+          <SearchTitle theme={theme}>Search task</SearchTitle>
+        </SearchButton>
+        <Modal open={showSearchModal} onClose={() => setShowSearchModal(false)}>
+          <SearchModal />
+        </Modal>
+      </SecondtyledHeaderSection>
     </StyledHeader>
   );
 };

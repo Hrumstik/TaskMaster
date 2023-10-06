@@ -113,7 +113,7 @@ export default function Menu() {
               ),
             },
           ].map(({ path, text, icon }) => {
-            return <ListItem path={path} text={text} icon={icon} />;
+            return <ListItem path={path} text={text} icon={icon} key={text} />;
           })}
         </StyledMenuList>
         <Divider variant="middle" />

@@ -3,6 +3,7 @@ import {
   sortTasksAlphabetically,
   showImportantTasks,
   sortAlphabeticallyTasksWithImportance,
+  sortUnfinishedTasks,
 } from "../components/utils/utils";
 import dayjs from "dayjs";
 
@@ -44,9 +45,14 @@ const useGroupTasks = (arrTasks: Task[]) => {
       );
     });
 
+    const overdueTasks = arrTasks.filter(({ date, done }) => {
+      const taskDate = dayjs(date, "DD.MM.YYYY");
+      return taskDate.isBefore(today, "day") && !done;
+    });
+
     const tasksWithoutDate = arrTasks.filter(({ date }) => date === null);
 
-    const unfinishedTasks = arrTasks.filter(({ done }) => !done);
+    const unfinishedTasks = sortUnfinishedTasks(arrTasks);
 
     const otherTaks = arrTasks.filter((task) => {
       return ![
@@ -66,6 +72,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
       tasksWithoutDate,
       otherTaks,
       unfinishedTasks,
+      overdueTasks,
     };
   }, [arrTasks]);
 
@@ -77,6 +84,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
     tasksWithoutDate,
     otherTaks,
     unfinishedTasks,
+    overdueTasks,
   } = sortTasksByDate();
 
   const importantAllTasks = showImportantTasks(arrTasks);
@@ -143,6 +151,7 @@ const useGroupTasks = (arrTasks: Task[]) => {
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
     unfinishedTasks,
+    overdueTasks,
   };
 };
 
