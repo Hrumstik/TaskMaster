@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 interface Task {
   name: string;
+  userId: string | string[];
   id: string;
   done: boolean;
 }
@@ -33,11 +34,26 @@ export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] = useState(false);
   const [doneTasksCount, setDoneTasksCount] = useState<null | number>(null);
   const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const currentUserId = useSelector(({ users }) => users.user.id);
 
   const countDoneTasks = useCallback(() => {
-    const doneTasksArray = tasksArray.filter((task) => task.done === true);
-    setDoneTasksCount(doneTasksArray.length);
-  }, [tasksArray]);
+    const doneTasksCount = tasksArray.reduce((acc, task) => {
+      if (task.done) {
+        if (typeof task.userId === "string") {
+          if (task.userId === currentUserId) {
+            return acc + 1;
+          }
+        } else if (Array.isArray(task.userId)) {
+          if (task.userId.includes(currentUserId)) {
+            return acc + 1;
+          }
+        }
+      }
+      return acc;
+    }, 0);
+
+    setDoneTasksCount(doneTasksCount);
+  }, [tasksArray, currentUserId]);
 
   useEffect(() => {
     countDoneTasks();
@@ -69,11 +85,21 @@ export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
         unmountOnExit
       >
         <Box>
-          {tasksArray.map(({ name, done, id }) => {
-            if (done === true) {
-              return <TaskListItem text={name} checked={done} key={id} />;
-            } else {
-              return null;
+          {tasksArray.map(({ name, done, id, userId }) => {
+            if (typeof userId === "string") {
+              if (done === true && currentUserId === userId) {
+                return <TaskListItem text={name} checked={done} key={id} />;
+              } else {
+                return null;
+              }
+            }
+
+            if (Array.isArray(userId) && done) {
+              if (userId.find((id: string) => id === currentUserId)) {
+                return <TaskListItem checked={done} text={name} key={id} />;
+              } else {
+                return null;
+              }
             }
           })}
         </Box>

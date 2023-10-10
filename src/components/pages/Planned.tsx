@@ -13,6 +13,7 @@ import useRenderTasks from "../../hooks/useRenderTasks";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import useAuth from "../../hooks/use-auth";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
@@ -37,6 +38,7 @@ const DateTitle = styled(Typography)`
 export default function Planned() {
   const tasks = useSelector(({ tasks }) => tasks.tasks);
   const stateOfInput = useSelector(({ input }) => input);
+  const currentUserId = useSelector(({ users }) => users.user.id);
 
   const {
     todayTasks,
@@ -76,7 +78,7 @@ export default function Planned() {
       ? importantTodayTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks;
+      : todayTasks.filter((task) => task.userId === currentUserId);
 
   const renderingTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -85,7 +87,7 @@ export default function Planned() {
       ? importantTomorrowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTomorrowTasksWithImportance
-      : tomorrowTasks;
+      : tomorrowTasks.filter((task) => task.userId === currentUserId);
 
   const renderingDayAfterTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -94,7 +96,7 @@ export default function Planned() {
       ? importantDayAfterTommorowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyDayAfterTommorowTasksWithImportance
-      : dayAfterTommorowTasks;
+      : dayAfterTommorowTasks.filter((task) => task.userId === currentUserId);
 
   const renderingNextWeekTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -103,7 +105,7 @@ export default function Planned() {
       ? importantNextWeekTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyNextWeekTasksWithImportance
-      : nextWeekTasks;
+      : nextWeekTasks.filter((task) => task.userId === currentUserId);
 
   const renderingTasksWithoutDate =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -112,7 +114,13 @@ export default function Planned() {
       ? importantTasksWithoutDate
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTasksWithoutDateWithImportance
-      : tasksWithoutDate;
+      : tasksWithoutDate.filter((task) => task.userId === currentUserId);
+
+  const renderindOtherTasks = otherTaks.filter(
+    (task) => task.userId === currentUserId
+  );
+
+  useAuth();
 
   return (
     <AppContainer theme={theme}>
@@ -130,7 +138,8 @@ export default function Planned() {
         <ContentContainer>
           {unfinishedTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
-              {todayTasks.length && checkTheStatusOfTask(todayTasks) ? (
+              {renderingTodayTasks.length &&
+              checkTheStatusOfTask(todayTasks) ? (
                 <Box sx={{ mb: "20px" }}>
                   <DateTitle color="text.primary" variant="h5">
                     Today tasks:
@@ -139,7 +148,8 @@ export default function Planned() {
                 </Box>
               ) : null}
 
-              {tomorrowTasks.length && checkTheStatusOfTask(tomorrowTasks) ? (
+              {renderingTommorovTasks.length &&
+              checkTheStatusOfTask(tomorrowTasks) ? (
                 <Box>
                   <DateTitle color="text.primary" variant="h5">
                     Tomorrow tasks:
@@ -148,7 +158,7 @@ export default function Planned() {
                 </Box>
               ) : null}
 
-              {dayAfterTommorowTasks.length &&
+              {renderingDayAfterTommorovTasks.length &&
               checkTheStatusOfTask(dayAfterTommorowTasks) ? (
                 <Box>
                   <DateTitle color="text.primary" variant="h5">
@@ -158,7 +168,8 @@ export default function Planned() {
                 </Box>
               ) : null}
 
-              {nextWeekTasks.length && checkTheStatusOfTask(nextWeekTasks) ? (
+              {renderingNextWeekTasks.length &&
+              checkTheStatusOfTask(nextWeekTasks) ? (
                 <Box>
                   <DateTitle color="text.primary" variant="h5">
                     Next week tasks:
@@ -167,7 +178,7 @@ export default function Planned() {
                 </Box>
               ) : null}
 
-              {tasksWithoutDate.length &&
+              {renderingTasksWithoutDate.length &&
               checkTheStatusOfTask(tasksWithoutDate) ? (
                 <Box>
                   <DateTitle color="text.primary" variant="h5">
@@ -177,16 +188,16 @@ export default function Planned() {
                 </Box>
               ) : null}
 
-              {otherTaks.length ? (
+              {renderindOtherTasks.length ? (
                 <Box>
-                  {otherTaks.map((task, i) => {
+                  {renderindOtherTasks.map((task) => {
                     if (!task.done) {
                       return (
                         <>
                           <DateTitle color="text.primary" variant="h5">
                             Task for the date {task.date}:
                           </DateTitle>
-                          <TaskListItem text={task.name} key={i} />
+                          <TaskListItem text={task.name} key={task.id} />
                         </>
                       );
                     } else {

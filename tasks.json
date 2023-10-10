@@ -1,18 +1,77 @@
 {
   "tasks": [
     {
-      "id": "d2b031d0-dba3-4ae4-b24e-56299822601d",
-      "name": "Поговорить с отцом",
-      "date": "06.12.2023",
+      "id": "67ce6dd3-3f26-449c-97c2-5b30c4333322",
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ],
+      "name": "Поиграть в комп",
+      "date": null,
       "done": false,
       "important": false
     },
     {
-      "id": "37c4ab59-1760-43db-a506-947a30057e75",
-      "name": "Сделать ДЗ по английскому",
-      "date": "06.11.2023",
+      "id": "3ca20421-6c10-4f4b-9e84-638fabe9268b",
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ],
+      "name": "Сделать зарядку",
+      "date": null,
       "done": false,
       "important": false
+    },
+    {
+      "id": "6fdfba82-40e9-4374-adf1-f16ec03a51de",
+      "name": "угадать",
+      "date": null,
+      "done": false,
+      "important": false,
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ]
+    },
+    {
+      "id": "38d99b73-ab07-42e6-a18d-b8cd50a68358",
+      "name": "Поговорить с мамой",
+      "date": "08.10.2023",
+      "done": false,
+      "important": true,
+      "userId": [
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ]
+    },
+    {
+      "id": "9390e36a-03a1-4a8b-bc95-064e287ea7c7",
+      "userId": [
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
+      ],
+      "name": "Забрать деньги",
+      "date": null,
+      "done": false,
+      "important": false
+    }
+  ],
+  "users": [
+    {
+      "email": "dasha.terehova@gmail.com",
+      "login": "Dasha",
+      "id": "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+    },
+    {
+      "email": "hrumstik.ivenec@gmail.com",
+      "login": "Hrumstik",
+      "id": "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
+    },
+    {
+      "email": "jetfree90@gmail.com",
+      "login": "JetFree",
+      "id": "yOXL3bShNdaqcQfmKziVhSeeS8S2"
     }
   ]
 }

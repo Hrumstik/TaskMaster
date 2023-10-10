@@ -13,6 +13,7 @@ import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import useAuth from "../../hooks/use-auth";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
@@ -31,6 +32,7 @@ const ContentContainer = styled(Box)`
 `;
 
 export default function MyDay() {
+  useAuth();
   const tasks = useSelector(({ tasks }) => tasks.tasks);
 
   const stateOfInput = useSelector(({ input }) => input);

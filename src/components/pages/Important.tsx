@@ -13,6 +13,7 @@ import useRenderTasks from "../../hooks/useRenderTasks";
 import useFeatures from "../../hooks/useFeatures";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import useAuth from "../../hooks/use-auth";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
@@ -43,6 +44,8 @@ export default function Important() {
   const renderingTasks = sortTasksAlphabeticallyState
     ? sortedAlphabeticallyAllTasksWithImportance
     : importantAllTasks;
+
+  useAuth();
 
   return (
     <AppContainer theme={theme}>

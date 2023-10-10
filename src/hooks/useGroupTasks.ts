@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 
 interface Task {
   id: string;
+  userId: string | string[];
   name: string;
   date: null | string;
   done: boolean;

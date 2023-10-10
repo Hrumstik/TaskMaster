@@ -9,8 +9,10 @@ import MyDay from "./components/pages/MyDay";
 import Main from "./components/pages/Main";
 import Important from "./components/pages/Important";
 import Planned from "./components/pages/Planned";
-import CustomThemeProvider from "./components/CustomThemeProvider/CustomThemeProvider";
-
+import App from "./components/App";
+import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
+import "./firebase";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,15 +31,17 @@ const router = createBrowserRouter([
     path: "/planned",
     element: <Planned />,
   },
+  { path: "/Login", element: <Login /> },
+  { path: "/Register", element: <Register /> },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CustomThemeProvider>
+      <App>
         <RouterProvider router={router} />
-      </CustomThemeProvider>
+      </App>
     </Provider>
   </React.StrictMode>
 );

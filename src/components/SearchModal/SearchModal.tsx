@@ -19,6 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 interface Task {
   id: string;
   name: string;
+  userId: string | string[];
   date: null | string;
   done: boolean;
   important: boolean;
@@ -143,17 +144,30 @@ const SearchModal: FC = () => {
     dayjs(),
     dayjs(),
   ]);
+  const currentUserId = useSelector(({ users }) => users.user.id);
 
   const { unfinishedTasks, importantAllTasks, overdueTasks } =
     useGroupTasks(tasks);
+
+  const searchCondition = (task: Task) => {
+    if (
+      (typeof task.userId === "string" && task.userId === currentUserId) ||
+      (Array.isArray(task.userId) &&
+        task.userId.find((id: string) => id === currentUserId))
+    ) {
+      return true;
+    }
+  };
 
   const searchTasks = (searchValue: string, arrTasks: Task[]) => {
     let selectedTaks: Task[] = [];
     if (searchValue.trim().length > 0) {
       selectedTaks = arrTasks.filter((task: Task) => {
-        return task.name
-          .toLowerCase()
-          .includes(searchValue.toLowerCase().trim());
+        if (searchCondition(task)) {
+          return task.name
+            .toLowerCase()
+            .includes(searchValue.toLowerCase().trim());
+        }
       });
     }
     return selectedTaks;

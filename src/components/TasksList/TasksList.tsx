@@ -19,26 +19,10 @@ const StyledMainTaskListContainer = styled(Box)`
   flex-direction: column;
 `;
 
-interface Task {
-  id: string;
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
-
-interface RootState {
-  tasks: {
-    tasks: Task[];
-    status: string;
-  };
-  input: boolean;
-}
-
 function TasksList() {
   const tasks = useSelector(({ tasks }) => tasks.tasks);
   const tasksStatus = useSelector(({ tasks }) => tasks.status);
-  const stateOfInput = useSelector((state: RootState) => state.input);
+  const stateOfInput = useSelector(({ input }) => input);
 
   const {
     sortedAlphabeticallyAllTasks,

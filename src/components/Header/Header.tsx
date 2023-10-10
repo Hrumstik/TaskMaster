@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import Menu from "@mui/material/Menu";
@@ -7,12 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../reducers/featuresSlice";
+import { removeUser } from "../authentication/usersSlice";
 import styled from "styled-components";
 import { Theme } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchModal from "../SearchModal/SearchModal";
 import Modal from "@mui/material/Modal";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface HeaderProps {
   text: string;
@@ -33,11 +35,12 @@ const FirstStyledHeaderSection = styled(Box)`
   cursor: pointer;
 `;
 
-const SecondtyledHeaderSection = styled(Box)`
+const SecondstyledHeaderSection = styled(Box)`
   display: flex;
-  width: 20%;
+  width: 35%;
   height: 100%;
-  justify-content: space-between;
+  gap: 10px;
+  justify-content: flex-end;
 `;
 
 const SearchTitle = styled(Typography)`
@@ -45,9 +48,8 @@ const SearchTitle = styled(Typography)`
 `;
 
 const SearchButton = styled.button<{ theme: Theme }>`
-  margin-left: 15px;
   padding: 0 8px;
-  width: 100%;
+  width: 40%;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -65,6 +67,15 @@ const SearchButton = styled.button<{ theme: Theme }>`
       color: ${({ theme }) => theme.palette.text.focused};
     }
   }
+`;
+
+const LogOutButton = styled(Button)`
+  width: 30%;
+  border-radius: 30px !important;
+  height: 40px;
+  align-self: center;
+  font-size: 12px !important;
+  font-weight: bold !important;
 `;
 
 export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
@@ -88,6 +99,10 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
   const printThePage = () => {
     setShowPrintFeature(false);
     window.print();
+  };
+
+  const logOut = () => {
+    dispatch(removeUser());
   };
 
   const theme = useTheme();
@@ -118,7 +133,14 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
           <MenuItem onClick={printThePage}>Print list</MenuItem>
         </Menu>
       </FirstStyledHeaderSection>
-      <SecondtyledHeaderSection>
+      <SecondstyledHeaderSection>
+        <SearchButton theme={theme} onClick={() => setShowSearchModal(true)}>
+          <SearchIcon sx={{ mr: "5px", color: "icons.primary" }} />
+          <SearchTitle theme={theme}>Search task</SearchTitle>
+        </SearchButton>
+        <Modal open={showSearchModal} onClose={() => setShowSearchModal(false)}>
+          <SearchModal />
+        </Modal>
         <IconButton onClick={() => dispatch(toggleTheme())}>
           {litghtThemeState ? (
             <ModeNightIcon
@@ -136,14 +158,14 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
             />
           )}
         </IconButton>
-        <SearchButton theme={theme} onClick={() => setShowSearchModal(true)}>
-          <SearchIcon sx={{ mr: "5px", color: "icons.primary" }} />
-          <SearchTitle theme={theme}>Search task</SearchTitle>
-        </SearchButton>
-        <Modal open={showSearchModal} onClose={() => setShowSearchModal(false)}>
-          <SearchModal />
-        </Modal>
-      </SecondtyledHeaderSection>
+        <LogOutButton
+          startIcon={<LogoutIcon />}
+          variant="contained"
+          onClick={logOut}
+        >
+          Log out
+        </LogOutButton>
+      </SecondstyledHeaderSection>
     </StyledHeader>
   );
 };

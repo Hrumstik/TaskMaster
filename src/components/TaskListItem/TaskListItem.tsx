@@ -34,13 +34,14 @@ import { useTheme } from "@mui/material/styles";
 
 interface TaskListItemProps {
   text: string;
-  checked?: boolean;
+  checked: boolean;
 }
 
 interface Task {
   id: string;
+  userId: string | string[];
   name: string;
-  date: Date;
+  date: null | string;
   done: boolean;
   important: boolean;
 }

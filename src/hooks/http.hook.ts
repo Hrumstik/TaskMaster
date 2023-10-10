@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 export const useHttp = () => {
   const request = async (
-    id?: string | null,
+    id: string | null,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     body: string | null = null,
     headers: { "Content-Type": string } = { "Content-Type": "application/json" }
@@ -26,7 +26,7 @@ export const useHttp = () => {
 
       return response.data;
     } catch (e: any) {
-      throw new Error(e.response ? e.response.data : e.message);
+      throw new Error(JSON.stringify(e.response ? e.response.data : e.message));
     }
   };
 

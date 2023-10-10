@@ -53,6 +53,20 @@ export default function Menu() {
   const { request } = useHttp();
 
   const theme = useTheme();
+  const currentUserId = useSelector(({ users }) => users.user.id);
+
+  const deleteAllTasks = async () => {
+    try {
+      dispatch(deleteAllTask());
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].userId === currentUserId) {
+          await request(tasks[i].id, "DELETE");
+        }
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
 
   return (
     <StyledMenuContainer theme={theme}>
@@ -158,15 +172,7 @@ export default function Menu() {
                 primary="Show important tasks"
               />
             </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                dispatch(deleteAllTask());
-                for (let i = 0; i < tasks.length; i++) {
-                  request(tasks[i].id, "DELETE");
-                }
-              }}
-              divider
-            >
+            <ListItemButton onClick={deleteAllTasks} divider>
               <ListItemIcon>
                 <DeleteForeverIcon sx={{ color: "icons.primary" }} />
               </ListItemIcon>

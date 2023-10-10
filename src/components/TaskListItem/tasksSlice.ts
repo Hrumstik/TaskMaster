@@ -45,9 +45,10 @@ const tasksSlice = createSlice({
           {
             id: payload.id,
             name: payload.name,
-            date: null,
+            date: payload.date,
             done: false,
-            important: false,
+            important: payload.important,
+            userId: payload.userId,
           },
         ],
       };

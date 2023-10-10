@@ -7,6 +7,6 @@
     "strict": true,
     "esModuleInterop": true // Добавьте эту опцию
   },
-  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "include": ["src/**/*.tsx", "src/**/*.ts", "src/firebase.js"],
   "exclude": ["node_modules"]
 }
