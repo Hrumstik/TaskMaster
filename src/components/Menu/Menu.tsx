@@ -25,18 +25,22 @@ import GradeIcon from "@mui/icons-material/Grade";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import useScreenSize from "../../hooks/useScreenSize";
+import useAuth from "../../hooks/use-auth";
 
-const StyledMenuContainer = styled(Box)`
+const StyledMenuContainer = styled(Box)<any>`
   background-color: ${({ theme }) => theme.palette.background.default};
   height: 100vh;
   box-shadow: 4px 0px 20px -10px rgba(0, 0, 0, 0.25);
-  width: 25%;
+  width: ${({ isMobile }) => (isMobile ? "8%" : "25%")};
 `;
 
-const StyledMenuHeader = styled.header`
+const StyledMenuHeader = styled.header<any>`
   padding-top: 40px;
   padding-left: 11%;
   padding-right: 10%;
+  display: ${({ isMobile }) => (isMobile ? "flex" : "block")};
+  justify-content: ${({ isMobile }) => (isMobile ? "center" : "initial")};
 `;
 
 const StyledMenuList = styled.ul`
@@ -53,13 +57,12 @@ export default function Menu() {
   const { request } = useHttp();
 
   const theme = useTheme();
-  const currentUserId = useSelector(({ users }) => users.user.id);
 
   const deleteAllTasks = async () => {
     try {
       dispatch(deleteAllTask());
       for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].userId === currentUserId) {
+        if (isTaskOwnedByCurrentUser(tasks[i])) {
           await request(tasks[i].id, "DELETE");
         }
       }
@@ -68,11 +71,16 @@ export default function Menu() {
     }
   };
 
+  const { isMobile, isTablet, isDesktop } = useScreenSize();
+  const { isTaskOwnedByCurrentUser } = useAuth();
+
   return (
-    <StyledMenuContainer theme={theme}>
-      <StyledMenuHeader>
+    <StyledMenuContainer theme={theme} isMobile={isMobile}>
+      <StyledMenuHeader isMobile={isMobile}>
         <IconButton onClick={() => setShowOptions(true)}>
-          <MenuOutlinedIcon sx={{ fontSize: 40, color: "icons.primary" }} />
+          <MenuOutlinedIcon
+            sx={{ fontSize: isMobile ? 25 : 40, color: "icons.primary" }}
+          />
         </IconButton>
       </StyledMenuHeader>
       <main>

@@ -1,42 +1,6 @@
 {
   "tasks": [
     {
-      "id": "67ce6dd3-3f26-449c-97c2-5b30c4333322",
-      "userId": [
-        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
-        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
-      ],
-      "name": "Поиграть в комп",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "3ca20421-6c10-4f4b-9e84-638fabe9268b",
-      "userId": [
-        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
-        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
-      ],
-      "name": "Сделать зарядку",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "6fdfba82-40e9-4374-adf1-f16ec03a51de",
-      "name": "угадать",
-      "date": null,
-      "done": false,
-      "important": false,
-      "userId": [
-        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
-        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
-      ]
-    },
-    {
       "id": "38d99b73-ab07-42e6-a18d-b8cd50a68358",
       "name": "Поговорить с мамой",
       "date": "08.10.2023",
@@ -52,6 +16,45 @@
         "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
       ],
       "name": "Забрать деньги",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
+      "id": "1103dc10-c885-470f-a34f-400c92604ac0",
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+      ],
+      "name": "Агула",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
+      "id": "c9b61e85-38bf-4636-b3c7-9c2dddda420f",
+      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
+      "name": "Саша",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
+      "id": "2d17f330-c20e-4ca6-8d31-9be691bd84a9",
+      "userId": "95MLBrLxLkgjv7fr5LihwJMXSj03",
+      "name": "погладить",
+      "date": "10.10.2023",
+      "done": false,
+      "important": true
+    },
+    {
+      "id": "d675303e-ac8c-4d6c-a785-e4b7b1ec2599",
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2",
+        "95MLBrLxLkgjv7fr5LihwJMXSj03"
+      ],
+      "name": "Покормить",
       "date": null,
       "done": false,
       "important": false
@@ -72,6 +75,11 @@
       "email": "jetfree90@gmail.com",
       "login": "JetFree",
       "id": "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+    },
+    {
+      "email": "dazhylik69@mail.ru",
+      "login": "Dashka",
+      "id": "95MLBrLxLkgjv7fr5LihwJMXSj03"
     }
   ]
 }

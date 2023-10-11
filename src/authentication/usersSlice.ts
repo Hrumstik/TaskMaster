@@ -7,12 +7,12 @@ interface User {
 }
 
 interface authentication {
-  user: User;
+  user: Partial<User>;
   auth: boolean;
 }
 
 const initialState: authentication = {
-  user: { email: "", token: "", id: "" },
+  user: { email: null, token: null, id: null },
   auth: false,
 };
 
@@ -21,16 +21,14 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
-      state.user.email = action.payload.email;
-      state.user.token = action.payload.token;
-      state.user.id = action.payload.id;
+      const { email, token, id } = action.payload;
+      state.user.email = email;
+      state.user.token = token;
+      state.user.id = id;
       state.auth = true;
     },
     removeUser: (state) => {
-      state.user.email = null;
-      state.user.token = null;
-      state.user.id = null;
-      state.auth = false;
+      return initialState;
     },
   },
 });

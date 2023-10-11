@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "../authentication/usersSlice";
+import { setUser } from "../../authentication/usersSlice";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosRequestConfig } from "axios";
 

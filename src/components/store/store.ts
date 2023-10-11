@@ -3,7 +3,7 @@ import tasksReducer from "../TaskListItem/tasksSlice";
 import inputOpenSlice from "../inputField/inputOpenSlice";
 import featuresSlice from "../../reducers/featuresSlice";
 import searchOpenSlice from "../SearchModal/searchSlice";
-import usersSlice from "../authentication/usersSlice";
+import usersSlice from "../../authentication/usersSlice";
 
 const store = configureStore({
   reducer: {

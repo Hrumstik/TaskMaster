@@ -52,7 +52,7 @@ function TasksList() {
 
   return (
     <StyledMainTaskListContainer>
-      {tasks.length || stateOfInput ? (
+      {renderingTasks.length || stateOfInput ? (
         <Box sx={{ height: "100%" }}>
           {renderTasks(renderingTasks)}
           <DoneTasksList tasksArray={tasks} />

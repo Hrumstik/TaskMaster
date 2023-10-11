@@ -15,6 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRange } from "@mui/x-date-pickers-pro";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import dayjs, { Dayjs } from "dayjs";
+import useScreenSize from "../../hooks/useScreenSize";
 
 interface Task {
   id: string;
@@ -28,6 +29,8 @@ interface Task {
 interface SearchPanelType {
   foundTasks: Task[];
   theme: Theme;
+  isMobile: boolean;
+  isTablet: boolean;
 }
 
 interface FilterButtonType {
@@ -42,8 +45,8 @@ const SearchPanel = styled(Box)<SearchPanelType>`
   display: "flex"
   flex-direction: "column";
   transform: translate(-55%, -15%);
-  width: 50%;
-  height: ${({ foundTasks }) => (foundTasks.length ? "60%" : "35%")};
+  width: ${({ isMobile, isTablet }) => (isMobile || isTablet ? "90%" : "50%")};
+  height: ${({ foundTasks }) => (foundTasks.length ? "70%" : "45%")};
   padding: 15px 15px 0px 15px;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.background.search};
@@ -228,8 +231,15 @@ const SearchModal: FC = () => {
     foundTasks.length ||
     (filterDateValue && "filter by date" === isActiveButton);
 
+  const { isMobile, isTablet } = useScreenSize();
+
   return (
-    <SearchPanel theme={theme} foundTasks={foundTasks}>
+    <SearchPanel
+      theme={theme}
+      foundTasks={foundTasks}
+      isMobile={isMobile}
+      isTablet={isTablet}
+    >
       <InputWrapper theme={theme}>
         <StyledLabel>
           <SearchIcon sx={{ color: "icons.secondary", fontSize: 40 }} />

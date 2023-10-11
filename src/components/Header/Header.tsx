@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../reducers/featuresSlice";
-import { removeUser } from "../authentication/usersSlice";
+import { removeUser } from "../../authentication/usersSlice";
 import styled from "styled-components";
 import { Theme } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -15,6 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import SearchModal from "../SearchModal/SearchModal";
 import Modal from "@mui/material/Modal";
 import LogoutIcon from "@mui/icons-material/Logout";
+import useScreenSize from "../../hooks/useScreenSize";
 
 interface HeaderProps {
   text: string;
@@ -107,6 +108,8 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
 
   const theme = useTheme();
 
+  const { isMobile, isTablet } = useScreenSize();
+
   return (
     <StyledHeader>
       <FirstStyledHeaderSection>
@@ -134,10 +137,18 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
         </Menu>
       </FirstStyledHeaderSection>
       <SecondstyledHeaderSection>
-        <SearchButton theme={theme} onClick={() => setShowSearchModal(true)}>
-          <SearchIcon sx={{ mr: "5px", color: "icons.primary" }} />
-          <SearchTitle theme={theme}>Search task</SearchTitle>
-        </SearchButton>
+        {isMobile || isTablet ? (
+          <IconButton onClick={() => setShowSearchModal(true)}>
+            <SearchIcon
+              sx={{ fontSize: 40, color: "icons.secondary" }}
+            ></SearchIcon>
+          </IconButton>
+        ) : (
+          <SearchButton theme={theme} onClick={() => setShowSearchModal(true)}>
+            <SearchIcon sx={{ mr: "5px", color: "icons.primary" }} />
+            <SearchTitle theme={theme}>Search task</SearchTitle>
+          </SearchButton>
+        )}
         <Modal open={showSearchModal} onClose={() => setShowSearchModal(false)}>
           <SearchModal />
         </Modal>
@@ -158,13 +169,19 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
             />
           )}
         </IconButton>
-        <LogOutButton
-          startIcon={<LogoutIcon />}
-          variant="contained"
-          onClick={logOut}
-        >
-          Log out
-        </LogOutButton>
+        {isMobile || isTablet ? (
+          <IconButton onClick={logOut}>
+            <LogoutIcon sx={{ color: "icons.secondary", fontSize: 40 }} />
+          </IconButton>
+        ) : (
+          <LogOutButton
+            startIcon={<LogoutIcon />}
+            variant="contained"
+            onClick={logOut}
+          >
+            Log out
+          </LogOutButton>
+        )}
       </SecondstyledHeaderSection>
     </StyledHeader>
   );

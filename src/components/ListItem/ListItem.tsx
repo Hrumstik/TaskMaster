@@ -3,6 +3,7 @@ import "./ListItem.css";
 import { NavLink } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 import styled from "styled-components";
+import useScreenSize from "../../hooks/useScreenSize";
 
 interface ListItemProps {
   text: string;
@@ -15,6 +16,8 @@ const StyledListItem = styled.li`
 `;
 
 export default function ListItem({ text, path, icon }: ListItemProps) {
+  const { isMobile } = useScreenSize();
+
   return (
     <StyledListItem className="">
       <NavLink
@@ -26,7 +29,7 @@ export default function ListItem({ text, path, icon }: ListItemProps) {
       >
         <Typography variant="h6" component="span" color="text.primary">
           <IconButton sx={{ mr: "25px" }}>{icon}</IconButton>
-          {text}
+          {isMobile ? null : text}
         </Typography>
       </NavLink>
     </StyledListItem>

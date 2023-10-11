@@ -14,14 +14,15 @@ import useFeatures from "../../hooks/useFeatures";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../hooks/use-auth";
+import useScreenSize from "../../hooks/useScreenSize";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
   display: flex;
 `;
 
-const MainContainer = styled(Box)`
-  width: 75%;
+const MainContainer = styled(Box)<any>`
+  width: ${({ isMobile }) => (isMobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -32,6 +33,7 @@ const ContentContainer = styled(Box)`
 `;
 
 export default function Important() {
+  const { isMobile } = useScreenSize();
   const tasks = useSelector(({ tasks }) => tasks.tasks);
   const stateOfInput = useSelector(({ input }) => input);
 
@@ -50,7 +52,7 @@ export default function Important() {
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer>
+      <MainContainer isMobile={isMobile}>
         <Header
           text="Important"
           icon={
