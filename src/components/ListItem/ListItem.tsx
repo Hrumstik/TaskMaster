@@ -29,7 +29,7 @@ export default function ListItem({ text, path, icon }: ListItemProps) {
       >
         <Typography variant="h6" component="span" color="text.primary">
           <IconButton sx={{ mr: "25px" }}>{icon}</IconButton>
-          {isMobile ? null : text}
+          {isMobile || text}
         </Typography>
       </NavLink>
     </StyledListItem>

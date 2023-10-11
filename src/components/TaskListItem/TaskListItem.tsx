@@ -31,22 +31,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import { Task, Tasks } from "../../types/types";
 
 interface TaskListItemProps {
   text: string;
   checked: boolean;
 }
-
-interface Task {
-  id: string;
-  userId: string | string[];
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
-
-type Tasks = Task[];
 
 const StyledMainTaskContainer = styled(Box)`
   margin-left: 18px;
@@ -76,10 +66,10 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
   text,
   checked,
 }) => {
-  const [focusedTask, setFocusedTask] = useState(false);
+  const [focusedTask, setFocusedTask] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState(false);
   const [date, setDate] = useState<Dayjs | null>(dayjs());
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [changingTheNameOfTask, setChangingTheNameOfTask] =
     useState<boolean>(false);
   const [valueOfInput, setTheValueOfInput] = useState<string>(text);
@@ -104,7 +94,7 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
   }, [tasks, text]);
 
   const indexOfTheTask: number = findIndexOfTheTask();
-  const idOfTheTask = findIdOfTheTask();
+  const idOfTheTask: string = findIdOfTheTask();
 
   const { request } = useHttp();
 
@@ -191,13 +181,14 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
     setFocusedTask(false);
   };
 
+  const animationTime: number = 500;
+
   return (
     <StyledMainTaskContainer theme={theme}>
       {!changingTheNameOfTask ? (
         <>
           <StyledBasicTaskContainer theme={theme} focusedTask={focusedTask}>
             <FormControlLabel
-              sx={{ width: "100%" }}
               control={
                 <Checkbox
                   checked={checked}
@@ -228,7 +219,7 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
 
           <CSSTransition
             in={focusedTask}
-            timeout={500}
+            timeout={animationTime}
             classNames="todo-additional-container"
             unmountOnExit
           >

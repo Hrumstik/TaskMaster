@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../reducers/featuresSlice";
-import { removeUser } from "../../authentication/usersSlice";
+import { removeUser } from "../authentication/usersSlice";
 import styled from "styled-components";
 import { Theme } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -16,6 +16,7 @@ import SearchModal from "../SearchModal/SearchModal";
 import Modal from "@mui/material/Modal";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useScreenSize from "../../hooks/useScreenSize";
+import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
 interface HeaderProps {
   text: string;
@@ -30,13 +31,13 @@ const StyledHeader = styled.header`
   margin-bottom: 37px;
 `;
 
-const FirstStyledHeaderSection = styled(Box)`
+const HeaderLeftSection = styled(Box)`
   display: flex;
   gap: 9px;
   cursor: pointer;
 `;
 
-const SecondstyledHeaderSection = styled(Box)`
+const HeaderRightSection = styled(Box)`
   display: flex;
   width: 35%;
   height: 100%;
@@ -83,8 +84,8 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
   const [anchorEl, setAnchorEl] = useState<
     null | (EventTarget & HTMLDivElement)
   >(null);
-  const [showPrintFeature, setShowPrintFeature] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showPrintFeature, setShowPrintFeature] = useState<boolean>(false);
+  const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
 
   const litghtThemeState = useSelector(
     ({ features }) => features.showLightTheme
@@ -101,9 +102,13 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
     setShowPrintFeature(false);
     window.print();
   };
+  const stateOfInput = useSelector(({ input }) => input);
 
   const logOut = () => {
     dispatch(removeUser());
+    if (stateOfInput) {
+      dispatch(toggleStateOfInput());
+    }
   };
 
   const theme = useTheme();
@@ -112,11 +117,13 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
 
   return (
     <StyledHeader>
-      <FirstStyledHeaderSection>
+      <HeaderLeftSection>
         <Typography variant="h1" color="text.secondary" fontSize="22px">
           <IconButton>{icon}</IconButton>
           {text}
         </Typography>
+
+        {/* This block responsible for the feature of printing the page*/}
         <Typography onClick={showPrintMenu} color="text.secondary">
           ...
         </Typography>
@@ -135,8 +142,8 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
         >
           <MenuItem onClick={printThePage}>Print list</MenuItem>
         </Menu>
-      </FirstStyledHeaderSection>
-      <SecondstyledHeaderSection>
+      </HeaderLeftSection>
+      <HeaderRightSection>
         {isMobile || isTablet ? (
           <IconButton onClick={() => setShowSearchModal(true)}>
             <SearchIcon
@@ -182,7 +189,7 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
             Log out
           </LogOutButton>
         )}
-      </SecondstyledHeaderSection>
+      </HeaderRightSection>
     </StyledHeader>
   );
 };

@@ -1,36 +1,27 @@
 import React, { FC, useState } from "react";
-import useGroupTasks from "../../hooks/useGroupTasks";
-import { Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import styled from "styled-components";
-import SearchIcon from "@mui/icons-material/Search";
-import { Typography } from "@mui/material";
+import dayjs, { Dayjs } from "dayjs";
 import { useSelector } from "react-redux";
-import TaskSearchItem from "./TaskSearchItem";
-import { Theme } from "@mui/material/styles";
+import styled from "styled-components";
+import { Box, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
+import { Theme, useTheme } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRange } from "@mui/x-date-pickers-pro";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import dayjs, { Dayjs } from "dayjs";
+import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
-
-interface Task {
-  id: string;
-  name: string;
-  userId: string | string[];
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
+import useAuth from "../../hooks/use-auth";
+import { Task, UseGroupTasksTypes } from "../../types/types";
+import TaskSearchItem from "./TaskSearchItem";
 
 interface SearchPanelType {
   foundTasks: Task[];
   theme: Theme;
-  isMobile: boolean;
-  isTablet: boolean;
+  ismobile: boolean;
+  istablet: boolean;
 }
 
 interface FilterButtonType {
@@ -45,12 +36,12 @@ const SearchPanel = styled(Box)<SearchPanelType>`
   display: "flex"
   flex-direction: "column";
   transform: translate(-55%, -15%);
-  width: ${({ isMobile, isTablet }) => (isMobile || isTablet ? "90%" : "50%")};
+  width: ${({ ismobile, istablet }) => (ismobile || istablet ? "90%" : "50%")};
   height: ${({ foundTasks }) => (foundTasks.length ? "70%" : "45%")};
   padding: 15px 15px 0px 15px;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.background.search};
-  overflow: auto;
+  overflow: auto; 
   overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 8px ;
@@ -138,8 +129,8 @@ const TaskListContainer = styled(Box)`
 
 const SearchModal: FC = () => {
   const theme = useTheme();
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
-  const [searchValue, setSearchValue] = useState("");
+  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
+  const [searchValue, setSearchValue] = useState<string>("");
   const [isActiveButton, setIsActiveButton] = useState<string>("all tasks");
   const [actualTaskArray, setActualTaskArray] = useState<Task[]>(tasks);
   const [foundTasks, setFoundTasks] = useState<Task[]>([]);
@@ -147,26 +138,21 @@ const SearchModal: FC = () => {
     dayjs(),
     dayjs(),
   ]);
-  const currentUserId = useSelector(({ users }) => users.user.id);
+  const currentUserId: string = useSelector(({ users }) => users.user.id);
 
-  const { unfinishedTasks, importantAllTasks, overdueTasks } =
-    useGroupTasks(tasks);
+  const { isTaskOwnedByCurrentUser } = useAuth();
 
-  const searchCondition = (task: Task) => {
-    if (
-      (typeof task.userId === "string" && task.userId === currentUserId) ||
-      (Array.isArray(task.userId) &&
-        task.userId.find((id: string) => id === currentUserId))
-    ) {
-      return true;
-    }
-  };
+  const {
+    unfinishedTasks,
+    importantAllTasks,
+    overdueTasks,
+  }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const searchTasks = (searchValue: string, arrTasks: Task[]) => {
     let selectedTaks: Task[] = [];
     if (searchValue.trim().length > 0) {
       selectedTaks = arrTasks.filter((task: Task) => {
-        if (searchCondition(task)) {
+        if (isTaskOwnedByCurrentUser(task)) {
           return task.name
             .toLowerCase()
             .includes(searchValue.toLowerCase().trim());
@@ -237,8 +223,8 @@ const SearchModal: FC = () => {
     <SearchPanel
       theme={theme}
       foundTasks={foundTasks}
-      isMobile={isMobile}
-      isTablet={isTablet}
+      ismobile={isMobile}
+      istablet={isTablet}
     >
       <InputWrapper theme={theme}>
         <StyledLabel>
@@ -308,10 +294,13 @@ const SearchModal: FC = () => {
 
       {displayTheTasks ? (
         <TaskListContainer>
-          {foundTasks.map(({ name, important, date, id }) => {
+          {foundTasks.map(({ name, important, date, id, userId, done }) => {
             return (
               <TaskSearchItem
+                done={done}
+                userId={userId}
                 key={id}
+                id={id}
                 name={name}
                 important={important}
                 date={date}

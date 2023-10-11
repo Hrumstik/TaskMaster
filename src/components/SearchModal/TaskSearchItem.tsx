@@ -6,16 +6,17 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { Task } from "../../types/types";
 
 dayjs.extend(customParseFormat);
 
-interface Task {
-  id?: string;
-  name: string;
-  date: null | string;
-  done?: boolean;
-  important: boolean;
-}
+// interface Task {
+//   id?: string;
+//   name: string;
+//   date: null | string;
+//   done?: boolean;
+//   important: boolean;
+// }
 
 const TaskSearchItemContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.searchItem};

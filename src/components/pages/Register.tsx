@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../authentication/usersSlice";
+import { setUser } from "../authentication/usersSlice";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosRequestConfig } from "axios";
 
@@ -22,7 +22,7 @@ const MainContainer = styled(Box)`
   width: 30%;
   display: flex;
   flex-direction: column;
-  `;
+`;
 
 const SignUpButton = styled(Button)`
   width: 200px;
@@ -34,28 +34,65 @@ const Register: React.FC = () => {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [failedRegister, setFailedRegister] = useState<string | boolean>(false);
+  const [loginError, setLoginError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const validateText = (text: string) => {
+    return text.length > 3 && text.trim().length > 3;
+  };
+
+  const validateEmail = (email: string) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePassword = (password: string) => {
+    return password.length > 5;
+  };
+
   const requestNewUser = async (body: BodyRequest) => {
-    try {
-      const config: AxiosRequestConfig = {
-        method: "POST",
-        url: `http://localhost:3001/users/`,
-        data: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-      };
+    const config: AxiosRequestConfig = {
+      method: "POST",
+      url: `http://localhost:3001/users/`,
+      data: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    };
 
-      const response = await axios(config);
-
-      return response.data;
-    } catch (error: any) {
-      setFailedRegister(error);
-    }
+    const response = await axios(config);
+    return response.data;
   };
 
   const handleRegister = () => {
+    let valid = true;
+    if (!validateText(loginValue)) {
+      setLoginError("Login must be longer than 3 characters");
+      valid = false;
+    } else {
+      setLoginError("");
+    }
+
+    if (!validateEmail(emailValue)) {
+      setEmailError("Invalid email");
+      valid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!validatePassword(passwordValue)) {
+      setPasswordError("Password must be longer than 5 characters");
+      valid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    if (!valid) {
+      return;
+    }
+
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, emailValue, passwordValue)
       .then(({ user }) => {
@@ -88,6 +125,8 @@ const Register: React.FC = () => {
         Register a New Account
       </Typography>
       <TextField
+        error={Boolean(loginError)}
+        helperText={loginError}
         sx={{ marginBottom: "20px" }}
         label="Your login"
         value={loginValue}
@@ -96,6 +135,8 @@ const Register: React.FC = () => {
         }}
       ></TextField>
       <TextField
+        error={Boolean(emailError)}
+        helperText={emailError}
         sx={{ marginBottom: "20px" }}
         label="Email adress"
         value={emailValue}
@@ -104,6 +145,8 @@ const Register: React.FC = () => {
         }}
       ></TextField>
       <TextField
+        error={Boolean(passwordError)}
+        helperText={passwordError}
         sx={{ marginBottom: "20px" }}
         label="Password"
         type="password"

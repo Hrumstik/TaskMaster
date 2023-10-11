@@ -1,35 +1,47 @@
-import React, { useEffect } from "react";
-import "./InputField.css";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
 import { CSSTransition } from "react-transition-group";
-import { addTask } from "../TaskListItem/tasksSlice";
-import { toggleStateOfInput } from "./inputOpenSlice";
+import { User } from "../../types/types";
 import { v4 as uuidv4 } from "uuid";
-import { TextField, Box, IconButton } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import Button from "@mui/material/Button";
 import styled from "styled-components";
-import { useTheme } from "@mui/material/styles";
 import dayjs, { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateField } from "@mui/x-date-pickers";
+import axios, { AxiosRequestConfig } from "axios";
+import {
+  TextField,
+  Box,
+  IconButton,
+  Button,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import SendIcon from "@mui/icons-material/Send";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import PeopleIcon from "@mui/icons-material/People";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import axios, { AxiosRequestConfig } from "axios";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateField } from "@mui/x-date-pickers";
+import { addTask } from "../TaskListItem/tasksSlice";
+import { toggleStateOfInput } from "./inputOpenSlice";
+import "./InputField.css";
 
-interface User {
-  email: string;
-  login: string;
-  id: string;
+interface AssignedTask {
+  showSelectUser: boolean;
+  responsibleForTheTaskUser: string[];
+  availableUsers: User[];
+}
+
+interface DateState {
+  dateOfNewTask: Dayjs | null;
+  showCalendar: boolean;
+  dateIconClicked: boolean;
 }
 
 const InputFieldMainContainer = styled(Box)`
@@ -54,22 +66,24 @@ const DateAndImportanceContainer = styled(Box)`
 `;
 
 export default function InputField() {
-  const stateOfInput = useSelector(({ input }) => input);
-  const userId = useSelector(({ users }) => users.user.id);
+  const stateOfInput: boolean = useSelector(({ input }) => input);
+  const userId: string = useSelector(({ users }) => users.user.id);
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState("");
-  const [isValid, setIsValid] = useState(true);
-  const [dateOfNewTask, setDateOfNewTask] = useState<Dayjs | null>(dayjs());
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [important, setAsImportant] = useState(false);
-  const [showSelectUser, setShowSelectUser] = useState(false);
-  const [dateIconClicked, setDateIconClicked] = useState(false);
-  const [responsibleForTheTaskUser, setResponsibleForTheTaskUser] = useState<
-    string[]
-  >([]);
-  const [availableUsers, setAvailableUsers] = useState<User[]>([]);
-  const [selectedResponsibleUsers, setSelectedResponsibleUsers] =
-    useState(false);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [isValid, setIsValid] = useState<boolean>(true);
+  const [dateState, setDateState] = useState<DateState>({
+    dateOfNewTask: dayjs(),
+    showCalendar: false,
+    dateIconClicked: false,
+  });
+  const [important, setAsImportant] = useState<boolean>(false);
+  const [assignedTask, setAssignedTask] = useState<AssignedTask>({
+    showSelectUser: false,
+    responsibleForTheTaskUser: [],
+    availableUsers: [],
+  });
+  const [error, setError] = useState<boolean>(false);
+
   const { request } = useHttp();
 
   useEffect(() => {
@@ -82,55 +96,56 @@ export default function InputField() {
         };
 
         const response = await axios(config);
-        setAvailableUsers(response.data);
+        setAssignedTask((prevState) => ({
+          ...prevState,
+          availableUsers: response.data,
+        }));
+        setError(false);
       } catch (error: any) {
+        setError(true);
         console.error(error);
       }
     };
+
     fetchData();
   }, []);
 
+  const formatTaskData = () =>
+    dateState.dateIconClicked
+      ? dayjs(dateState.dateOfNewTask).format("DD.MM.YYYY")
+      : null;
+
   const saveTask = () => {
     const task = makeAnObjectForNewTask(inputValue);
-    const userIds = determineUserIdFromLogin();
-    let taskDate = dateIconClicked
-      ? dayjs(dateOfNewTask).format("DD.MM.YYYY")
-      : null;
     if (isValid) {
-      dispatch(
-        addTask({
-          name: inputValue,
-          id: task.id,
-          userId: selectedResponsibleUsers ? userIds : userId,
-          date: taskDate,
-          important,
-        })
-      );
+      dispatch(addTask(task));
       request(null, "POST", JSON.stringify(task));
       setInputValue("");
       dispatch(toggleStateOfInput());
+      setAssignedTask((prevState) => ({
+        ...prevState,
+        showSelectUser: false,
+        responsibleForTheTaskUser: [],
+      }));
     }
   };
 
   const makeAnObjectForNewTask = (taskName: string) => {
-    let taskDate = dateIconClicked
-      ? dayjs(dateOfNewTask).format("DD.MM.YYYY")
-      : null;
     const userIds = determineUserIdFromLogin();
     return {
       id: uuidv4(),
-      userId: selectedResponsibleUsers ? userIds : userId,
+      userId: assignedTask.showSelectUser && userIds.length ? userIds : userId,
       name: taskName,
-      date: taskDate,
+      date: formatTaskData(),
       done: false,
       important,
     };
   };
 
   const determineUserIdFromLogin = () => {
-    return responsibleForTheTaskUser
+    return assignedTask.responsibleForTheTaskUser
       .map((login) => {
-        const user = availableUsers.find((u) => u.login === login);
+        const user = assignedTask.availableUsers.find((u) => u.login === login);
         return user ? user.id : "";
       })
       .filter(Boolean);
@@ -159,19 +174,43 @@ export default function InputField() {
   };
 
   const onKeyDownSaveTheDateOfTheTask = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && showCalendar) {
-      setShowCalendar(false);
+    if (event.key === "Enter" && dateState.showCalendar) {
+      setDateState((prevState) => ({
+        ...prevState,
+        showCalendar: false,
+      }));
     }
   };
 
   const onClickSaveTheDateOfThedask = () => {
-    if (showCalendar) {
-      setShowCalendar(false);
+    if (dateState.showCalendar) {
+      setDateState((prevState) => ({
+        ...prevState,
+        showCalendar: false,
+      }));
     }
   };
 
+  const showCalendar = () => {
+    setDateState((prevState) => ({
+      ...prevState,
+      showCalendar: true,
+      dateIconClicked: true,
+    }));
+  };
+
   const handleUserSelect = (e: SelectChangeEvent<string[]>) => {
-    setResponsibleForTheTaskUser(e.target.value as string[]);
+    setAssignedTask((prevState) => ({
+      ...prevState,
+      responsibleForTheTaskUser: e.target.value as string[],
+    }));
+  };
+
+  const showUserSelect = () => {
+    setAssignedTask((prevState) => ({
+      ...prevState,
+      showSelectUser: true,
+    }));
   };
 
   const theme = useTheme();
@@ -217,23 +256,24 @@ export default function InputField() {
           onClick={onClickSaveTheDateOfThedask}
         >
           <DateAndImportanceContainer>
-            {showCalendar ? (
+            {dateState.showCalendar ? (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField
                   autoFocus
-                  onChange={(newValue) => setDateOfNewTask(newValue)}
+                  onChange={(newValue) => {
+                    setDateState((prevState) => ({
+                      ...prevState,
+                      dateOfNewTask: newValue,
+                    }));
+                    // setDateOfNewTask(newValue)
+                  }}
                   format="DD.MM.YYYY"
-                  value={dateOfNewTask}
+                  value={dateState.dateOfNewTask}
                   label="Set date"
                 />
               </LocalizationProvider>
             ) : (
-              <IconButton
-                onClick={() => {
-                  setShowCalendar(true);
-                  setDateIconClicked(true);
-                }}
-              >
+              <IconButton onClick={showCalendar}>
                 <DateRangeOutlinedIcon
                   sx={{ fontSize: 25, color: "icons.primary" }}
                 />
@@ -252,7 +292,7 @@ export default function InputField() {
               )}
             </IconButton>
           </DateAndImportanceContainer>
-          {showSelectUser ? (
+          {assignedTask.showSelectUser ? (
             <FormControl
               variant="standard"
               sx={{ minWidth: 160 }}
@@ -261,11 +301,11 @@ export default function InputField() {
               <InputLabel>User</InputLabel>
               <Select
                 multiple
-                value={responsibleForTheTaskUser}
+                value={assignedTask.responsibleForTheTaskUser}
                 onChange={handleUserSelect}
                 defaultOpen
               >
-                {availableUsers.map(({ login }) => {
+                {assignedTask.availableUsers.map(({ login }) => {
                   return <MenuItem value={login}>{login}</MenuItem>;
                 })}
               </Select>
@@ -275,15 +315,15 @@ export default function InputField() {
               variant="text"
               sx={{ alignSelf: "center" }}
               endIcon={<PeopleIcon />}
-              onClick={() => {
-                setShowSelectUser(true);
-                setSelectedResponsibleUsers(true);
-              }}
+              onClick={showUserSelect}
             >
               Assign a task
             </Button>
           )}
         </FeaturesContainer>
+        {error ? (
+          <Typography sx={{ color: "red" }}>Something went wrong</Typography>
+        ) : null}
       </InputFieldMainContainer>
     </CSSTransition>
   );

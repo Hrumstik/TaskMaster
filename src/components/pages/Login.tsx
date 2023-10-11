@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../authentication/usersSlice";
+import { setUser } from "../authentication/usersSlice";
 
 const MainContainer = styled(Box)`
   margin-left: auto;

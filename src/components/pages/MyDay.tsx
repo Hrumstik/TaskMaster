@@ -14,6 +14,7 @@ import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../hooks/use-auth";
+import { Task, UseGroupTasksTypes } from "../../types/types";
 import useScreenSize from "../../hooks/useScreenSize";
 
 const AppContainer = styled(Box)`
@@ -22,7 +23,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ isMobile }) => (isMobile ? "92%" : "75%")};
+  width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -33,11 +34,10 @@ const ContentContainer = styled(Box)`
 `;
 
 export default function MyDay() {
-  const { isMobile } = useScreenSize();
   useAuth();
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
+  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
 
-  const stateOfInput = useSelector(({ input }) => input);
+  const stateOfInput: boolean = useSelector(({ input }) => input);
 
   const theme = useTheme();
 
@@ -46,12 +46,16 @@ export default function MyDay() {
     sortedAlphabeticallyTodayTasks,
     importantTodayTasks,
     sortedAlphabeticallyTodayTasksWithImportance,
-  } = useGroupTasks(tasks);
+  }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
     useFeatures();
 
   const { renderTasks } = useRenderTasks();
+
+  const { isMobile } = useScreenSize();
+
+  const { isTaskOwnedByCurrentUser } = useAuth();
 
   const renderingTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -60,12 +64,12 @@ export default function MyDay() {
       ? importantTodayTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks;
+      : todayTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer isMobile={isMobile}>
+      <MainContainer isMobile={isMobile ? true : false}>
         <Header
           text="My day"
           icon={
@@ -82,7 +86,7 @@ export default function MyDay() {
           {renderingTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
               {renderTasks(renderingTasks)}
-              <DoneTasksList tasksArray={todayTasks} />
+              <DoneTasksList tasksArray={renderingTasks} />
             </Box>
           ) : (
             <NoTaskScreen

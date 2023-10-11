@@ -14,6 +14,7 @@ import useGroupTasks from "../../hooks/useGroupTasks";
 import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../hooks/use-auth";
+import { Task, UseGroupTasksTypes } from "../../types/types";
 import useScreenSize from "../../hooks/useScreenSize";
 
 const AppContainer = styled(Box)`
@@ -22,7 +23,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ isMobile }) => (isMobile ? "92%" : "75%")};
+  width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -36,11 +37,13 @@ const DateTitle = styled(Typography)`
   padding-left: 45px;
 `;
 
+const TasksContainer = styled(Box)`
+  height: 100%;
+`;
+
 export default function Planned() {
-  const { isMobile } = useScreenSize();
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
-  const stateOfInput = useSelector(({ input }) => input);
-  const currentUserId = useSelector(({ users }) => users.user.id);
+  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
+  const stateOfInput: boolean = useSelector(({ input }) => input);
 
   const {
     todayTasks,
@@ -65,13 +68,15 @@ export default function Planned() {
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
     unfinishedTasks,
-  } = useGroupTasks(tasks);
+  }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
     useFeatures();
   const { renderTasks, checkTheStatusOfTask } = useRenderTasks();
 
   const theme = useTheme();
+
+  const { isTaskOwnedByCurrentUser } = useAuth();
 
   const renderingTodayTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -80,7 +85,7 @@ export default function Planned() {
       ? importantTodayTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks.filter((task) => task.userId === currentUserId);
+      : todayTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   const renderingTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -89,7 +94,7 @@ export default function Planned() {
       ? importantTomorrowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTomorrowTasksWithImportance
-      : tomorrowTasks.filter((task) => task.userId === currentUserId);
+      : tomorrowTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   const renderingDayAfterTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -98,7 +103,7 @@ export default function Planned() {
       ? importantDayAfterTommorowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyDayAfterTommorowTasksWithImportance
-      : dayAfterTommorowTasks.filter((task) => task.userId === currentUserId);
+      : dayAfterTommorowTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   const renderingNextWeekTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -107,7 +112,7 @@ export default function Planned() {
       ? importantNextWeekTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyNextWeekTasksWithImportance
-      : nextWeekTasks.filter((task) => task.userId === currentUserId);
+      : nextWeekTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   const renderingTasksWithoutDate =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -116,18 +121,24 @@ export default function Planned() {
       ? importantTasksWithoutDate
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTasksWithoutDateWithImportance
-      : tasksWithoutDate.filter((task) => task.userId === currentUserId);
+      : tasksWithoutDate.filter((task) => isTaskOwnedByCurrentUser(task));
 
-  const renderindOtherTasks = otherTaks.filter(
-    (task) => task.userId === currentUserId
+  const renderindOtherTasks = otherTaks.filter((task) =>
+    isTaskOwnedByCurrentUser(task)
   );
 
   useAuth();
 
+  const actualForUserUnfinishedTasks = unfinishedTasks.filter((task) =>
+    isTaskOwnedByCurrentUser(task)
+  );
+
+  const { isMobile } = useScreenSize();
+
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer isMobile={isMobile}>
+      <MainContainer ismobile={isMobile}>
         <Header
           text="Planned"
           icon={
@@ -138,59 +149,59 @@ export default function Planned() {
         />
 
         <ContentContainer>
-          {unfinishedTasks.length || stateOfInput ? (
-            <Box sx={{ height: "100%" }}>
+          {actualForUserUnfinishedTasks.length || stateOfInput ? (
+            <TasksContainer>
               {renderingTodayTasks.length &&
-                checkTheStatusOfTask(todayTasks) && (
-                  <Box sx={{ mb: "20px" }}>
-                    <DateTitle color="text.primary" variant="h5">
-                      Today tasks:
-                    </DateTitle>
-                    {renderTasks(renderingTodayTasks)}
-                  </Box>
-                )}
+              checkTheStatusOfTask(todayTasks) ? (
+                <Box sx={{ mb: "20px" }}>
+                  <DateTitle color="text.primary" variant="h5">
+                    Today tasks:
+                  </DateTitle>
+                  {renderTasks(renderingTodayTasks)}
+                </Box>
+              ) : null}
 
               {renderingTommorovTasks.length &&
-                checkTheStatusOfTask(tomorrowTasks) && (
-                  <Box>
-                    <DateTitle color="text.primary" variant="h5">
-                      Tomorrow tasks:
-                    </DateTitle>
-                    {renderTasks(renderingTommorovTasks)}
-                  </Box>
-                )}
+              checkTheStatusOfTask(tomorrowTasks) ? (
+                <Box>
+                  <DateTitle color="text.primary" variant="h5">
+                    Tomorrow tasks:
+                  </DateTitle>
+                  {renderTasks(renderingTommorovTasks)}
+                </Box>
+              ) : null}
 
               {renderingDayAfterTommorovTasks.length &&
-                checkTheStatusOfTask(dayAfterTommorowTasks) && (
-                  <Box>
-                    <DateTitle color="text.primary" variant="h5">
-                      Day after tomorrow tasks:
-                    </DateTitle>
-                    {renderTasks(renderingDayAfterTommorovTasks)}
-                  </Box>
-                )}
+              checkTheStatusOfTask(dayAfterTommorowTasks) ? (
+                <Box>
+                  <DateTitle color="text.primary" variant="h5">
+                    Day after tomorrow tasks:
+                  </DateTitle>
+                  {renderTasks(renderingDayAfterTommorovTasks)}
+                </Box>
+              ) : null}
 
               {renderingNextWeekTasks.length &&
-                checkTheStatusOfTask(nextWeekTasks) && (
-                  <Box>
-                    <DateTitle color="text.primary" variant="h5">
-                      Next week tasks:
-                    </DateTitle>
-                    {renderTasks(renderingNextWeekTasks)}
-                  </Box>
-                )}
+              checkTheStatusOfTask(nextWeekTasks) ? (
+                <Box>
+                  <DateTitle color="text.primary" variant="h5">
+                    Next week tasks:
+                  </DateTitle>
+                  {renderTasks(renderingNextWeekTasks)}
+                </Box>
+              ) : null}
 
               {renderingTasksWithoutDate.length &&
-                checkTheStatusOfTask(tasksWithoutDate) && (
-                  <Box>
-                    <DateTitle color="text.primary" variant="h5">
-                      Tasks without date:
-                    </DateTitle>
-                    {renderTasks(renderingTasksWithoutDate)}
-                  </Box>
-                )}
+              checkTheStatusOfTask(tasksWithoutDate) ? (
+                <Box>
+                  <DateTitle color="text.primary" variant="h5">
+                    Tasks without date:
+                  </DateTitle>
+                  {renderTasks(renderingTasksWithoutDate)}
+                </Box>
+              ) : null}
 
-              {renderindOtherTasks.length && (
+              {renderindOtherTasks.length ? (
                 <Box>
                   {renderindOtherTasks.map((task) => {
                     if (!task.done) {
@@ -211,8 +222,8 @@ export default function Planned() {
                     }
                   })}
                 </Box>
-              )}
-            </Box>
+              ) : null}
+            </TasksContainer>
           ) : (
             <NoTaskScreen
               firstTitle="You"

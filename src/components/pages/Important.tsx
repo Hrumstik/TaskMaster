@@ -5,24 +5,24 @@ import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
 import { Header } from "../Header/Header";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/material";
-import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
-import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useFeatures from "../../hooks/useFeatures";
-import styled from "styled-components";
-import { useTheme } from "@mui/material/styles";
 import useAuth from "../../hooks/use-auth";
-import useScreenSize from "../../hooks/useScreenSize";
+import { Box } from "@mui/material";
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import { useTheme } from "@mui/material/styles";
+import styled from "styled-components";
+import { Task, UseGroupTasksTypes } from "../../types/types";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
   display: flex;
 `;
 
-const MainContainer = styled(Box)<any>`
-  width: ${({ isMobile }) => (isMobile ? "92%" : "75%")};
+const MainContainer = styled(Box)`
+  width: 75%;
 `;
 
 const ContentContainer = styled(Box)`
@@ -33,26 +33,29 @@ const ContentContainer = styled(Box)`
 `;
 
 export default function Important() {
-  const { isMobile } = useScreenSize();
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
-  const stateOfInput = useSelector(({ input }) => input);
+  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
+  const stateOfInput: boolean = useSelector(({ input }) => input);
 
   const theme = useTheme();
 
-  const { importantAllTasks, sortedAlphabeticallyAllTasksWithImportance } =
-    useGroupTasks(tasks);
+  const { isTaskOwnedByCurrentUser } = useAuth();
+
+  const {
+    importantAllTasks,
+    sortedAlphabeticallyAllTasksWithImportance,
+  }: UseGroupTasksTypes = useGroupTasks(tasks);
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState } = useFeatures();
   const renderingTasks = sortTasksAlphabeticallyState
     ? sortedAlphabeticallyAllTasksWithImportance
-    : importantAllTasks;
+    : importantAllTasks.filter((task) => isTaskOwnedByCurrentUser(task));
 
   useAuth();
 
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer isMobile={isMobile}>
+      <MainContainer>
         <Header
           text="Important"
           icon={
@@ -63,7 +66,7 @@ export default function Important() {
         />
 
         <ContentContainer>
-          {importantAllTasks.length || stateOfInput ? (
+          {renderingTasks.length || stateOfInput ? (
             <Box sx={{ height: "100%" }}>
               {renderTasks(renderingTasks)}
               <DoneTasksList tasksArray={importantAllTasks} />
@@ -85,7 +88,6 @@ export default function Important() {
               }
             />
           )}
-
           <InputField />
         </ContentContainer>
       </MainContainer>

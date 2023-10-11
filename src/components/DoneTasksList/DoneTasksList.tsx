@@ -1,24 +1,14 @@
-import React from "react";
-import "./DoneTasksList.css";
-import { TaskListItem } from "../TaskListItem/TaskListItem";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 import { Box, IconButton, Typography } from "@mui/material";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
-interface Task {
-  name: string;
-  userId: string | string[];
-  id: string;
-  done: boolean;
-}
-
-interface DoneTasksListProps {
-  tasksArray: Task[];
-}
+import { TaskListItem } from "../TaskListItem/TaskListItem";
+import useAuth from "../../hooks/use-auth";
+import { Task, ArrayTasksProps } from "../../types/types";
+import "./DoneTasksList.css";
 
 const StyledCompletedBox = styled(Box)`
   display: flex;
@@ -30,24 +20,19 @@ const StyledTitleOfDoneTasks = styled(Typography)`
   cursor: pointer;
 `;
 
-export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
-  const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] = useState(false);
-  const [doneTasksCount, setDoneTasksCount] = useState<null | number>(null);
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
-  const currentUserId = useSelector(({ users }) => users.user.id);
+export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
+  const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] =
+    useState<boolean>(false);
+  const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
+  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
+  const currentUserId: string = useSelector(({ users }) => users.user.id);
+
+  const { isTaskOwnedByCurrentUser } = useAuth();
 
   const countDoneTasks = useCallback(() => {
     const doneTasksCount = tasksArray.reduce((acc, task) => {
-      if (task.done) {
-        if (typeof task.userId === "string") {
-          if (task.userId === currentUserId) {
-            return acc + 1;
-          }
-        } else if (Array.isArray(task.userId)) {
-          if (task.userId.includes(currentUserId)) {
-            return acc + 1;
-          }
-        }
+      if (isTaskOwnedByCurrentUser(task) && task.done) {
+        return acc + 1;
       }
       return acc;
     }, 0);
@@ -57,14 +42,14 @@ export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
 
   useEffect(() => {
     countDoneTasks();
-  }, [tasks, countDoneTasks]);
+  }, [countDoneTasks]);
+
+  const animationDuration: number = 300;
 
   return (
     <>
       <StyledCompletedBox
-        onClick={() => {
-          setVisibilityOfDoneTasks(!visibilityOfDoneTasks);
-        }}
+        onClick={() => setVisibilityOfDoneTasks(!visibilityOfDoneTasks)}
       >
         <StyledTitleOfDoneTasks color="text.primary" fontWeight="bold">
           <IconButton>
@@ -74,34 +59,27 @@ export const DoneTasksList: React.FC<DoneTasksListProps> = ({ tasksArray }) => {
               <KeyboardArrowRightOutlinedIcon color="primary" />
             )}
           </IconButton>
-          Completed {doneTasksCount ? doneTasksCount : null}
+          Completed {doneTasksCount || null}
         </StyledTitleOfDoneTasks>
       </StyledCompletedBox>
 
       <CSSTransition
-        in={visibilityOfDoneTasks && tasks.length}
-        timeout={300}
+        in={Boolean(visibilityOfDoneTasks && tasks.length > 0)}
+        timeout={animationDuration}
         classNames="done-tasks"
+        // I use there CSS, because it is necessary for CSSTransition (animation)
         unmountOnExit
       >
         <Box>
-          {tasksArray.map(({ name, done, id, userId }) => {
-            if (typeof userId === "string") {
-              if (done === true && currentUserId === userId) {
-                return <TaskListItem text={name} checked={done} key={id} />;
-              } else {
-                return null;
-              }
-            }
-
-            if (Array.isArray(userId) && done) {
-              if (userId.find((id: string) => id === currentUserId)) {
-                return <TaskListItem checked={done} text={name} key={id} />;
-              } else {
-                return null;
-              }
-            }
-          })}
+          {tasksArray
+            .filter((task) => isTaskOwnedByCurrentUser(task) && task.done)
+            .map((task) => (
+              <TaskListItem
+                text={task.name}
+                checked={task.done}
+                key={task.id}
+              />
+            ))}
         </Box>
       </CSSTransition>
     </>

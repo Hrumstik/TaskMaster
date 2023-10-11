@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Menu from "../Menu/Menu";
 import { Header } from "../Header/Header";
+import styled from "styled-components";
+import useAuth from "../../hooks/use-auth";
+import useScreenSize from "../../hooks/useScreenSize";
 import TasksList from "../TasksList/TasksList";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { Box } from "@mui/material";
-import useAuth from "../../hooks/use-auth";
-import useScreenSize from "../../hooks/useScreenSize";
+
+const MainContainer = styled(Box)<any>`
+  width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};
+`;
 
 export default function Main() {
   useAuth();
@@ -14,7 +19,7 @@ export default function Main() {
   return (
     <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
       <Menu />
-      <Box sx={{ width: isMobile ? "92%" : "75%" }}>
+      <MainContainer ismobile={isMobile}>
         <Header
           text="Tasks"
           icon={
@@ -22,7 +27,7 @@ export default function Main() {
           }
         />
         <TasksList />
-      </Box>
+      </MainContainer>
     </Box>
   );
 }
