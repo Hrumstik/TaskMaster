@@ -87,24 +87,24 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
   const [showPrintFeature, setShowPrintFeature] = useState<boolean>(false);
   const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
 
-  const litghtThemeState = useSelector(
+  const litghtThemeState: boolean = useSelector(
     ({ features }) => features.showLightTheme
   );
 
   const dispatch = useDispatch();
 
-  const showPrintMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+  const showPrintMenu = (event: React.MouseEvent<HTMLDivElement>): void => {
     setShowPrintFeature(true);
     setAnchorEl(event.currentTarget);
   };
 
-  const printThePage = () => {
+  const printThePage = (): void => {
     setShowPrintFeature(false);
     window.print();
   };
   const stateOfInput = useSelector(({ input }) => input);
 
-  const logOut = () => {
+  const logOut = (): void => {
     dispatch(removeUser());
     if (stateOfInput) {
       dispatch(toggleStateOfInput());

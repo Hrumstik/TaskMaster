@@ -1,3 +1,6 @@
+import { Theme } from "@mui/material/styles";
+import { Dayjs } from "dayjs";
+
 export interface Task {
   id: string;
   userId: string | string[];
@@ -61,3 +64,33 @@ export interface Error {
 }
 
 export type Tasks = Task[];
+
+export interface SearchPanelType {
+  foundTasks: Task[];
+  theme: Theme;
+  ismobile: boolean;
+  istablet: boolean;
+}
+
+export interface FilterButtonType {
+  isActive: string | boolean;
+  theme: Theme;
+}
+
+export interface AssignedTask {
+  showSelectUser: boolean;
+  responsibleForTheTaskUser: string[];
+  availableUsers: User[];
+}
+
+export interface DateState {
+  dateOfNewTask: Dayjs | null;
+  showCalendar: boolean;
+  dateIconClicked: boolean;
+}
+
+export interface ListItemProps {
+  text: string;
+  path: string;
+  icon: React.ReactNode;
+}

@@ -34,9 +34,9 @@
       "id": "c9b61e85-38bf-4636-b3c7-9c2dddda420f",
       "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
       "name": "Саша",
-      "date": null,
+      "date": "12.10.2023",
       "done": false,
-      "important": false
+      "important": true
     },
     {
       "id": "2d17f330-c20e-4ca6-8d31-9be691bd84a9",
@@ -58,6 +58,14 @@
       "date": null,
       "done": false,
       "important": false
+    },
+    {
+      "id": "410afe0a-a1c3-4900-9e8b-c9d43de422d7",
+      "name": "Поесть",
+      "date": "12.10.2023",
+      "done": false,
+      "important": true,
+      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2"
     }
   ],
   "users": [

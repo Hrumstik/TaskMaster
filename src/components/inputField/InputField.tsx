@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
 import { CSSTransition } from "react-transition-group";
-import { User } from "../../types/types";
+import { AssignedTask, DateState, User } from "../../types/types";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import axios, { AxiosRequestConfig } from "axios";
 import {
   TextField,
@@ -31,18 +31,6 @@ import { DateField } from "@mui/x-date-pickers";
 import { addTask } from "../TaskListItem/tasksSlice";
 import { toggleStateOfInput } from "./inputOpenSlice";
 import "./InputField.css";
-
-interface AssignedTask {
-  showSelectUser: boolean;
-  responsibleForTheTaskUser: string[];
-  availableUsers: User[];
-}
-
-interface DateState {
-  dateOfNewTask: Dayjs | null;
-  showCalendar: boolean;
-  dateIconClicked: boolean;
-}
 
 const InputFieldMainContainer = styled(Box)`
   display: flex;

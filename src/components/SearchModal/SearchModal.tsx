@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
-import { Theme, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRange } from "@mui/x-date-pickers-pro";
@@ -14,20 +14,14 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import useAuth from "../../hooks/use-auth";
-import { Task, UseGroupTasksTypes } from "../../types/types";
+import {
+  Task,
+  UseGroupTasksTypes,
+  SearchPanelType,
+  FilterButtonType,
+  Tasks,
+} from "../../types/types";
 import TaskSearchItem from "./TaskSearchItem";
-
-interface SearchPanelType {
-  foundTasks: Task[];
-  theme: Theme;
-  ismobile: boolean;
-  istablet: boolean;
-}
-
-interface FilterButtonType {
-  isActive: string | boolean;
-  theme: Theme;
-}
 
 const SearchPanel = styled(Box)<SearchPanelType>`
   position: fixed;
@@ -129,7 +123,7 @@ const TaskListContainer = styled(Box)`
 
 const SearchModal: FC = () => {
   const theme = useTheme();
-  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
+  const tasks: Tasks = useSelector(({ tasks }) => tasks.tasks);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isActiveButton, setIsActiveButton] = useState<string>("all tasks");
   const [actualTaskArray, setActualTaskArray] = useState<Task[]>(tasks);
@@ -138,7 +132,6 @@ const SearchModal: FC = () => {
     dayjs(),
     dayjs(),
   ]);
-  const currentUserId: string = useSelector(({ users }) => users.user.id);
 
   const { isTaskOwnedByCurrentUser } = useAuth();
 
@@ -148,10 +141,10 @@ const SearchModal: FC = () => {
     overdueTasks,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
-  const searchTasks = (searchValue: string, arrTasks: Task[]) => {
-    let selectedTaks: Task[] = [];
+  const searchTasks = (searchValue: string, arrTasks: Tasks) => {
+    let selectedTasks: Tasks = [];
     if (searchValue.trim().length > 0) {
-      selectedTaks = arrTasks.filter((task: Task) => {
+      selectedTasks = arrTasks.filter((task: Task) => {
         if (isTaskOwnedByCurrentUser(task)) {
           return task.name
             .toLowerCase()
@@ -159,7 +152,7 @@ const SearchModal: FC = () => {
         }
       });
     }
-    return selectedTaks;
+    return selectedTasks;
   };
 
   const handleChangeSearchInput = () => {
@@ -186,7 +179,7 @@ const SearchModal: FC = () => {
     setFoundTasks([]);
   };
 
-  const applyFilter = (nameOfTheFilter: string, filteredTaskArray: Task[]) => {
+  const applyFilter = (nameOfTheFilter: string, filteredTaskArray: Tasks) => {
     setIsActiveButton(nameOfTheFilter);
     setActualTaskArray(filteredTaskArray);
     setFoundTasks(searchTasks(searchValue, filteredTaskArray));
@@ -194,13 +187,15 @@ const SearchModal: FC = () => {
 
   const sortByPeriod = (firstDate: Dayjs, secondDate: Dayjs) => {
     return tasks.filter((task: Task) => {
-      const taskDate = dayjs(task.date, "DD.MM.YYYY");
-      return (
-        (taskDate.isBefore(secondDate, "day") ||
-          taskDate.isSame(secondDate, "day")) &&
-        (taskDate.isAfter(firstDate, "day") ||
-          taskDate.isSame(firstDate, "day"))
-      );
+      if (isTaskOwnedByCurrentUser(task)) {
+        const taskDate = dayjs(task.date, "DD.MM.YYYY");
+        return (
+          (taskDate.isBefore(secondDate, "day") ||
+            taskDate.isSame(secondDate, "day")) &&
+          (taskDate.isAfter(firstDate, "day") ||
+            taskDate.isSame(firstDate, "day"))
+        );
+      }
     });
   };
 
@@ -297,9 +292,9 @@ const SearchModal: FC = () => {
           {foundTasks.map(({ name, important, date, id, userId, done }) => {
             return (
               <TaskSearchItem
-                done={done}
-                userId={userId}
                 key={id}
+                userId={userId}
+                done={done}
                 id={id}
                 name={name}
                 important={important}

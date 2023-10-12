@@ -4,12 +4,7 @@ import { NavLink } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 import styled from "styled-components";
 import useScreenSize from "../../hooks/useScreenSize";
-
-interface ListItemProps {
-  text: string;
-  path: string;
-  icon: React.ReactNode;
-}
+import { ListItemProps } from "../../types/types";
 
 const StyledListItem = styled.li`
   height: 54px;
