@@ -1,10 +1,11 @@
 import React from "react";
+
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Box, IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
 import useScreenSize from "../../hooks/useScreenSize";
+import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
 export default function AddTaskButton() {
   const dispatch = useDispatch();

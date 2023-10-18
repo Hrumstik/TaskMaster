@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import tasksReducer from "../TaskListItem/tasksSlice";
-import inputOpenSlice from "../inputField/inputOpenSlice";
+
 import featuresSlice from "../../reducers/featuresSlice";
-import searchOpenSlice from "../SearchModal/searchSlice";
 import usersSlice from "../authentication/usersSlice";
+import inputOpenSlice from "../inputField/inputOpenSlice";
+import searchOpenSlice from "../SearchModal/searchSlice";
+import tasksReducer from "../TaskListItem/tasksSlice";
 
 const store = configureStore({
   reducer: {

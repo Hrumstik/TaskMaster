@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Box, Typography } from "@mui/material";
 
 type TimeContainerProps = {
   text: string;

@@ -1,19 +1,21 @@
 import React, { FC, useState } from "react";
+
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
+import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { DateRange } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { Box, Typography } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
-import { useTheme } from "@mui/material/styles";
-import { LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import { DateRange } from "@mui/x-date-pickers-pro";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+
+import useAuth from "../../hooks/use-auth";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
-import useAuth from "../../hooks/use-auth";
 import {
   Task,
   UseGroupTasksTypes,
@@ -21,6 +23,7 @@ import {
   FilterButtonType,
   Tasks,
 } from "../../types/types";
+
 import TaskSearchItem from "./TaskSearchItem";
 
 const SearchPanel = styled(Box)<SearchPanelType>`

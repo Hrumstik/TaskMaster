@@ -1,40 +1,24 @@
 import React from "react";
-import { TaskListItem } from "../components/TaskListItem/TaskListItem";
-import { useSelector } from "react-redux";
 
-interface Task {
-  id: string;
-  userId?: string | string[];
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
+import { TaskListItem } from "../components/TaskListItem/TaskListItem";
+import { Tasks } from "../types/types";
+
+import useAuth from "./use-auth";
 
 export default function useRenderTasks() {
-  const currentUserId = useSelector(({ users }) => users.user.id);
+  const { isTaskOwnedByCurrentUser } = useAuth();
 
-  const renderTasks = (specialTasksArray: Task[]) => {
-    return specialTasksArray.map(({ done, userId, id, name }) => {
-      if (typeof userId === "string") {
-        if (!done && userId === currentUserId) {
-          return <TaskListItem text={name} key={id} />;
-        } else {
-          return null;
-        }
-      }
-
-      if (Array.isArray(userId) && !done) {
-        if (userId.find((id) => id === currentUserId)) {
-          return <TaskListItem text={name} key={id} />;
-        } else {
-          return null;
-        }
+  const renderTasks = (specialTasksArray: Tasks) => {
+    return specialTasksArray.map((task) => {
+      if (isTaskOwnedByCurrentUser(task)) {
+        return (
+          <TaskListItem checked={task.done} text={task.name} key={task.id} />
+        );
       }
     });
   };
 
-  const checkTheStatusOfTask = (arr: Task[]) => {
+  const checkTheStatusOfTask = (arr: Tasks) => {
     return arr.some(({ done }) => !done);
   };
 

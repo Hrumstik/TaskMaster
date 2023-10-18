@@ -1,20 +1,22 @@
 import React from "react";
-import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
-import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
-import InputField from "../inputField/InputField";
-import Menu from "../Menu/Menu";
-import { Header } from "../Header/Header";
+
+import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import { Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+import useAuth from "../../hooks/use-auth";
+import useFeatures from "../../hooks/useFeatures";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
-import useFeatures from "../../hooks/useFeatures";
-import useAuth from "../../hooks/use-auth";
-import { Box } from "@mui/material";
-import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
-import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
-import { useTheme } from "@mui/material/styles";
-import styled from "styled-components";
 import { Task, UseGroupTasksTypes } from "../../types/types";
+import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
+import { Header } from "../Header/Header";
+import InputField from "../inputField/InputField";
+import Menu from "../Menu/Menu";
+import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};

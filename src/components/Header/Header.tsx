@@ -1,22 +1,24 @@
 import React from "react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import ModeNightIcon from "@mui/icons-material/ModeNight";
+import { useState } from "react";
+
 import LightModeIcon from "@mui/icons-material/LightMode";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../../reducers/featuresSlice";
-import { removeUser } from "../authentication/usersSlice";
-import styled from "styled-components";
+import Modal from "@mui/material/Modal";
 import { Theme } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
-import SearchModal from "../SearchModal/SearchModal";
-import Modal from "@mui/material/Modal";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+
 import useScreenSize from "../../hooks/useScreenSize";
+import { toggleTheme } from "../../reducers/featuresSlice";
+import { removeUser } from "../authentication/usersSlice";
 import { toggleStateOfInput } from "../inputField/inputOpenSlice";
+import SearchModal from "../SearchModal/SearchModal";
 
 interface HeaderProps {
   text: string;

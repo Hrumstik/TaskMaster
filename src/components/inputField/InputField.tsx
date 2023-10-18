@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useHttp } from "../../hooks/http.hook";
-import { CSSTransition } from "react-transition-group";
-import { AssignedTask, DateState, User } from "../../types/types";
-import { v4 as uuidv4 } from "uuid";
-import styled from "styled-components";
-import dayjs from "dayjs";
-import axios, { AxiosRequestConfig } from "axios";
+
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import PeopleIcon from "@mui/icons-material/People";
+import SendIcon from "@mui/icons-material/Send";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import {
   TextField,
   Box,
@@ -20,15 +18,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SendIcon from "@mui/icons-material/Send";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import PeopleIcon from "@mui/icons-material/People";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import axios, { AxiosRequestConfig } from "axios";
+import dayjs from "dayjs";
+import { useSelector, useDispatch } from "react-redux";
+import { CSSTransition } from "react-transition-group";
+import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
+
+import { useHttp } from "../../hooks/http.hook";
+import { AssignedTask, DateState } from "../../types/types";
 import { addTask } from "../TaskListItem/tasksSlice";
+
 import { toggleStateOfInput } from "./inputOpenSlice";
 import "./InputField.css";
 

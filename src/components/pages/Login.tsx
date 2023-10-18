@@ -1,9 +1,11 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import styled from "styled-components";
+
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
 import { setUser } from "../authentication/usersSlice";
 
 const MainContainer = styled(Box)`

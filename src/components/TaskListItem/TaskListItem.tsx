@@ -1,9 +1,33 @@
 import React from "react";
 import "./TaskListItem.css";
 import { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHttp } from "../../hooks/http.hook";
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CreateIcon from "@mui/icons-material/Create";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { TextField } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import { DateField } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { CSSTransition } from "react-transition-group";
+import styled from "styled-components";
+
+import { useHttp } from "../../hooks/http.hook";
+import { Tasks } from "../../types/types";
+
 import {
   setAsDoneTask,
   deleteTask,
@@ -11,27 +35,6 @@ import {
   setTheDateOfPerfomingTheTask,
   changeTheNameOfTask,
 } from "./tasksSlice";
-import { CSSTransition } from "react-transition-group";
-import { TextField } from "@mui/material";
-import { Box, IconButton } from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
-import CreateIcon from "@mui/icons-material/Create";
-import Typography from "@mui/material/Typography";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateField } from "@mui/x-date-pickers";
-import styled from "styled-components";
-import { useTheme } from "@mui/material/styles";
-import { Task, Tasks } from "../../types/types";
 
 interface TaskListItemProps {
   text: string;

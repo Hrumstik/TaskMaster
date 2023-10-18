@@ -1,22 +1,16 @@
 import { useCallback } from "react";
+
+import dayjs from "dayjs";
+
+import { Tasks } from "../types/types";
 import {
   sortTasksAlphabetically,
   showImportantTasks,
   sortAlphabeticallyTasksWithImportance,
   sortUnfinishedTasks,
-} from "../components/utils/utils";
-import dayjs from "dayjs";
+} from "../utils/utils";
 
-interface Task {
-  id: string;
-  userId: string | string[];
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
-
-const useGroupTasks = (arrTasks: Task[]) => {
+const useGroupTasks = (arrTasks: Tasks) => {
   const sortTasksByDate = useCallback(() => {
     const today = dayjs();
     const tomorrow = today.add(1, "day");
@@ -87,6 +81,17 @@ const useGroupTasks = (arrTasks: Task[]) => {
     unfinishedTasks,
     overdueTasks,
   } = sortTasksByDate();
+
+  const countDoneTasks = () => {
+    const doneTasksCount = tasksArray.reduce((acc, task) => {
+      if (isTaskOwnedByCurrentUser(task) && task.done) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+
+    setDoneTasksCount(doneTasksCount);
+  };
 
   const importantAllTasks = showImportantTasks(arrTasks);
   const sortedAlphabeticallyAllTasks = sortTasksAlphabetically(arrTasks);

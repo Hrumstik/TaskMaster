@@ -1,8 +1,10 @@
 import React from "react";
+
 import "./ListItem.css";
-import { NavLink } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+
 import useScreenSize from "../../hooks/useScreenSize";
 import { ListItemProps } from "../../types/types";
 

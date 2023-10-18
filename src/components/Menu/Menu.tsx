@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  sortTasksAlphabetically,
-  showImportantTasks,
-} from "../../reducers/featuresSlice";
-import { Error, Task } from "../../types/types";
-import { deleteAllTask } from "../TaskListItem/tasksSlice";
+
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import GradeIcon from "@mui/icons-material/Grade";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import {
   Box,
   Drawer,
@@ -17,22 +19,22 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import GradeIcon from "@mui/icons-material/Grade";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import useFeatures from "../../hooks/useFeatures";
-import { useHttp } from "../../hooks/http.hook";
-import useScreenSize from "../../hooks/useScreenSize";
-import useAuth from "../../hooks/use-auth";
-import ListItem from "../ListItem/ListItem";
-import AddTaskButton from "../addTaskButton/AddTaskButton";
-import styled from "styled-components";
 import { useTheme } from "@mui/material/styles";
+import { useSelector, useDispatch } from "react-redux";
+import styled from "styled-components";
+
+import { useHttp } from "../../hooks/http.hook";
+import useAuth from "../../hooks/use-auth";
+import useFeatures from "../../hooks/useFeatures";
+import useScreenSize from "../../hooks/useScreenSize";
+import {
+  sortTasksAlphabetically,
+  showImportantTasks,
+} from "../../reducers/featuresSlice";
+import { Error, Task } from "../../types/types";
+import AddTaskButton from "../addTaskButton/AddTaskButton";
+import ListItem from "../ListItem/ListItem";
+import { deleteAllTask } from "../TaskListItem/tasksSlice";
 
 const StyledMenuContainer = styled(Box)<{ isMobile: boolean }>`
   background-color: ${({ theme }) => theme.palette.background.default};

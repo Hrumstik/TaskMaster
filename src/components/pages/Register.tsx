@@ -1,12 +1,14 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+
+import { Box, Button, TextField, Typography } from "@mui/material";
+import axios, { AxiosRequestConfig } from "axios";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "../authentication/usersSlice";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosRequestConfig } from "axios";
+import styled from "styled-components";
+
+import { setUser } from "../authentication/usersSlice";
 
 interface BodyRequest {
   email: string;

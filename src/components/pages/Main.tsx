@@ -1,12 +1,14 @@
 import React from "react";
-import Menu from "../Menu/Menu";
-import { Header } from "../Header/Header";
-import styled from "styled-components";
-import useAuth from "../../hooks/use-auth";
-import useScreenSize from "../../hooks/useScreenSize";
-import TasksList from "../TasksList/TasksList";
+
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { Box } from "@mui/material";
+import styled from "styled-components";
+
+import useAuth from "../../hooks/use-auth";
+import useScreenSize from "../../hooks/useScreenSize";
+import { Header } from "../Header/Header";
+import Menu from "../Menu/Menu";
+import TasksList from "../TasksList/TasksList";
 
 const MainContainer = styled(Box)<any>`
   width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};

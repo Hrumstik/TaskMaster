@@ -1,21 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import useFeatures from "../../hooks/useFeatures";
-import useRenderTasks from "../../hooks/useRenderTasks";
-import useGroupTasks from "../../hooks/useGroupTasks";
-import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
-import Menu from "../Menu/Menu";
-import { Header } from "../Header/Header";
-import { Box } from "@mui/material";
-import InputField from "../inputField/InputField";
-import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
-import styled from "styled-components";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+
 import useAuth from "../../hooks/use-auth";
-import { Task, UseGroupTasksTypes } from "../../types/types";
+import useFeatures from "../../hooks/useFeatures";
+import useGroupTasks from "../../hooks/useGroupTasks";
+import useRenderTasks from "../../hooks/useRenderTasks";
 import useScreenSize from "../../hooks/useScreenSize";
+import { Task, UseGroupTasksTypes } from "../../types/types";
+import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
+import { Header } from "../Header/Header";
+import InputField from "../inputField/InputField";
+import Menu from "../Menu/Menu";
+import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};

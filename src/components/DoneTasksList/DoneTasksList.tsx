@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import { Box, IconButton, Typography } from "@mui/material";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
-import { Box, IconButton, Typography } from "@mui/material";
-import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { TaskListItem } from "../TaskListItem/TaskListItem";
+
 import useAuth from "../../hooks/use-auth";
-import { Task, ArrayTasksProps } from "../../types/types";
+import { ArrayTasksProps } from "../../types/types";
+import { TaskListItem } from "../TaskListItem/TaskListItem";
 import "./DoneTasksList.css";
 
 const StyledCompletedBox = styled(Box)`
@@ -24,8 +25,6 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] =
     useState<boolean>(false);
   const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
-  const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
-  const currentUserId: string = useSelector(({ users }) => users.user.id);
 
   const { isTaskOwnedByCurrentUser } = useAuth();
 
@@ -38,7 +37,7 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
     }, 0);
 
     setDoneTasksCount(doneTasksCount);
-  }, [tasksArray, currentUserId]);
+  }, [isTaskOwnedByCurrentUser, tasksArray]);
 
   useEffect(() => {
     countDoneTasks();
@@ -64,7 +63,7 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
       </StyledCompletedBox>
 
       <CSSTransition
-        in={Boolean(visibilityOfDoneTasks && tasks.length > 0)}
+        in={Boolean(visibilityOfDoneTasks && doneTasksCount > 0)}
         timeout={animationDuration}
         classNames="done-tasks"
         // I use there CSS, because it is necessary for CSSTransition (animation)
