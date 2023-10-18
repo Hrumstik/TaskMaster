@@ -48,6 +48,7 @@ export default function MyDay() {
     sortedAlphabeticallyTodayTasks,
     importantTodayTasks,
     sortedAlphabeticallyTodayTasksWithImportance,
+    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
@@ -57,8 +58,6 @@ export default function MyDay() {
 
   const { isMobile } = useScreenSize();
 
-  const { isTaskOwnedByCurrentUser } = useAuth();
-
   const renderingTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
       ? sortedAlphabeticallyTodayTasks
@@ -66,7 +65,9 @@ export default function MyDay() {
       ? importantTodayTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+      : todayTasks.filter(
+          (task) => isTaskOwnedByCurrentUser(task) && !task.done
+        );
 
   return (
     <AppContainer theme={theme}>

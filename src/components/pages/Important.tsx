@@ -40,17 +40,19 @@ export default function Important() {
 
   const theme = useTheme();
 
-  const { isTaskOwnedByCurrentUser } = useAuth();
-
   const {
     importantAllTasks,
     sortedAlphabeticallyAllTasksWithImportance,
+    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
+
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState } = useFeatures();
   const renderingTasks = sortTasksAlphabeticallyState
     ? sortedAlphabeticallyAllTasksWithImportance
-    : importantAllTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+    : importantAllTasks.filter(
+        (task) => isTaskOwnedByCurrentUser(task) && !task.done
+      );
 
   useAuth();
 

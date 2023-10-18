@@ -70,6 +70,7 @@ export default function Planned() {
     importantTasksWithoutDate,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
     unfinishedTasks,
+    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
@@ -78,8 +79,6 @@ export default function Planned() {
 
   const theme = useTheme();
 
-  const { isTaskOwnedByCurrentUser } = useAuth();
-
   const renderingTodayTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
       ? sortedAlphabeticallyTodayTasks
@@ -87,7 +86,9 @@ export default function Planned() {
       ? importantTodayTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+      : todayTasks.filter(
+          (task) => isTaskOwnedByCurrentUser(task) && !task.done
+        );
 
   const renderingTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -96,7 +97,9 @@ export default function Planned() {
       ? importantTomorrowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTomorrowTasksWithImportance
-      : tomorrowTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+      : tomorrowTasks.filter(
+          (task) => isTaskOwnedByCurrentUser(task) && !task.done
+        );
 
   const renderingDayAfterTommorovTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -105,7 +108,9 @@ export default function Planned() {
       ? importantDayAfterTommorowTasks
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyDayAfterTommorowTasksWithImportance
-      : dayAfterTommorowTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+      : dayAfterTommorowTasks.filter(
+          (task) => isTaskOwnedByCurrentUser(task) && !task.done
+        );
 
   const renderingNextWeekTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
@@ -123,10 +128,12 @@ export default function Planned() {
       ? importantTasksWithoutDate
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTasksWithoutDateWithImportance
-      : tasksWithoutDate.filter((task) => isTaskOwnedByCurrentUser(task));
+      : tasksWithoutDate.filter(
+          (task) => isTaskOwnedByCurrentUser(task) && !task.done
+        );
 
-  const renderindOtherTasks = otherTaks.filter((task) =>
-    isTaskOwnedByCurrentUser(task)
+  const renderindOtherTasks = otherTaks.filter(
+    (task) => isTaskOwnedByCurrentUser(task) && !task.done
   );
 
   useAuth();

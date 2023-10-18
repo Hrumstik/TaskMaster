@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import PeopleIcon from "@mui/icons-material/People";
 import SendIcon from "@mui/icons-material/Send";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import {
-  TextField,
-  Box,
-  IconButton,
-  Button,
-  InputLabel,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { TextField, Box, IconButton, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { DateField } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import axios, { AxiosRequestConfig } from "axios";
 import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
@@ -30,6 +13,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import { useHttp } from "../../hooks/http.hook";
 import { AssignedTask, DateState } from "../../types/types";
+import AssignTaskButton from "../AssignTaskButton/AssignTaskButton";
+import CreateTaskDateButton from "../CreateTaskDateButton/CreateTaskDateButton";
 import { addTask } from "../TaskListItem/tasksSlice";
 
 import { toggleStateOfInput } from "./inputOpenSlice";
@@ -76,30 +61,6 @@ export default function InputField() {
   const [error, setError] = useState<boolean>(false);
 
   const { request } = useHttp();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config: AxiosRequestConfig = {
-          method: "GET",
-          url: `http://localhost:3001/users/`,
-          headers: { "Content-Type": "application/json" },
-        };
-
-        const response = await axios(config);
-        setAssignedTask((prevState) => ({
-          ...prevState,
-          availableUsers: response.data,
-        }));
-        setError(false);
-      } catch (error: any) {
-        setError(true);
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const formatTaskData = () =>
     dateState.dateIconClicked
@@ -182,27 +143,8 @@ export default function InputField() {
     }
   };
 
-  const showCalendar = () => {
-    setDateState((prevState) => ({
-      ...prevState,
-      showCalendar: true,
-      dateIconClicked: true,
-    }));
-  };
-
-  const handleUserSelect = (e: SelectChangeEvent<string[]>) => {
-    setAssignedTask((prevState) => ({
-      ...prevState,
-      responsibleForTheTaskUser: e.target.value as string[],
-    }));
-  };
-
-  const showUserSelect = () => {
-    setAssignedTask((prevState) => ({
-      ...prevState,
-      showSelectUser: true,
-    }));
-  };
+  const hadleOnChangeOfTextField = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(e.target.value);
 
   const theme = useTheme();
 
@@ -219,7 +161,7 @@ export default function InputField() {
             autoFocus
             color="primary"
             onKeyDown={handleKeyDownSaveTask}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={hadleOnChangeOfTextField}
             value={inputValue}
             error={!isValid}
             label="Write your task"
@@ -242,34 +184,16 @@ export default function InputField() {
             Send
           </Button>
         </Box>
+
         <FeaturesContainer
           onKeyDown={onKeyDownSaveTheDateOfTheTask}
           onClick={onClickSaveTheDateOfThedask}
         >
           <DateAndImportanceContainer>
-            {dateState.showCalendar ? (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateField
-                  autoFocus
-                  onChange={(newValue) => {
-                    setDateState((prevState) => ({
-                      ...prevState,
-                      dateOfNewTask: newValue,
-                    }));
-                    // setDateOfNewTask(newValue)
-                  }}
-                  format="DD.MM.YYYY"
-                  value={dateState.dateOfNewTask}
-                  label="Set date"
-                />
-              </LocalizationProvider>
-            ) : (
-              <IconButton onClick={showCalendar}>
-                <DateRangeOutlinedIcon
-                  sx={{ fontSize: 25, color: "icons.primary" }}
-                />
-              </IconButton>
-            )}
+            <CreateTaskDateButton
+              dateState={dateState}
+              setDateState={setDateState}
+            />
             <IconButton onClick={() => setAsImportant(!important)}>
               {important ? (
                 <StarIcon
@@ -283,34 +207,11 @@ export default function InputField() {
               )}
             </IconButton>
           </DateAndImportanceContainer>
-          {assignedTask.showSelectUser ? (
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 160 }}
-              color="primary"
-            >
-              <InputLabel>User</InputLabel>
-              <Select
-                multiple
-                value={assignedTask.responsibleForTheTaskUser}
-                onChange={handleUserSelect}
-                defaultOpen
-              >
-                {assignedTask.availableUsers.map(({ login }) => {
-                  return <MenuItem value={login}>{login}</MenuItem>;
-                })}
-              </Select>
-            </FormControl>
-          ) : (
-            <Button
-              variant="text"
-              sx={{ alignSelf: "center" }}
-              endIcon={<PeopleIcon />}
-              onClick={showUserSelect}
-            >
-              Assign a task
-            </Button>
-          )}
+          <AssignTaskButton
+            setError={setError}
+            assignedTask={assignedTask}
+            setAssignedTask={setAssignedTask}
+          />
         </FeaturesContainer>
         {error ? (
           <Typography sx={{ color: "red" }}>Something went wrong</Typography>

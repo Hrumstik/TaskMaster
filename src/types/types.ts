@@ -56,6 +56,7 @@ export interface UseGroupTasksTypes {
   sortedAlphabeticallyTasksWithoutDateWithImportance: Task[];
   unfinishedTasks: Task[];
   overdueTasks: Task[];
+  isTaskOwnedByCurrentUser: Function;
 }
 
 export interface Error {

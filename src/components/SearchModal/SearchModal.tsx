@@ -13,7 +13,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useAuth from "../../hooks/use-auth";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import {
@@ -136,12 +135,11 @@ const SearchModal: FC = () => {
     dayjs(),
   ]);
 
-  const { isTaskOwnedByCurrentUser } = useAuth();
-
   const {
     unfinishedTasks,
     importantAllTasks,
     overdueTasks,
+    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const searchTasks = (searchValue: string, arrTasks: Tasks) => {

@@ -24,8 +24,8 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { useHttp } from "../../hooks/http.hook";
-import useAuth from "../../hooks/use-auth";
 import useFeatures from "../../hooks/useFeatures";
+import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import {
   sortTasksAlphabetically,
@@ -69,6 +69,8 @@ export default function Menu() {
 
   const theme = useTheme();
 
+  const { isTaskOwnedByCurrentUser } = useGroupTasks(tasks);
+
   const deleteAllTasks = async (): Promise<void> => {
     try {
       dispatch(deleteAllTask());
@@ -85,8 +87,6 @@ export default function Menu() {
   };
 
   const { isMobile } = useScreenSize();
-
-  const { isTaskOwnedByCurrentUser } = useAuth();
 
   const iconStyles = { fontSize: 25, color: "icons.primary" };
 

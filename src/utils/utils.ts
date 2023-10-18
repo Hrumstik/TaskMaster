@@ -1,32 +1,62 @@
-interface Task {
-  id: string;
-  userId: string | string[];
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
+import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 
-export function sortTasksAlphabetically(arr: Task[]) {
+import { DateState, Tasks, User } from "../types/types";
+
+export function sortTasksAlphabetically(arr: Tasks) {
   return [...arr].sort((a, b) =>
     a.name.toLowerCase().localeCompare(b.name.toLowerCase())
   );
 }
 
-export function showImportantTasks(arr: Task[]) {
+export function showImportantTasks(arr: Tasks) {
   return arr.filter(({ important }) => {
     return important;
   });
 }
 
 export const sortAlphabeticallyTasksWithImportance = (
-  tasksWithImportance: Task[]
+  tasksWithImportance: Tasks
 ) => {
   return [...tasksWithImportance].sort((a, b) => {
     return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
   });
 };
 
-export const sortUnfinishedTasks = (arr: Task[]) => {
+export const sortUnfinishedTasks = (arr: Tasks) => {
   return arr.filter(({ done }) => !done);
+};
+
+export const makeAnObjectForNewTask = (
+  taskName: string,
+  userIds: string[],
+  userId: string,
+  dateState: DateState,
+  important: boolean
+) => {
+  const formatTaskData = () =>
+    dateState.dateIconClicked
+      ? dayjs(dateState.dateOfNewTask).format("DD.MM.YYYY")
+      : null;
+
+  return {
+    id: uuidv4(),
+    userId: userIds.length ? userIds : userId,
+    name: taskName,
+    date: formatTaskData(),
+    done: false,
+    important,
+  };
+};
+
+export const determineUserIdFromLogin = (
+  responsibleForTheTaskUser: string[],
+  availableUsers: User[]
+) => {
+  return responsibleForTheTaskUser
+    .map((login) => {
+      const user = availableUsers.find((u) => u.login === login);
+      return user ? user.id : "";
+    })
+    .filter(Boolean);
 };

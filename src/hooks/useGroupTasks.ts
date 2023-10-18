@@ -1,8 +1,9 @@
 import { useCallback } from "react";
 
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
-import { Tasks } from "../types/types";
+import { Task, Tasks } from "../types/types";
 import {
   sortTasksAlphabetically,
   showImportantTasks,
@@ -11,6 +12,19 @@ import {
 } from "../utils/utils";
 
 const useGroupTasks = (arrTasks: Tasks) => {
+  const currentUserId = useSelector(({ users }) => users.user.id);
+
+  const isTaskOwnedByCurrentUser = (task: Task) => {
+    if (
+      (typeof task.userId === "string" && task.userId === currentUserId) ||
+      (Array.isArray(task.userId) &&
+        task.userId.find((id: string) => id === currentUserId))
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const sortTasksByDate = useCallback(() => {
     const today = dayjs();
     const tomorrow = today.add(1, "day");
@@ -83,15 +97,17 @@ const useGroupTasks = (arrTasks: Tasks) => {
   } = sortTasksByDate();
 
   const countDoneTasks = () => {
-    const doneTasksCount = tasksArray.reduce((acc, task) => {
+    const doneTasksCount = arrTasks.reduce((acc, task) => {
       if (isTaskOwnedByCurrentUser(task) && task.done) {
         return acc + 1;
       }
       return acc;
     }, 0);
 
-    setDoneTasksCount(doneTasksCount);
+    return doneTasksCount;
   };
+
+  const doneTasksCount = countDoneTasks();
 
   const importantAllTasks = showImportantTasks(arrTasks);
   const sortedAlphabeticallyAllTasks = sortTasksAlphabetically(arrTasks);
@@ -128,6 +144,7 @@ const useGroupTasks = (arrTasks: Tasks) => {
   const importantTasksWithoutDate = showImportantTasks(tasksWithoutDate);
   const sortedAlphabeticallyTasksWithoutDateWithImportance =
     sortAlphabeticallyTasksWithImportance(importantTasksWithoutDate);
+
   return {
     todayTasks,
     tomorrowTasks,
@@ -158,6 +175,8 @@ const useGroupTasks = (arrTasks: Tasks) => {
     sortedAlphabeticallyTasksWithoutDateWithImportance,
     unfinishedTasks,
     overdueTasks,
+    doneTasksCount,
+    isTaskOwnedByCurrentUser,
   };
 };
 

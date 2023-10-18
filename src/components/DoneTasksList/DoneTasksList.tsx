@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
@@ -6,7 +6,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 
-import useAuth from "../../hooks/use-auth";
+import useGroupTasks from "../../hooks/useGroupTasks";
 import { ArrayTasksProps } from "../../types/types";
 import { TaskListItem } from "../TaskListItem/TaskListItem";
 import "./DoneTasksList.css";
@@ -24,24 +24,9 @@ const StyledTitleOfDoneTasks = styled(Typography)`
 export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] =
     useState<boolean>(false);
-  const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
 
-  const { isTaskOwnedByCurrentUser } = useAuth();
-
-  const countDoneTasks = useCallback(() => {
-    const doneTasksCount = tasksArray.reduce((acc, task) => {
-      if (isTaskOwnedByCurrentUser(task) && task.done) {
-        return acc + 1;
-      }
-      return acc;
-    }, 0);
-
-    setDoneTasksCount(doneTasksCount);
-  }, [isTaskOwnedByCurrentUser, tasksArray]);
-
-  useEffect(() => {
-    countDoneTasks();
-  }, [countDoneTasks]);
+  const { doneTasksCount, isTaskOwnedByCurrentUser } =
+    useGroupTasks(tasksArray);
 
   const animationDuration: number = 300;
 
