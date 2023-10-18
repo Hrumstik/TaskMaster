@@ -2,9 +2,9 @@ import React from "react";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import { IconButton, Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
+import useGlobalState from "../../hooks/useGlobalState";
 import useScreenSize from "../../hooks/useScreenSize";
 import { removeUser } from "../authentication/usersSlice";
 import { toggleStateOfInput } from "../inputField/inputOpenSlice";
@@ -20,9 +20,8 @@ const LogOutButtonStyled = styled(Button)`
 
 export default function LogOutButton() {
   const { isMobile, isTablet } = useScreenSize();
-  const dispatch = useDispatch();
 
-  const stateOfInput = useSelector(({ input }) => input);
+  const { dispatch, stateOfInput } = useGlobalState();
 
   const logOut = (): void => {
     dispatch(removeUser());

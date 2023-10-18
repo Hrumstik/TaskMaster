@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 
-import SendIcon from "@mui/icons-material/Send";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import { TextField, Box, IconButton, Button, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { Box, IconButton, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { useSelector, useDispatch } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
 
 import { useHttp } from "../../hooks/http.hook";
+import useGlobalState from "../../hooks/useGlobalState";
+import TaskInputForm from "../../TaskInputForm/TaskInputForm";
 import { AssignedTask, DateState } from "../../types/types";
+import {
+  determineUserIdFromLogin,
+  makeAnObjectForNewTask,
+} from "../../utils/utils";
 import AssignTaskButton from "../AssignTaskButton/AssignTaskButton";
 import CreateTaskDateButton from "../CreateTaskDateButton/CreateTaskDateButton";
 import { addTask } from "../TaskListItem/tasksSlice";
@@ -42,9 +44,7 @@ const DateAndImportanceContainer = styled(Box)`
 `;
 
 export default function InputField() {
-  const stateOfInput: boolean = useSelector(({ input }) => input);
-  const userId: string = useSelector(({ users }) => users.user.id);
-  const dispatch = useDispatch();
+  const { stateOfInput, userId, theme, dispatch } = useGlobalState();
   const [inputValue, setInputValue] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(true);
   const [dateState, setDateState] = useState<DateState>({
@@ -62,13 +62,18 @@ export default function InputField() {
 
   const { request } = useHttp();
 
-  const formatTaskData = () =>
-    dateState.dateIconClicked
-      ? dayjs(dateState.dateOfNewTask).format("DD.MM.YYYY")
-      : null;
-
   const saveTask = () => {
-    const task = makeAnObjectForNewTask(inputValue);
+    const userIds = determineUserIdFromLogin(
+      assignedTask.responsibleForTheTaskUser,
+      assignedTask.availableUsers
+    ) as string[];
+    const task = makeAnObjectForNewTask(
+      inputValue,
+      userIds,
+      userId,
+      dateState,
+      important
+    );
     if (isValid) {
       dispatch(addTask(task));
       request(null, "POST", JSON.stringify(task));
@@ -79,49 +84,6 @@ export default function InputField() {
         showSelectUser: false,
         responsibleForTheTaskUser: [],
       }));
-    }
-  };
-
-  const makeAnObjectForNewTask = (taskName: string) => {
-    const userIds = determineUserIdFromLogin();
-    return {
-      id: uuidv4(),
-      userId: assignedTask.showSelectUser && userIds.length ? userIds : userId,
-      name: taskName,
-      date: formatTaskData(),
-      done: false,
-      important,
-    };
-  };
-
-  const determineUserIdFromLogin = () => {
-    return assignedTask.responsibleForTheTaskUser
-      .map((login) => {
-        const user = assignedTask.availableUsers.find((u) => u.login === login);
-        return user ? user.id : "";
-      })
-      .filter(Boolean);
-  };
-
-  const validateText = (text: string) => {
-    return text.length > 2 && text.trim().length > 2;
-  };
-
-  const handleKeyDownSaveTask = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      setIsValid(validateText(inputValue));
-      if (validateText(inputValue)) {
-        saveTask();
-      }
-    } else if (e.key === "Escape") {
-      dispatch(toggleStateOfInput());
-    }
-  };
-
-  const handleClickSaveTask = () => {
-    setIsValid(validateText(inputValue));
-    if (validateText(inputValue)) {
-      saveTask();
     }
   };
 
@@ -143,11 +105,6 @@ export default function InputField() {
     }
   };
 
-  const hadleOnChangeOfTextField = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setInputValue(e.target.value);
-
-  const theme = useTheme();
-
   return (
     <CSSTransition
       in={stateOfInput}
@@ -156,34 +113,11 @@ export default function InputField() {
       unmountOnExit
     >
       <InputFieldMainContainer theme={theme}>
-        <Box sx={{ display: "flex" }}>
-          <TextField
-            autoFocus
-            color="primary"
-            onKeyDown={handleKeyDownSaveTask}
-            onChange={hadleOnChangeOfTextField}
-            value={inputValue}
-            error={!isValid}
-            label="Write your task"
-            variant="filled"
-            helperText={
-              isValid
-                ? null
-                : "The text must contain at least 2 characters and not consist only of spaces"
-            }
-            fullWidth
-          />
-          <Button
-            color="primary"
-            onClick={handleClickSaveTask}
-            sx={{ ml: "15px" }}
-            size="medium"
-            variant="contained"
-            endIcon={<SendIcon />}
-          >
-            Send
-          </Button>
-        </Box>
+        <TaskInputForm
+          isValid={isValid}
+          saveTask={saveTask}
+          setIsValid={setIsValid}
+        />
 
         <FeaturesContainer
           onKeyDown={onKeyDownSaveTheDateOfTheTask}

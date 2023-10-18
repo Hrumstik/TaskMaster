@@ -60,9 +60,9 @@ export default function MyDay() {
 
   const renderingTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyTodayTasks
+      ? sortedAlphabeticallyTodayTasks.filter((task: Task) => !task.done)
       : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantTodayTasks
+      ? importantTodayTasks.filter((task: Task) => !task.done)
       : sortTasksAlphabeticallyState && showImportantTasksState
       ? sortedAlphabeticallyTodayTasksWithImportance
       : todayTasks.filter(

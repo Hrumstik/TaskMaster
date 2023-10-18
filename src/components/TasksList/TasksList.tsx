@@ -46,11 +46,13 @@ function TasksList() {
 
   const renderingTasks =
     sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyAllTasks
+      ? sortedAlphabeticallyAllTasks.filter((task: Task) => !task.done)
       : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantAllTasks
+      ? importantAllTasks.filter((task: Task) => !task.done)
       : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyAllTasksWithImportance
+      ? sortedAlphabeticallyAllTasksWithImportance.filter(
+          (task: Task) => !task.done
+        )
       : tasks.filter((task: Task) => !task.done);
 
   return (

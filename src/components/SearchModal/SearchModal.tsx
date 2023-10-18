@@ -129,7 +129,7 @@ const SearchModal: FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isActiveButton, setIsActiveButton] = useState<string>("all tasks");
   const [actualTaskArray, setActualTaskArray] = useState<Task[]>(tasks);
-  const [foundTasks, setFoundTasks] = useState<Task[]>([]);
+  const [foundTasks, setFoundTasks] = useState<Tasks>([]);
   const [filterDateValue, setFilterDateValue] = useState<DateRange<Dayjs>>([
     dayjs(),
     dayjs(),

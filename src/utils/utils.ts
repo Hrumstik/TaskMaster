@@ -41,7 +41,7 @@ export const makeAnObjectForNewTask = (
 
   return {
     id: uuidv4(),
-    userId: userIds.length ? userIds : userId,
+    userId: userIds.length > 0 ? userIds : userId,
     name: taskName,
     date: formatTaskData(),
     done: false,
@@ -59,4 +59,8 @@ export const determineUserIdFromLogin = (
       return user ? user.id : "";
     })
     .filter(Boolean);
+};
+
+export const validateText = (text: string) => {
+  return text.length > 2 && text.trim().length > 2;
 };

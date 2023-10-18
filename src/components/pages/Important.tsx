@@ -49,7 +49,9 @@ export default function Important() {
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState } = useFeatures();
   const renderingTasks = sortTasksAlphabeticallyState
-    ? sortedAlphabeticallyAllTasksWithImportance
+    ? sortedAlphabeticallyAllTasksWithImportance.filter(
+        (task: Task) => !task.done
+      )
     : importantAllTasks.filter(
         (task) => isTaskOwnedByCurrentUser(task) && !task.done
       );
