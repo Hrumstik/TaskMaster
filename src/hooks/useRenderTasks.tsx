@@ -17,6 +17,8 @@ export default function useRenderTasks() {
         return (
           <TaskListItem checked={task.done} text={task.name} key={task.id} />
         );
+      } else {
+        return null;
       }
     });
   };

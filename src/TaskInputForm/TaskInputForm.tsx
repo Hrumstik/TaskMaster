@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
 import { TextField, Box, Button } from "@mui/material";
@@ -11,15 +11,17 @@ interface TaskInputFormProps {
   saveTask: () => void;
   isValid: boolean;
   setIsValid: Dispatch<SetStateAction<boolean>>;
+  inputValue: string;
+  setInputValue: Dispatch<SetStateAction<string>>;
 }
 
 export default function TaskInputForm({
   saveTask,
   isValid,
   setIsValid,
+  inputValue,
+  setInputValue,
 }: TaskInputFormProps) {
-  const [inputValue, setInputValue] = useState<string>("");
-
   const dispatch = useDispatch();
 
   const handleKeyDownSaveTask = (e: React.KeyboardEvent) => {

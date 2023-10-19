@@ -4,9 +4,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { Theme } from "@mui/material/styles";
-import { useTheme } from "@mui/material/styles";
 import styled from "styled-components";
 
+import useGlobalState from "../../hooks/useGlobalState";
 import useScreenSize from "../../hooks/useScreenSize";
 import SearchModal from "../SearchModal/SearchModal";
 
@@ -39,7 +39,7 @@ const SearchButtonStyled = styled.button<{ theme: Theme }>`
 export default function SearchButton() {
   const { isMobile, isTablet } = useScreenSize();
   const [showSearchModal, setShowSearchModal] = useState<boolean>(false);
-  const theme = useTheme();
+  const { theme } = useGlobalState();
 
   return (
     <>
@@ -59,7 +59,9 @@ export default function SearchButton() {
         </SearchButtonStyled>
       )}
       <Modal open={showSearchModal} onClose={() => setShowSearchModal(false)}>
-        <SearchModal />
+        <div>
+          <SearchModal />
+        </div>
       </Modal>
     </>
   );

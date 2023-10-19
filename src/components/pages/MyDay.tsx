@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -7,14 +7,13 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useAuth from "../../hooks/use-auth";
 import useFeatures from "../../hooks/useFeatures";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import { Task, UseGroupTasksTypes } from "../../types/types";
 import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
-import { Header } from "../Header/Header";
+import Header from "../Header/Header";
 import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
@@ -25,7 +24,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};
+  width: ${({ $ismobile }) => ($ismobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -36,7 +35,6 @@ const ContentContainer = styled(Box)`
 `;
 
 export default function MyDay() {
-  useAuth();
   const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
 
   const stateOfInput: boolean = useSelector(({ input }) => input);
@@ -48,7 +46,6 @@ export default function MyDay() {
     sortedAlphabeticallyTodayTasks,
     importantTodayTasks,
     sortedAlphabeticallyTodayTasksWithImportance,
-    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
@@ -58,21 +55,32 @@ export default function MyDay() {
 
   const { isMobile } = useScreenSize();
 
-  const renderingTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyTodayTasks.filter((task: Task) => !task.done)
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantTodayTasks.filter((task: Task) => !task.done)
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks.filter(
-          (task) => isTaskOwnedByCurrentUser(task) && !task.done
-        );
+  const renderingTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTodayTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantTodayTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTodayTasksWithImportance;
+    } else {
+      sortedTasks = todayTasks;
+    }
+
+    return sortedTasks.filter(({ done }) => !done);
+  }, [
+    todayTasks,
+    importantTodayTasks,
+    showImportantTasksState,
+    sortTasksAlphabeticallyState,
+    sortedAlphabeticallyTodayTasks,
+    sortedAlphabeticallyTodayTasksWithImportance,
+  ]);
 
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer isMobile={isMobile ? true : false}>
+      <MainContainer $isMobile={Boolean(isMobile)}>
         <Header
           text="My day"
           icon={

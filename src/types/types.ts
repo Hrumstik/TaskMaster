@@ -1,4 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { Theme } from "@mui/material/styles";
+import { DateRange } from "@mui/x-date-pickers-pro";
 import { Dayjs } from "dayjs";
 
 export interface Task {
@@ -94,4 +97,60 @@ export interface ListItemProps {
   text: string;
   path: string;
   icon: React.ReactNode;
+}
+
+export interface AssignTaskButtonProps {
+  setError: Dispatch<SetStateAction<boolean>>;
+  assignedTask: AssignedTask;
+  setAssignedTask: Dispatch<SetStateAction<AssignedTask>>;
+}
+
+export interface ChangeTaskNameButtonProps {
+  setChangingTheNameOfTask: Dispatch<SetStateAction<boolean>>;
+  setFocusedTask: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface ChangeTaskNameInputProps {
+  text: string;
+  indexOfTheTask: number;
+  idOfTheTask: string;
+  setChangingTheNameOfTask: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface DateTaskButtonProps {
+  idOfTheTask: string;
+  indexOfTheTask: number;
+  setFocusedTask: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface DeleteTaskButtonProps {
+  idOfTheTask: string;
+  text: string;
+}
+
+export interface HeaderProps {
+  text: string;
+  icon: React.ReactNode;
+}
+
+export interface ImportanceButtonProps {
+  text: string;
+  idOfTheTask: string;
+  indexOfTheTask: number;
+}
+
+export interface SearchInputProps {
+  searchValue: string;
+  setSearchValue: Dispatch<SetStateAction<string>>;
+  isActiveButton: string;
+  actualTaskArray: Tasks;
+  setFoundTasks: Dispatch<SetStateAction<Tasks>>;
+  filterDateValue: DateRange<Dayjs>;
+  searchTasks: (searchValue: string, arrTasks: Tasks) => Tasks;
+  sortByPeriod: (firstDate: Dayjs, secondDate: Dayjs) => Tasks;
+}
+
+export interface TaskListItemProps {
+  text: string;
+  checked: boolean;
 }

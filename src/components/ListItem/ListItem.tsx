@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import "./ListItem.css";
 import { IconButton, Typography } from "@mui/material";
@@ -12,7 +12,7 @@ const StyledListItem = styled.li`
   height: 54px;
 `;
 
-export default function ListItem({ text, path, icon }: ListItemProps) {
+function ListItem({ text, path, icon }: ListItemProps) {
   const { isMobile } = useScreenSize();
 
   return (
@@ -26,9 +26,11 @@ export default function ListItem({ text, path, icon }: ListItemProps) {
       >
         <Typography variant="h6" component="span" color="text.primary">
           <IconButton sx={{ mr: "25px" }}>{icon}</IconButton>
-          {isMobile || text}
+          {isMobile ? null : text}
         </Typography>
       </NavLink>
     </StyledListItem>
   );
 }
+
+export default memo(ListItem);

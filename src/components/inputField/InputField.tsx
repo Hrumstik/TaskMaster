@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -62,7 +62,7 @@ export default function InputField() {
 
   const { request } = useHttp();
 
-  const saveTask = () => {
+  const saveTask = useCallback(() => {
     const userIds = determineUserIdFromLogin(
       assignedTask.responsibleForTheTaskUser,
       assignedTask.availableUsers
@@ -85,7 +85,17 @@ export default function InputField() {
         responsibleForTheTaskUser: [],
       }));
     }
-  };
+  }, [
+    assignedTask.responsibleForTheTaskUser,
+    assignedTask.availableUsers,
+    dateState,
+    dispatch,
+    important,
+    inputValue,
+    isValid,
+    request,
+    userId,
+  ]);
 
   const onKeyDownSaveTheDateOfTheTask = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && dateState.showCalendar) {
@@ -117,6 +127,8 @@ export default function InputField() {
           isValid={isValid}
           saveTask={saveTask}
           setIsValid={setIsValid}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
         />
 
         <FeaturesContainer

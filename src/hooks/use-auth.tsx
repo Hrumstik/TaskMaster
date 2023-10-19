@@ -7,7 +7,6 @@ import { RootState } from "../components/store/store";
 
 const useAuth = () => {
   const auth = useSelector((state: RootState) => state.users.auth);
-
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -1,17 +1,13 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { Box, IconButton, Typography } from "@mui/material";
 import styled from "styled-components";
 
+import { HeaderProps } from "../../types/types";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import PrintButton from "../PrintButton/PrintButton";
 import SearchButton from "../SearchButton/SearchButton";
 import ThemeButton from "../ThemeButton/ThemeButton";
-
-interface HeaderProps {
-  text: string;
-  icon: React.ReactNode;
-}
 
 const StyledHeader = styled.header`
   display: flex;
@@ -35,7 +31,7 @@ const HeaderRightSection = styled(Box)`
   justify-content: flex-end;
 `;
 
-export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
+const Header: React.FC<HeaderProps> = ({ text, icon }) => {
   return (
     <StyledHeader>
       <HeaderLeftSection>
@@ -54,3 +50,5 @@ export const Header: React.FC<HeaderProps> = ({ text, icon }) => {
     </StyledHeader>
   );
 };
+
+export default memo(Header);

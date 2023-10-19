@@ -1,13 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Task {
-  id: string;
-  name: string;
-  date: null | string;
-  done: boolean;
-  important: boolean;
-}
+import { Task } from "../../types/types";
 
 interface TasksState {
   tasks: Task[];
@@ -151,7 +145,6 @@ export const {
   deleteTask,
   setTheDateOfPerfomingTheTask,
   changeTheNameOfTask,
-  deleteAllTask,
 } = tasksSlice.actions;
 export default tasksSlice.reducer;
 export const getTasksStatus = (state: any) => state.tasks.status;

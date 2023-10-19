@@ -1,14 +1,11 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { DateRange } from "@mui/x-date-pickers-pro";
-import dayjs, { Dayjs } from "dayjs";
 import styled from "styled-components";
 
 import useGlobalState from "../../hooks/useGlobalState";
-import useGroupTasks from "../../hooks/useGroupTasks";
-import { Task, Tasks } from "../../types/types";
+import { SearchInputProps } from "../../types/types";
 
 const InputWrapper = styled.form`
   width: 100%;
@@ -40,20 +37,6 @@ const SearchInputStyled = styled.input`
   }
 `;
 
-interface SearchInputProps {
-  searchValue: string;
-  setSearchValue: Dispatch<SetStateAction<string>>;
-  isActiveButton:
-    | "all tasks"
-    | "unfinished tasks"
-    | "important tasks"
-    | "overdue tasks"
-    | "filter by date";
-  actualTaskArray: Tasks;
-  setFoundTasks: Dispatch<SetStateAction<Tasks>>;
-  filterDateValue: DateRange<Dayjs>;
-}
-
 export default function SearchInput({
   searchValue,
   setSearchValue,
@@ -61,10 +44,10 @@ export default function SearchInput({
   actualTaskArray,
   setFoundTasks,
   filterDateValue,
+  searchTasks,
+  sortByPeriod,
 }: SearchInputProps) {
-  const { theme, tasks } = useGlobalState();
-
-  const { isTaskOwnedByCurrentUser } = useGroupTasks(tasks);
+  const { theme } = useGlobalState();
 
   const handleChangeSearchInput = () => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,34 +71,6 @@ export default function SearchInput({
     if (startDate && endDate) {
       setFoundTasks(sortByPeriod(startDate, endDate));
     }
-  };
-
-  const searchTasks = (searchValue: string, arrTasks: Tasks) => {
-    let selectedTasks: Tasks = [];
-    if (searchValue.trim().length > 0) {
-      selectedTasks = arrTasks.filter((task: Task) => {
-        if (isTaskOwnedByCurrentUser(task)) {
-          return task.name
-            .toLowerCase()
-            .includes(searchValue.toLowerCase().trim());
-        }
-      });
-    }
-    return selectedTasks;
-  };
-
-  const sortByPeriod = (firstDate: Dayjs, secondDate: Dayjs) => {
-    return tasks.filter((task: Task) => {
-      if (isTaskOwnedByCurrentUser(task)) {
-        const taskDate = dayjs(task.date, "DD.MM.YYYY");
-        return (
-          (taskDate.isBefore(secondDate, "day") ||
-            taskDate.isSame(secondDate, "day")) &&
-          (taskDate.isAfter(firstDate, "day") ||
-            taskDate.isSame(firstDate, "day"))
-        );
-      }
-    });
   };
 
   return (

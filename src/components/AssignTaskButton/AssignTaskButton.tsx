@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, Dispatch, SetStateAction } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 
 import PeopleIcon from "@mui/icons-material/People";
 import {
@@ -12,15 +11,9 @@ import {
 } from "@mui/material";
 import axios, { AxiosRequestConfig } from "axios";
 
-import { AssignedTask } from "../../types/types";
+import { AssignTaskButtonProps } from "../../types/types";
 
-interface AssignTaskButtonProps {
-  setError: Dispatch<SetStateAction<boolean>>;
-  assignedTask: AssignedTask;
-  setAssignedTask: Dispatch<SetStateAction<AssignedTask>>;
-}
-
-export default function AssignTaskButton({
+function AssignTaskButton({
   setError,
   assignedTask,
   setAssignedTask,
@@ -44,7 +37,7 @@ export default function AssignTaskButton({
       try {
         const config: AxiosRequestConfig = {
           method: "GET",
-          url: `http://localhost:3001/users/`,
+          url: process.env.REACT_APP_BASE_URL_TASKS,
           headers: { "Content-Type": "application/json" },
         };
 
@@ -59,7 +52,17 @@ export default function AssignTaskButton({
     };
 
     fetchData();
-  }, []);
+  }, [setAssignedTask, setError]);
+
+  const renderedUsers = useMemo(() => {
+    return assignedTask.availableUsers.map(({ login, id }) => {
+      return (
+        <MenuItem key={id} value={login}>
+          {login}
+        </MenuItem>
+      );
+    });
+  }, [assignedTask]);
 
   return (
     <>
@@ -72,9 +75,7 @@ export default function AssignTaskButton({
             onChange={handleUserSelect}
             defaultOpen
           >
-            {assignedTask.availableUsers.map(({ login }) => {
-              return <MenuItem value={login}>{login}</MenuItem>;
-            })}
+            {renderedUsers}
           </Select>
         </FormControl>
       ) : (
@@ -90,3 +91,5 @@ export default function AssignTaskButton({
     </>
   );
 }
+
+export default memo(AssignTaskButton);

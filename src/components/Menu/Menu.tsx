@@ -15,19 +15,19 @@ import AddTaskButton from "../addTaskButton/AddTaskButton";
 import DrawerMenu from "../DrawerMenu/DrawerMenu";
 import ListItem from "../ListItem/ListItem";
 
-const StyledMenuContainer = styled(Box)<{ isMobile: boolean }>`
+const StyledMenuContainer = styled(Box)<any>`
   background-color: ${({ theme }) => theme.palette.background.default};
   height: 100vh;
   box-shadow: 4px 0px 20px -10px rgba(0, 0, 0, 0.25);
-  width: ${({ isMobile }) => (isMobile ? "8%" : "25%")};
+  width: ${(props) => (props.$isMobile ? "8%" : "25%")};
 `;
 
 const StyledMenuHeader = styled.header<any>`
   padding-top: 40px;
   padding-left: 11%;
   padding-right: 10%;
-  display: ${({ ismobile }) => (ismobile ? "flex" : "block")};
-  justify-content: ${({ ismobile }) => (ismobile ? "center" : "initial")};
+  display: ${(props) => (props.$isMobile ? "flex" : "block")};
+  justify-content: ${(props) => (props.$isMobile ? "center" : "initial")};
 `;
 
 const StyledMenuList = styled.ul`
@@ -46,8 +46,8 @@ export default function Menu() {
   const iconStyles = { fontSize: 25, color: "icons.primary" };
 
   return (
-    <StyledMenuContainer theme={theme} isMobile={isMobile}>
-      <StyledMenuHeader ismobile={isMobile ? true : false}>
+    <StyledMenuContainer theme={theme} $isMobile={Boolean(isMobile)}>
+      <StyledMenuHeader $ismobile={Boolean(isMobile)}>
         <IconButton onClick={() => setShowOptions(true)}>
           <MenuOutlinedIcon
             sx={{ fontSize: isMobile ? 25 : 40, color: "icons.primary" }}

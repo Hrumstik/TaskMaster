@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { Typography } from "@mui/material";
 
@@ -43,4 +43,4 @@ const NoTaskScreen: React.FC<NoTaskScreenProps> = ({
   );
 };
 
-export default NoTaskScreen;
+export default memo(NoTaskScreen);

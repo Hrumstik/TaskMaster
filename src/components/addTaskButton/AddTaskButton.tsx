@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import useScreenSize from "../../hooks/useScreenSize";
 import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
-export default function AddTaskButton() {
+function AddTaskButton() {
   const dispatch = useDispatch();
 
   const { isMobile } = useScreenSize();
@@ -36,3 +36,5 @@ export default function AddTaskButton() {
     </Box>
   );
 }
+
+export default AddTaskButton;

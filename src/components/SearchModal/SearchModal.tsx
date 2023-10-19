@@ -1,18 +1,15 @@
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { DateRange } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
+import useGlobalState from "../../hooks/useGlobalState";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import {
@@ -22,6 +19,7 @@ import {
   FilterButtonType,
   Tasks,
 } from "../../types/types";
+import SearchInput from "../SearchInput/SearchInput";
 
 import TaskSearchItem from "./TaskSearchItem";
 
@@ -45,31 +43,6 @@ const SearchPanel = styled(Box)<SearchPanelType>`
   &::-webkit-scrollbar-thumb {
     background-color: ${({ theme }) => theme.palette.background.default};
     border-radius: 10px;
-  }
-`;
-
-const InputWrapper = styled.form`
-  width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  border: 2px solid ${({ theme }) => theme.palette.primary.main};
-  background-color: ${({ theme }) => theme.palette.background.default};
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 10px;
-  border: none;
-  outline: none;
-  background-color: ${({ theme }) => theme.palette.background.default};
-  font-size: 24px;
-  color: ${({ theme }) => theme.palette.text.primary};
-
-  &::placeholder {
-    color: ${({ theme }) => theme.palette.text.primary};
   }
 `;
 
@@ -112,11 +85,6 @@ const NoTaskFoundContainer = styled(Box)`
   align-items: center;
 `;
 
-const StyledLabel = styled.label`
-  margin-right: 10px;
-  margin-left: 10px;
-`;
-
 const TaskListContainer = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -124,8 +92,7 @@ const TaskListContainer = styled(Box)`
 `;
 
 const SearchModal: FC = () => {
-  const theme = useTheme();
-  const tasks: Tasks = useSelector(({ tasks }) => tasks.tasks);
+  const { tasks, theme } = useGlobalState();
   const [searchValue, setSearchValue] = useState<string>("");
   const [isActiveButton, setIsActiveButton] = useState<string>("all tasks");
   const [actualTaskArray, setActualTaskArray] = useState<Task[]>(tasks);
@@ -150,34 +117,12 @@ const SearchModal: FC = () => {
           return task.name
             .toLowerCase()
             .includes(searchValue.toLowerCase().trim());
+        } else {
+          return null;
         }
       });
     }
     return selectedTasks;
-  };
-
-  const handleChangeSearchInput = () => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const actualSearchValue = e.target.value;
-      setSearchValue(actualSearchValue);
-      if ("filter by date" === isActiveButton && !actualSearchValue) {
-        handleFilterByDate();
-      } else {
-        setFoundTasks(searchTasks(actualSearchValue, actualTaskArray));
-      }
-    };
-  };
-
-  const handleFilterByDate = () => {
-    const [startDate, endDate] = filterDateValue;
-    if (startDate && endDate) {
-      setFoundTasks(sortByPeriod(startDate, endDate));
-    }
-  };
-
-  const handleCleanSearchInput = () => {
-    setSearchValue("");
-    setFoundTasks([]);
   };
 
   const applyFilter = (nameOfTheFilter: string, filteredTaskArray: Tasks) => {
@@ -196,6 +141,8 @@ const SearchModal: FC = () => {
           (taskDate.isAfter(firstDate, "day") ||
             taskDate.isSame(firstDate, "day"))
         );
+      } else {
+        return null;
       }
     });
   };
@@ -215,6 +162,22 @@ const SearchModal: FC = () => {
 
   const { isMobile, isTablet } = useScreenSize();
 
+  const renderedTasks = useMemo(() => {
+    return foundTasks.map(({ name, important, date, id, userId, done }) => {
+      return (
+        <TaskSearchItem
+          key={id}
+          userId={userId}
+          done={done}
+          id={id}
+          name={name}
+          important={important}
+          date={date}
+        />
+      );
+    });
+  }, [foundTasks]);
+
   return (
     <SearchPanel
       theme={theme}
@@ -222,21 +185,16 @@ const SearchModal: FC = () => {
       ismobile={isMobile}
       istablet={isTablet}
     >
-      <InputWrapper theme={theme}>
-        <StyledLabel>
-          <SearchIcon sx={{ color: "icons.secondary", fontSize: 40 }} />
-        </StyledLabel>
-        <SearchInput
-          theme={theme}
-          placeholder="Search task"
-          value={searchValue}
-          onChange={handleChangeSearchInput()}
-        />
-        <CloseIcon
-          onClick={handleCleanSearchInput}
-          sx={{ fontSize: 40, mr: "5px", cursor: "pointer" }}
-        />
-      </InputWrapper>
+      <SearchInput
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        isActiveButton={isActiveButton}
+        actualTaskArray={actualTaskArray}
+        setFoundTasks={setFoundTasks}
+        filterDateValue={filterDateValue}
+        searchTasks={searchTasks}
+        sortByPeriod={sortByPeriod}
+      />
       <FilterContainer>
         <Box sx={{ display: "flex", justifyContent: "center", gap: "20px" }}>
           <ButtonFilter
@@ -289,21 +247,7 @@ const SearchModal: FC = () => {
       </FilterContainer>
 
       {displayTheTasks ? (
-        <TaskListContainer>
-          {foundTasks.map(({ name, important, date, id, userId, done }) => {
-            return (
-              <TaskSearchItem
-                key={id}
-                userId={userId}
-                done={done}
-                id={id}
-                name={name}
-                important={important}
-                date={date}
-              />
-            );
-          })}
-        </TaskListContainer>
+        <TaskListContainer>{renderedTasks}</TaskListContainer>
       ) : searchValue === "" ? (
         <TitleNoTask fontSize={24} theme={theme}>
           Start typing to search for tasks...

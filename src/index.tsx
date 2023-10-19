@@ -1,35 +1,62 @@
 import React from "react";
+
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import store from "./components/store/store";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Error from "./components/pages/Error";
-import MyDay from "./components/pages/MyDay";
-import Main from "./components/pages/Main";
-import Important from "./components/pages/Important";
-import Planned from "./components/pages/Planned";
+
 import App from "./components/App";
+import Error from "./components/pages/Error";
+import Important from "./components/pages/Important";
 import Login from "./components/pages/Login";
+import Main from "./components/pages/Main";
+import MyDay from "./components/pages/MyDay";
+import Planned from "./components/pages/Planned";
 import Register from "./components/pages/Register";
+import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
+import store from "./components/store/store";
 import "./firebase";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <ProtectedRoute />,
     errorElement: <Error />,
+    children: [
+      {
+        path: "",
+        element: <Main />,
+      },
+    ],
   },
   {
     path: "/my-day",
-    element: <MyDay />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <MyDay />,
+      },
+    ],
   },
   {
     path: "/important",
-    element: <Important />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <Important />,
+      },
+    ],
   },
   {
     path: "/planned",
-    element: <Planned />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <Planned />,
+      },
+    ],
   },
   { path: "/Login", element: <Login /> },
   { path: "/Register", element: <Register /> },

@@ -3,11 +3,11 @@ import React, { FC } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import styled from "styled-components";
 
+import useGlobalState from "../../hooks/useGlobalState";
 import { Task } from "../../types/types";
 
 dayjs.extend(customParseFormat);
@@ -22,7 +22,7 @@ const TaskSearchItemContainer = styled(Box)`
 `;
 
 const TaskSearchItem: FC<Task> = ({ name, important, date }) => {
-  const theme = useTheme();
+  const theme = useGlobalState();
   const formattedDate = dayjs(date, "DD.MM.YYYY").format("D MMM YYYY");
 
   return (

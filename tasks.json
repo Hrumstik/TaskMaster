@@ -31,66 +31,10 @@
       "important": false
     },
     {
-      "id": "c9b61e85-38bf-4636-b3c7-9c2dddda420f",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "Саша",
-      "date": "12.10.2023",
-      "done": false,
-      "important": true
-    },
-    {
       "id": "2d17f330-c20e-4ca6-8d31-9be691bd84a9",
       "userId": "95MLBrLxLkgjv7fr5LihwJMXSj03",
       "name": "погладить",
       "date": "10.10.2023",
-      "done": false,
-      "important": true
-    },
-    {
-      "id": "d675303e-ac8c-4d6c-a785-e4b7b1ec2599",
-      "userId": [
-        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2",
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
-        "yOXL3bShNdaqcQfmKziVhSeeS8S2",
-        "95MLBrLxLkgjv7fr5LihwJMXSj03"
-      ],
-      "name": "Покормить",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "410afe0a-a1c3-4900-9e8b-c9d43de422d7",
-      "name": "Поесть",
-      "date": "12.10.2023",
-      "done": true,
-      "important": true,
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2"
-    },
-    {
-      "id": "bc235966-2d88-485e-98fa-7da1eb116607",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "Алеша",
-      "date": null,
-      "done": true,
-      "important": true
-    },
-    {
-      "id": "990e32c9-7de1-4163-80e0-27bab8c374a3",
-      "userId": [
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
-        "95MLBrLxLkgjv7fr5LihwJMXSj03"
-      ],
-      "name": "Апельсин",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "d671fcf5-d721-46a4-b743-aba6d7588ac3",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "Алеша Задрекой",
-      "date": "01.10.2023",
       "done": false,
       "important": true
     }

@@ -66,7 +66,7 @@ const Login: React.FC = () => {
         onChange={(event) => {
           setEmailValue(event.target.value);
         }}
-      ></TextField>
+      />
       <TextField
         sx={{ marginBottom: "20px" }}
         label="Password"

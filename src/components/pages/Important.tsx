@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
@@ -7,13 +7,13 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useAuth from "../../hooks/use-auth";
 import useFeatures from "../../hooks/useFeatures";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
+import useScreenSize from "../../hooks/useScreenSize";
 import { Task, UseGroupTasksTypes } from "../../types/types";
 import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
-import { Header } from "../Header/Header";
+import Header from "../Header/Header";
 import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
@@ -23,8 +23,8 @@ const AppContainer = styled(Box)`
   display: flex;
 `;
 
-const MainContainer = styled(Box)`
-  width: 75%;
+const MainContainer = styled(Box)<any>`
+  width: ${(props) => (props.$isMobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -38,30 +38,33 @@ export default function Important() {
   const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
   const stateOfInput: boolean = useSelector(({ input }) => input);
 
+  const { isMobile } = useScreenSize();
+
   const theme = useTheme();
 
   const {
     importantAllTasks,
     sortedAlphabeticallyAllTasksWithImportance,
-    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState } = useFeatures();
-  const renderingTasks = sortTasksAlphabeticallyState
-    ? sortedAlphabeticallyAllTasksWithImportance.filter(
-        (task: Task) => !task.done
-      )
-    : importantAllTasks.filter(
-        (task) => isTaskOwnedByCurrentUser(task) && !task.done
-      );
+  const renderingTasks = useMemo(() => {
+    const sortedTasks = sortTasksAlphabeticallyState
+      ? sortedAlphabeticallyAllTasksWithImportance
+      : importantAllTasks;
 
-  useAuth();
+    return sortedTasks.filter((task: Task) => !task.done);
+  }, [
+    importantAllTasks,
+    sortTasksAlphabeticallyState,
+    sortedAlphabeticallyAllTasksWithImportance,
+  ]);
 
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer>
+      <MainContainer $isMobile={Boolean(isMobile)}>
         <Header
           text="Important"
           icon={

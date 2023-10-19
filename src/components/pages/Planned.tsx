@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
@@ -7,13 +7,12 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useAuth from "../../hooks/use-auth";
 import useFeatures from "../../hooks/useFeatures";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import useScreenSize from "../../hooks/useScreenSize";
 import { Task, UseGroupTasksTypes } from "../../types/types";
-import { Header } from "../Header/Header";
+import Header from "../Header/Header";
 import InputField from "../inputField/InputField";
 import Menu from "../Menu/Menu";
 import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
@@ -25,7 +24,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ ismobile }) => (ismobile ? "92%" : "75%")};
+  width: ${({ $ismobile }) => ($ismobile ? "92%" : "75%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -79,64 +78,119 @@ export default function Planned() {
 
   const theme = useTheme();
 
-  const renderingTodayTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyTodayTasks
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantTodayTasks
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyTodayTasksWithImportance
-      : todayTasks.filter(
-          (task) => isTaskOwnedByCurrentUser(task) && !task.done
-        );
+  const renderingTodayTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTodayTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantTodayTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTodayTasksWithImportance;
+    } else {
+      sortedTasks = todayTasks;
+    }
 
-  const renderingTommorovTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyTomorrowTasks
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantTomorrowTasks
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyTomorrowTasksWithImportance
-      : tomorrowTasks.filter(
-          (task) => isTaskOwnedByCurrentUser(task) && !task.done
-        );
+    return sortedTasks.filter(({ done }) => !done);
+  }, [
+    importantTodayTasks,
+    sortTasksAlphabeticallyState,
+    todayTasks,
+    showImportantTasksState,
+    sortedAlphabeticallyTodayTasksWithImportance,
+    sortedAlphabeticallyTodayTasks,
+  ]);
 
-  const renderingDayAfterTommorovTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyDayAfterTommorowTasks
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantDayAfterTommorowTasks
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyDayAfterTommorowTasksWithImportance
-      : dayAfterTommorowTasks.filter(
-          (task) => isTaskOwnedByCurrentUser(task) && !task.done
-        );
+  const renderingTommorovTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTomorrowTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantTomorrowTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTomorrowTasksWithImportance;
+    } else {
+      sortedTasks = tomorrowTasks.filter(({ done }) => !done);
+    }
 
-  const renderingNextWeekTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyNextWeekTasks
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantNextWeekTasks
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyNextWeekTasksWithImportance
-      : nextWeekTasks.filter((task) => isTaskOwnedByCurrentUser(task));
+    return sortedTasks;
+  }, [
+    importantTomorrowTasks,
+    sortTasksAlphabeticallyState,
+    tomorrowTasks,
+    showImportantTasksState,
+    sortedAlphabeticallyTomorrowTasksWithImportance,
+    sortedAlphabeticallyTomorrowTasks,
+  ]);
 
-  const renderingTasksWithoutDate =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyTasksWithoutDate
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantTasksWithoutDate
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyTasksWithoutDateWithImportance
-      : tasksWithoutDate.filter(
-          (task) => isTaskOwnedByCurrentUser(task) && !task.done
-        );
+  const renderingDayAfterTommorovTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyDayAfterTommorowTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantDayAfterTommorowTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyDayAfterTommorowTasksWithImportance;
+    } else {
+      sortedTasks = dayAfterTommorowTasks.filter(({ done }) => !done);
+    }
+
+    return sortedTasks;
+  }, [
+    importantDayAfterTommorowTasks,
+    sortTasksAlphabeticallyState,
+    dayAfterTommorowTasks,
+    showImportantTasksState,
+    sortedAlphabeticallyDayAfterTommorowTasksWithImportance,
+    sortedAlphabeticallyDayAfterTommorowTasks,
+  ]);
+
+  const renderingNextWeekTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyNextWeekTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantNextWeekTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyNextWeekTasksWithImportance;
+    } else {
+      sortedTasks = nextWeekTasks.filter(({ done }) => !done);
+    }
+
+    return sortedTasks;
+  }, [
+    importantNextWeekTasks,
+    sortTasksAlphabeticallyState,
+    nextWeekTasks,
+    showImportantTasksState,
+    sortedAlphabeticallyNextWeekTasksWithImportance,
+    sortedAlphabeticallyNextWeekTasks,
+  ]);
+
+  const renderingTasksWithoutDate = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTasksWithoutDate;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantTasksWithoutDate;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyTasksWithoutDateWithImportance;
+    } else {
+      sortedTasks = tasksWithoutDate.filter(({ done }) => !done);
+    }
+
+    return sortedTasks;
+  }, [
+    importantTasksWithoutDate,
+    sortTasksAlphabeticallyState,
+    tasksWithoutDate,
+    showImportantTasksState,
+    sortedAlphabeticallyTasksWithoutDateWithImportance,
+    sortedAlphabeticallyTasksWithoutDate,
+  ]);
 
   const renderindOtherTasks = otherTaks.filter(
     (task) => isTaskOwnedByCurrentUser(task) && !task.done
   );
-
-  useAuth();
 
   const actualForUserUnfinishedTasks = unfinishedTasks.filter((task) =>
     isTaskOwnedByCurrentUser(task)
@@ -147,7 +201,7 @@ export default function Planned() {
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer ismobile={isMobile}>
+      <MainContainer $ismobile={isMobile}>
         <Header
           text="Planned"
           icon={
@@ -215,7 +269,7 @@ export default function Planned() {
                   {renderindOtherTasks.map((task) => {
                     if (!task.done) {
                       return (
-                        <>
+                        <React.Fragment key={task.id}>
                           <DateTitle color="text.primary" variant="h5">
                             Task for the date {task.date}:
                           </DateTitle>
@@ -224,7 +278,7 @@ export default function Planned() {
                             text={task.name}
                             key={task.id}
                           />
-                        </>
+                        </React.Fragment>
                       );
                     } else {
                       return null;

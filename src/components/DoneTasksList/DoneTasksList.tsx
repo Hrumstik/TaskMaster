@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
@@ -28,6 +28,14 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
   const { doneTasksCount, isTaskOwnedByCurrentUser } =
     useGroupTasks(tasksArray);
 
+  const renderedTasks = useMemo(() => {
+    return tasksArray
+      .filter((task) => isTaskOwnedByCurrentUser(task) && task.done)
+      .map((task) => (
+        <TaskListItem text={task.name} checked={task.done} key={task.id} />
+      ));
+  }, [tasksArray, isTaskOwnedByCurrentUser]);
+
   const animationDuration: number = 300;
 
   return (
@@ -54,17 +62,7 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
         // I use there CSS, because it is necessary for CSSTransition (animation)
         unmountOnExit
       >
-        <Box>
-          {tasksArray
-            .filter((task) => isTaskOwnedByCurrentUser(task) && task.done)
-            .map((task) => (
-              <TaskListItem
-                text={task.name}
-                checked={task.done}
-                key={task.id}
-              />
-            ))}
-        </Box>
+        <Box>{renderedTasks}</Box>
       </CSSTransition>
     </>
   );
