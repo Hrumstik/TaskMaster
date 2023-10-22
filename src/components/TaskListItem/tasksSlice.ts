@@ -17,9 +17,12 @@ const initialState: TasksState = {
 
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
   try {
-    const response = await axios.get("http://localhost:3001/tasks/", {
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_BASE_URL_TASKS}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     return response.data;
   } catch (e) {

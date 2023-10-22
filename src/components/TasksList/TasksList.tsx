@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import useFeatures from "../../hooks/useFeatures";
+import useGlobalState from "../../hooks/useGlobalState";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
 import { Task } from "../../types/types";
@@ -23,14 +24,13 @@ const StyledMainTaskListContainer = styled(Box)`
 `;
 
 function TasksList() {
-  const tasks = useSelector(({ tasks }) => tasks.tasks);
-  const tasksStatus = useSelector(({ tasks }) => tasks.status);
-  const stateOfInput = useSelector(({ input }) => input);
+  const { stateOfInput, tasks, tasksStatus } = useGlobalState();
 
   const {
     sortedAlphabeticallyAllTasks,
     importantAllTasks,
     sortedAlphabeticallyAllTasksWithImportance,
+    isTaskOwnedByCurrentUser,
   } = useGroupTasks(tasks);
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
@@ -44,20 +44,33 @@ function TasksList() {
     }
   }, [dispatch, tasksStatus]);
 
-  const renderingTasks =
-    sortTasksAlphabeticallyState && !showImportantTasksState
-      ? sortedAlphabeticallyAllTasks.filter((task: Task) => !task.done)
-      : !sortTasksAlphabeticallyState && showImportantTasksState
-      ? importantAllTasks.filter((task: Task) => !task.done)
-      : sortTasksAlphabeticallyState && showImportantTasksState
-      ? sortedAlphabeticallyAllTasksWithImportance.filter(
-          (task: Task) => !task.done
-        )
-      : tasks.filter((task: Task) => !task.done);
+  const renderingTasks = useMemo(() => {
+    let sortedTasks;
+    if (sortTasksAlphabeticallyState && !showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyAllTasks;
+    } else if (!sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = importantAllTasks;
+    } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
+      sortedTasks = sortedAlphabeticallyAllTasksWithImportance;
+    } else {
+      sortedTasks = tasks;
+    }
+    return sortedTasks.filter(
+      (task: Task) => !task.done && isTaskOwnedByCurrentUser(task)
+    );
+  }, [
+    importantAllTasks,
+    showImportantTasksState,
+    sortTasksAlphabeticallyState,
+    sortedAlphabeticallyAllTasks,
+    sortedAlphabeticallyAllTasksWithImportance,
+    tasks,
+    isTaskOwnedByCurrentUser,
+  ]);
 
   return (
     <StyledMainTaskListContainer>
-      {tasks.length || stateOfInput ? (
+      {renderingTasks.length || stateOfInput ? (
         <Box sx={{ height: "100%" }}>
           {renderTasks(renderingTasks)}
           <DoneTasksList tasksArray={tasks} />

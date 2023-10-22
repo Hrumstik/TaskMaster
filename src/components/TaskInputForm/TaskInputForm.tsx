@@ -4,8 +4,8 @@ import SendIcon from "@mui/icons-material/Send";
 import { TextField, Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 
-import { toggleStateOfInput } from "../components/inputField/inputOpenSlice";
-import { validateText } from "../utils/utils";
+import { validateText } from "../../utils/utils";
+import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
 interface TaskInputFormProps {
   saveTask: () => void;

@@ -9,7 +9,6 @@ import styled from "styled-components";
 
 import { useHttp } from "../../hooks/http.hook";
 import useGlobalState from "../../hooks/useGlobalState";
-import TaskInputForm from "../../TaskInputForm/TaskInputForm";
 import { AssignedTask, DateState } from "../../types/types";
 import {
   determineUserIdFromLogin,
@@ -17,6 +16,7 @@ import {
 } from "../../utils/utils";
 import AssignTaskButton from "../AssignTaskButton/AssignTaskButton";
 import CreateTaskDateButton from "../CreateTaskDateButton/CreateTaskDateButton";
+import TaskInputForm from "../TaskInputForm/TaskInputForm";
 import { addTask } from "../TaskListItem/tasksSlice";
 
 import { toggleStateOfInput } from "./inputOpenSlice";

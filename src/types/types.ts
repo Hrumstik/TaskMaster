@@ -154,3 +154,9 @@ export interface TaskListItemProps {
   text: string;
   checked: boolean;
 }
+
+export interface BodyRequest {
+  email: string;
+  login: string;
+  id: string;
+}

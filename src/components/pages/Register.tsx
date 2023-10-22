@@ -8,13 +8,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { BodyRequest } from "../../types/types";
 import { setUser } from "../authentication/usersSlice";
-
-interface BodyRequest {
-  email: string;
-  login: string;
-  id: string;
-}
 
 const MainContainer = styled(Box)`
   margin-left: auto;
@@ -59,7 +54,7 @@ const Register: React.FC = () => {
   const requestNewUser = async (body: BodyRequest) => {
     const config: AxiosRequestConfig = {
       method: "POST",
-      url: `http://localhost:3001/users/`,
+      url: process.env.REACT_APP_USERS,
       data: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
     };

@@ -6,15 +6,11 @@
       "date": "08.10.2023",
       "done": false,
       "important": true,
-      "userId": [
-        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
-      ]
+      "userId": ["yOXL3bShNdaqcQfmKziVhSeeS8S2"]
     },
     {
       "id": "9390e36a-03a1-4a8b-bc95-064e287ea7c7",
-      "userId": [
-        "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
-      ],
+      "userId": ["mle6KvtgOdRWnD6ctJEUqnXVo2b2"],
       "name": "Забрать деньги",
       "date": null,
       "done": false,
@@ -22,9 +18,7 @@
     },
     {
       "id": "1103dc10-c885-470f-a34f-400c92604ac0",
-      "userId": [
-        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
-      ],
+      "userId": ["PWWbcOAoXXbGdOWL11j1ZwAMbDX2"],
       "name": "Агула",
       "date": null,
       "done": false,

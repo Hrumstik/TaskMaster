@@ -15,7 +15,6 @@ import useScreenSize from "../../hooks/useScreenSize";
 import {
   Task,
   UseGroupTasksTypes,
-  SearchPanelType,
   FilterButtonType,
   Tasks,
 } from "../../types/types";
@@ -23,15 +22,16 @@ import SearchInput from "../SearchInput/SearchInput";
 
 import TaskSearchItem from "./TaskSearchItem";
 
-const SearchPanel = styled(Box)<SearchPanelType>`
+const SearchPanel = styled(Box)<any>`
   position: fixed;
   top: 15%;
   left: 55%;
   display: "flex"
   flex-direction: "column";
   transform: translate(-55%, -15%);
-  width: ${({ ismobile, istablet }) => (ismobile || istablet ? "90%" : "50%")};
-  height: ${({ foundTasks }) => (foundTasks.length ? "70%" : "45%")};
+  width: ${({ $isMobile, $isTablet }) =>
+    $isMobile || $isTablet ? "90%" : "50%"};
+  height: ${({ $foundTasks }) => ($foundTasks.length ? "70%" : "45%")};
   padding: 15px 15px 0px 15px;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.background.search};
@@ -181,9 +181,9 @@ const SearchModal: FC = () => {
   return (
     <SearchPanel
       theme={theme}
-      foundTasks={foundTasks}
-      ismobile={isMobile}
-      istablet={isTablet}
+      $foundTasks={foundTasks}
+      $isMobile={isMobile}
+      $isTablet={isTablet}
     >
       <SearchInput
         searchValue={searchValue}

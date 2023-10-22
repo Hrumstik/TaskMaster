@@ -37,7 +37,7 @@ function AssignTaskButton({
       try {
         const config: AxiosRequestConfig = {
           method: "GET",
-          url: process.env.REACT_APP_BASE_URL_TASKS,
+          url: process.env.REACT_APP_USERS,
           headers: { "Content-Type": "application/json" },
         };
 
@@ -50,7 +50,6 @@ function AssignTaskButton({
         setError(true);
       }
     };
-
     fetchData();
   }, [setAssignedTask, setError]);
 
