@@ -1,0 +1,58 @@
+{
+  "tasks": [
+    {
+      "id": "38d99b73-ab07-42e6-a18d-b8cd50a68358",
+      "name": "Поговорить с мамой",
+      "date": "08.10.2023",
+      "done": false,
+      "important": true,
+      "userId": ["yOXL3bShNdaqcQfmKziVhSeeS8S2"]
+    },
+    {
+      "id": "9390e36a-03a1-4a8b-bc95-064e287ea7c7",
+      "userId": ["mle6KvtgOdRWnD6ctJEUqnXVo2b2"],
+      "name": "Забрать деньги",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
+      "id": "1103dc10-c885-470f-a34f-400c92604ac0",
+      "userId": ["PWWbcOAoXXbGdOWL11j1ZwAMbDX2"],
+      "name": "Агула",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
+      "id": "2d17f330-c20e-4ca6-8d31-9be691bd84a9",
+      "userId": "95MLBrLxLkgjv7fr5LihwJMXSj03",
+      "name": "погладить",
+      "date": "10.10.2023",
+      "done": false,
+      "important": true
+    }
+  ],
+  "users": [
+    {
+      "email": "dasha.terehova@gmail.com",
+      "login": "Dasha",
+      "id": "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+    },
+    {
+      "email": "hrumstik.ivenec@gmail.com",
+      "login": "Hrumstik",
+      "id": "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
+    },
+    {
+      "email": "jetfree90@gmail.com",
+      "login": "JetFree",
+      "id": "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+    },
+    {
+      "email": "dazhylik69@mail.ru",
+      "login": "Dashka",
+      "id": "95MLBrLxLkgjv7fr5LihwJMXSj03"
+    }
+  ]
+}
