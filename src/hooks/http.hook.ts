@@ -7,7 +7,6 @@ export const useHttp = () => {
     body: string | null = null,
     headers: { "Content-Type": string } = { "Content-Type": "application/json" }
   ) => {
-    console.log("Base URL:", process.env.REACT_APP_BASE_URL);
     let url: any = id
       ? `${process.env.REACT_APP_BASE_URL_TASKS}${id}`
       : process.env.REACT_APP_BASE_URL_TASKS;

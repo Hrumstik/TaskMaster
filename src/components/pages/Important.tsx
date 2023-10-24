@@ -45,6 +45,7 @@ export default function Important() {
   const {
     importantAllTasks,
     sortedAlphabeticallyAllTasksWithImportance,
+    isTaskOwnedByCurrentUser,
   }: UseGroupTasksTypes = useGroupTasks(tasks);
 
   const { renderTasks } = useRenderTasks();
@@ -54,11 +55,14 @@ export default function Important() {
       ? sortedAlphabeticallyAllTasksWithImportance
       : importantAllTasks;
 
-    return sortedTasks.filter((task: Task) => !task.done);
+    return sortedTasks.filter(
+      (task: Task) => !task.done && isTaskOwnedByCurrentUser(task)
+    );
   }, [
     importantAllTasks,
     sortTasksAlphabeticallyState,
     sortedAlphabeticallyAllTasksWithImportance,
+    isTaskOwnedByCurrentUser,
   ]);
 
   return (
