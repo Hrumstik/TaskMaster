@@ -25,4 +25,7 @@ This section showcases screenshots of the main features of the application.
 ![Login Page](./screenshots/loginPage.png)
 ### Registration Page
 ![Registration Page](./screenshots/registrationPage.png)
-
+### Main Page
+![Main Page](./screenshots/mainPage.png)
+### Task creation process
+![Task creation process](./screenshots/creationOfTheTask.png)
