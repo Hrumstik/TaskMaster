@@ -17,6 +17,12 @@ The application enables registered and authenticated users to create personal ta
    - Clone the repository: `git clone https://github.com/Hrumstik/TaskMaster.git`.
    - Navigate to the project directory and install dependencies: `npm install`.
    - Start the application: `npm start`.
+  
+## Screenshots
+
+This section showcases screenshots of the main features of the application.
+### Login Page
+![Login Page](screenshots/loginPage.png)
 
 
 
