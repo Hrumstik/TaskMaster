@@ -23,11 +23,11 @@ The application enables registered and authenticated users to create personal ta
 This section showcases screenshots of the main features of the application.
 ### Login Page
 ![Login Page](./screenshots/loginPage.png)
-![Login Page](./screenshots/tasks.png)
 ### Registration Page
 ![Registration Page](./screenshots/registrationPage.png)
 ### Main Page
 ![Main Page](./screenshots/mainPage.png)
+![Main Page](./screenshots/tasks.png)
 ### Task creation process
 ![Task creation process](./screenshots/creationOfTheTask.png)
 ### The process of setting the importance of a task by clicking on the star, and setting the responsible registered users for the task
