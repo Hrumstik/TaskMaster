@@ -28,6 +28,7 @@ This section showcases screenshots of the main features of the application.
 ### Main Page
 ![Main Page](./screenshots/mainPage.png)
 ![Main Page](./screenshots/tasks.png)
+![Main Page](./screenshots/completedTask.png)
 ### Task creation process
 ![Task creation process](./screenshots/creationOfTheTask.png)
 ### The process of setting the importance of a task by clicking on the star, and setting the responsible registered users for the task
