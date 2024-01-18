@@ -6,11 +6,15 @@
       "date": "08.10.2023",
       "done": false,
       "important": true,
-      "userId": ["yOXL3bShNdaqcQfmKziVhSeeS8S2"]
+      "userId": [
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ]
     },
     {
       "id": "9390e36a-03a1-4a8b-bc95-064e287ea7c7",
-      "userId": ["mle6KvtgOdRWnD6ctJEUqnXVo2b2"],
+      "userId": [
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2"
+      ],
       "name": "Забрать деньги",
       "date": null,
       "done": false,
@@ -18,7 +22,9 @@
     },
     {
       "id": "1103dc10-c885-470f-a34f-400c92604ac0",
-      "userId": ["PWWbcOAoXXbGdOWL11j1ZwAMbDX2"],
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+      ],
       "name": "Агула",
       "date": null,
       "done": false,
@@ -29,6 +35,56 @@
       "userId": "95MLBrLxLkgjv7fr5LihwJMXSj03",
       "name": "погладить",
       "date": "10.10.2023",
+      "done": false,
+      "important": true
+    },
+    {
+      "id": "7c183ca2-ee98-48cf-8060-9d018bae6b40",
+      "name": "Immediately write an email to customer service asking for a replacement item.",
+      "date": "19.02.2023",
+      "done": false,
+      "important": true,
+      "userId": [
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ]
+    },
+    {
+      "id": "025534a8-db0d-4205-84bc-dda126a9c414",
+      "userId": [
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2"
+      ],
+      "name": "Write a letter to support service with request to replace product",
+      "date": "19.02.2023",
+      "done": false,
+      "important": true
+    },
+    {
+      "id": "e4fc5b30-8436-48dd-986c-baa2f42f7259",
+      "userId": [
+        "95MLBrLxLkgjv7fr5LihwJMXSj03",
+        "yOXL3bShNdaqcQfmKziVhSeeS8S2",
+        "mle6KvtgOdRWnD6ctJEUqnXVo2b2",
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+      ],
+      "name": "Write a letter to the support service with a request to replace the product",
+      "date": "19.02.2023",
+      "done": false,
+      "important": true
+    },
+    {
+      "id": "e7d25d0f-4b62-47a4-b9f0-170d731920c5",
+      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
+      "name": "Write a letter to the support service with a request to replace the product",
+      "date": "19.02.2023",
+      "done": false,
+      "important": true
+    },
+    {
+      "id": "a253adf8-094a-44ad-9980-11c3b8b6d796",
+      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
+      "name": "conduct code review",
+      "date": "19.02.2023",
       "done": false,
       "important": true
     }
