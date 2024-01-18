@@ -22,7 +22,7 @@ The application enables registered and authenticated users to create personal ta
 
 This section showcases screenshots of the main features of the application.
 ### Login Page
-![Login Page](screenshots/loginPage.png)
+![Login Page](./screenshots/loginPage.png)
 
 
 
