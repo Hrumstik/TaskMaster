@@ -20,7 +20,7 @@ export interface ArrayTasksProps {
 export interface User {
   email: string | null;
   login?: string;
-  token: string | null;
+  token?: string | null;
   id: string | null;
 }
 

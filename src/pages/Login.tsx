@@ -25,9 +25,9 @@ const Login: React.FC = () => {
             setUser({
               email: user.email,
               id: user.uid,
-              token: (user as any).accessToken,
             })
           );
+          localStorage.setItem("token", (user as any).accessToken.toString());
           navigate("/");
         }
       })

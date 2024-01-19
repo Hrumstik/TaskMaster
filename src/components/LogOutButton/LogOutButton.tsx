@@ -4,10 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { IconButton, Button } from "@mui/material";
 import styled from "styled-components";
 
-import useGlobalState from "../../hooks/useGlobalState";
 import useScreenSize from "../../hooks/useScreenSize";
-import { removeUser } from "../authentication/usersSlice";
-import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 
 const LogOutButtonStyled = styled(Button)`
   width: 30%;
@@ -21,13 +18,8 @@ const LogOutButtonStyled = styled(Button)`
 export default function LogOutButton() {
   const { isMobile, isTablet } = useScreenSize();
 
-  const { dispatch, stateOfInput } = useGlobalState();
-
   const logOut = (): void => {
-    dispatch(removeUser());
-    if (stateOfInput) {
-      dispatch(toggleStateOfInput());
-    }
+    localStorage.removeItem("token");
   };
   return (
     <>
