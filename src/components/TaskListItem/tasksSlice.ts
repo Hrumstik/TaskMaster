@@ -84,7 +84,7 @@ const tasksSlice = createSlice({
       return {
         ...state,
         tasks: state.tasks.map((task) => {
-          if (task.name === payload.name) {
+          if (task.id === payload.id) {
             return {
               ...task,
               date: payload.date,

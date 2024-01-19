@@ -91,7 +91,9 @@ export default function Planned() {
       sortedTasks = todayTasks;
     }
 
-    return sortedTasks.filter(({ done }) => !done);
+    return sortedTasks.filter(
+      (task) => isTaskOwnedByCurrentUser(task) && !task.done
+    );
   }, [
     importantTodayTasks,
     sortTasksAlphabeticallyState,
@@ -99,6 +101,7 @@ export default function Planned() {
     showImportantTasksState,
     sortedAlphabeticallyTodayTasksWithImportance,
     sortedAlphabeticallyTodayTasks,
+    isTaskOwnedByCurrentUser,
   ]);
 
   const renderingTommorovTasks = useMemo(() => {
@@ -110,7 +113,9 @@ export default function Planned() {
     } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
       sortedTasks = sortedAlphabeticallyTomorrowTasksWithImportance;
     } else {
-      sortedTasks = tomorrowTasks.filter(({ done }) => !done);
+      sortedTasks = tomorrowTasks.filter(
+        (task) => isTaskOwnedByCurrentUser(task) && !task.done
+      );
     }
 
     return sortedTasks;
@@ -121,6 +126,7 @@ export default function Planned() {
     showImportantTasksState,
     sortedAlphabeticallyTomorrowTasksWithImportance,
     sortedAlphabeticallyTomorrowTasks,
+    isTaskOwnedByCurrentUser,
   ]);
 
   const renderingDayAfterTommorovTasks = useMemo(() => {
@@ -132,7 +138,9 @@ export default function Planned() {
     } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
       sortedTasks = sortedAlphabeticallyDayAfterTommorowTasksWithImportance;
     } else {
-      sortedTasks = dayAfterTommorowTasks.filter(({ done }) => !done);
+      sortedTasks = dayAfterTommorowTasks.filter(
+        (task) => isTaskOwnedByCurrentUser(task) && !task.done
+      );
     }
 
     return sortedTasks;
@@ -143,6 +151,7 @@ export default function Planned() {
     showImportantTasksState,
     sortedAlphabeticallyDayAfterTommorowTasksWithImportance,
     sortedAlphabeticallyDayAfterTommorowTasks,
+    isTaskOwnedByCurrentUser,
   ]);
 
   const renderingNextWeekTasks = useMemo(() => {
@@ -154,7 +163,9 @@ export default function Planned() {
     } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
       sortedTasks = sortedAlphabeticallyNextWeekTasksWithImportance;
     } else {
-      sortedTasks = nextWeekTasks.filter(({ done }) => !done);
+      sortedTasks = nextWeekTasks.filter(
+        (task) => isTaskOwnedByCurrentUser(task) && !task.done
+      );
     }
 
     return sortedTasks;
@@ -165,6 +176,7 @@ export default function Planned() {
     showImportantTasksState,
     sortedAlphabeticallyNextWeekTasksWithImportance,
     sortedAlphabeticallyNextWeekTasks,
+    isTaskOwnedByCurrentUser,
   ]);
 
   const renderingTasksWithoutDate = useMemo(() => {
@@ -176,7 +188,9 @@ export default function Planned() {
     } else if (sortTasksAlphabeticallyState && showImportantTasksState) {
       sortedTasks = sortedAlphabeticallyTasksWithoutDateWithImportance;
     } else {
-      sortedTasks = tasksWithoutDate.filter(({ done }) => !done);
+      sortedTasks = tasksWithoutDate.filter(
+        (task) => isTaskOwnedByCurrentUser(task) && !task.done
+      );
     }
 
     return sortedTasks;
@@ -187,6 +201,7 @@ export default function Planned() {
     showImportantTasksState,
     sortedAlphabeticallyTasksWithoutDateWithImportance,
     sortedAlphabeticallyTasksWithoutDate,
+    isTaskOwnedByCurrentUser,
   ]);
 
   const renderindOtherTasks = otherTaks.filter(

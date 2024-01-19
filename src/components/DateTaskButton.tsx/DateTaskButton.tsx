@@ -24,8 +24,12 @@ function DateTaskButton({
 
   const handeleSaveTaskDate = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
+      console.log({
+        date: dayjs(date).format("DD.MM.YYYY"),
+      });
       dispatch(
         setTheDateOfPerfomingTheTask({
+          id: idOfTheTask,
           date: dayjs(date).format("DD.MM.YYYY"),
         })
       );
