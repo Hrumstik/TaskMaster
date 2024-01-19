@@ -22,7 +22,7 @@ const TaskSearchItemContainer = styled(Box)`
 `;
 
 const TaskSearchItem: FC<Task> = ({ name, important, date }) => {
-  const theme = useGlobalState();
+  const { theme } = useGlobalState();
   const formattedDate = dayjs(date, "DD.MM.YYYY").format("D MMM YYYY");
 
   return (

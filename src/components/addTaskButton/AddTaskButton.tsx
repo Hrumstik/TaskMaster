@@ -10,7 +10,7 @@ import { toggleStateOfInput } from "../inputField/inputOpenSlice";
 function AddTaskButton() {
   const dispatch = useDispatch();
 
-  const { isMobile } = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
 
   const openInputField = () => {
     dispatch(toggleStateOfInput());
@@ -18,7 +18,7 @@ function AddTaskButton() {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", mt: "15px" }}>
-      {isMobile ? (
+      {isMobile || isTablet ? (
         <IconButton onClick={openInputField} sx={{ color: "icons.primary" }}>
           <AddIcon />
         </IconButton>

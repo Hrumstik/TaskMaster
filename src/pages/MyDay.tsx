@@ -7,16 +7,16 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useFeatures from "../../hooks/useFeatures";
-import useGroupTasks from "../../hooks/useGroupTasks";
-import useRenderTasks from "../../hooks/useRenderTasks";
-import useScreenSize from "../../hooks/useScreenSize";
-import { Task, UseGroupTasksTypes } from "../../types/types";
-import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
-import Header from "../Header/Header";
-import InputField from "../inputField/InputField";
-import Menu from "../Menu/Menu";
-import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
+import { DoneTasksList } from "../components/DoneTasksList/DoneTasksList";
+import Header from "../components/Header/Header";
+import InputField from "../components/inputField/InputField";
+import Menu from "../components/Menu/Menu";
+import NoTaskScreen from "../components/NoTaskScreen/NoTaskScreen";
+import useFeatures from "../hooks/useFeatures";
+import useGroupTasks from "../hooks/useGroupTasks";
+import useRenderTasks from "../hooks/useRenderTasks";
+import useScreenSize from "../hooks/useScreenSize";
+import { Task, UseGroupTasksTypes } from "../types/types";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
@@ -24,7 +24,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ $ismobile }) => ($ismobile ? "92%" : "75%")};
+  width: ${({ $ismobile }) => ($ismobile ? "75%" : "87%")};
 `;
 
 const ContentContainer = styled(Box)`

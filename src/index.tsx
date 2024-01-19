@@ -6,15 +6,15 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./components/App";
-import Error from "./components/pages/Error";
-import Important from "./components/pages/Important";
-import Login from "./components/pages/Login";
-import Main from "./components/pages/Main";
-import MyDay from "./components/pages/MyDay";
-import Planned from "./components/pages/Planned";
-import Register from "./components/pages/Register";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import store from "./components/store/store";
+import Error from "./pages/Error";
+import Important from "./pages/Important";
+import Login from "./pages/Login";
+import Main from "./pages/Main";
+import MyDay from "./pages/MyDay";
+import Planned from "./pages/Planned";
+import Register from "./pages/Register";
 import "./firebase";
 const router = createBrowserRouter([
   {

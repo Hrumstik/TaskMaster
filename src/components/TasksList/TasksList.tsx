@@ -9,6 +9,7 @@ import useFeatures from "../../hooks/useFeatures";
 import useGlobalState from "../../hooks/useGlobalState";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useRenderTasks from "../../hooks/useRenderTasks";
+import useScreenSize from "../../hooks/useScreenSize";
 import { Task } from "../../types/types";
 import { DoneTasksList } from "../DoneTasksList/DoneTasksList";
 import InputField from "../inputField/InputField";
@@ -16,16 +17,17 @@ import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
 import { AppDispatch } from "../store/store";
 import { fetchTasks } from "../TaskListItem/tasksSlice";
 
-const StyledMainTaskListContainer = styled(Box)`
+const StyledMainTaskListContainer = styled(Box)<any>`
   height: 86%;
-  padding-right: 20px;
+  padding-right: ${({ $isMobile }) => ($isMobile ? "0px" : "20px")};
+  padding-left: ${({ $isMobile }) => ($isMobile ? "2px" : "20px")};
   display: flex;
   flex-direction: column;
 `;
 
 function TasksList() {
   const { stateOfInput, tasks, tasksStatus } = useGlobalState();
-
+  const { isMobile } = useScreenSize();
   const {
     sortedAlphabeticallyAllTasks,
     importantAllTasks,
@@ -69,7 +71,7 @@ function TasksList() {
   ]);
 
   return (
-    <StyledMainTaskListContainer>
+    <StyledMainTaskListContainer $isMobile={isMobile}>
       {renderingTasks.length || stateOfInput ? (
         <Box sx={{ height: "100%" }}>
           {renderTasks(renderingTasks)}

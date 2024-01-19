@@ -4,7 +4,6 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Box, IconButton, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 
 import { useHttp } from "../../hooks/http.hook";
@@ -26,7 +25,6 @@ const InputFieldMainContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-left: 32px;
   padding: 10px 5px 0 5px;
   box-shadow: 0px 4px 8px -3px rgba(0, 0, 0, 1);
 `;
@@ -115,54 +113,47 @@ export default function InputField() {
     }
   };
 
-  return (
-    <CSSTransition
-      in={stateOfInput}
-      timeout={500}
-      classNames="text-field"
-      unmountOnExit
-    >
-      <InputFieldMainContainer theme={theme}>
-        <TaskInputForm
-          isValid={isValid}
-          saveTask={saveTask}
-          setIsValid={setIsValid}
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-        />
+  return stateOfInput ? (
+    <InputFieldMainContainer theme={theme}>
+      <TaskInputForm
+        isValid={isValid}
+        saveTask={saveTask}
+        setIsValid={setIsValid}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+      />
 
-        <FeaturesContainer
-          onKeyDown={onKeyDownSaveTheDateOfTheTask}
-          onClick={onClickSaveTheDateOfThedask}
-        >
-          <DateAndImportanceContainer>
-            <CreateTaskDateButton
-              dateState={dateState}
-              setDateState={setDateState}
-            />
-            <IconButton onClick={() => setAsImportant(!important)}>
-              {important ? (
-                <StarIcon
-                  sx={{
-                    fontSize: 25,
-                    color: "icons.primary",
-                  }}
-                />
-              ) : (
-                <StarBorderIcon sx={{ fontSize: 25, color: "icons.primary" }} />
-              )}
-            </IconButton>
-          </DateAndImportanceContainer>
-          <AssignTaskButton
-            setError={setError}
-            assignedTask={assignedTask}
-            setAssignedTask={setAssignedTask}
+      <FeaturesContainer
+        onKeyDown={onKeyDownSaveTheDateOfTheTask}
+        onClick={onClickSaveTheDateOfThedask}
+      >
+        <DateAndImportanceContainer>
+          <CreateTaskDateButton
+            dateState={dateState}
+            setDateState={setDateState}
           />
-        </FeaturesContainer>
-        {error ? (
-          <Typography sx={{ color: "red" }}>Something went wrong</Typography>
-        ) : null}
-      </InputFieldMainContainer>
-    </CSSTransition>
-  );
+          <IconButton onClick={() => setAsImportant(!important)}>
+            {important ? (
+              <StarIcon
+                sx={{
+                  fontSize: 25,
+                  color: "icons.primary",
+                }}
+              />
+            ) : (
+              <StarBorderIcon sx={{ fontSize: 25, color: "icons.primary" }} />
+            )}
+          </IconButton>
+        </DateAndImportanceContainer>
+        <AssignTaskButton
+          setError={setError}
+          assignedTask={assignedTask}
+          setAssignedTask={setAssignedTask}
+        />
+      </FeaturesContainer>
+      {error ? (
+        <Typography sx={{ color: "red" }}>Something went wrong</Typography>
+      ) : null}
+    </InputFieldMainContainer>
+  ) : null;
 }

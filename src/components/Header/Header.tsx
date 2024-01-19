@@ -1,15 +1,16 @@
 import React, { memo } from "react";
 
-import { Box, IconButton, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import styled from "styled-components";
 
+import useScreenSize from "../../hooks/useScreenSize";
 import { HeaderProps } from "../../types/types";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import PrintButton from "../PrintButton/PrintButton";
 import SearchButton from "../SearchButton/SearchButton";
 import ThemeButton from "../ThemeButton/ThemeButton";
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.header<any>`
   display: flex;
   justify-content: space-between;
   padding-right: 18px;
@@ -17,13 +18,13 @@ const StyledHeader = styled.header`
   margin-bottom: 37px;
 `;
 
-const HeaderLeftSection = styled(Box)`
+const HeaderLeftSection = styled.div<any>`
   display: flex;
   gap: 9px;
   cursor: pointer;
 `;
 
-const HeaderRightSection = styled(Box)`
+const HeaderRightSection = styled.div<any>`
   display: flex;
   width: 35%;
   height: 100%;
@@ -32,15 +33,24 @@ const HeaderRightSection = styled(Box)`
 `;
 
 const Header: React.FC<HeaderProps> = ({ text, icon }) => {
+  const { isMobile } = useScreenSize();
   return (
     <StyledHeader>
       <HeaderLeftSection>
-        <Typography variant="h1" color="text.secondary" fontSize="22px">
-          <IconButton>{icon}</IconButton>
+        <Typography
+          variant="h1"
+          color="text.secondary"
+          fontSize="22px"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {!isMobile && <IconButton>{icon}</IconButton>}
           {text}
         </Typography>
-
-        <PrintButton />
+        {!isMobile && <PrintButton />}
       </HeaderLeftSection>
       <HeaderRightSection>
         <SearchButton />

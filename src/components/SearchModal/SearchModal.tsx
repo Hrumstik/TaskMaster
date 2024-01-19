@@ -12,12 +12,7 @@ import styled from "styled-components";
 import useGlobalState from "../../hooks/useGlobalState";
 import useGroupTasks from "../../hooks/useGroupTasks";
 import useScreenSize from "../../hooks/useScreenSize";
-import {
-  Task,
-  UseGroupTasksTypes,
-  FilterButtonType,
-  Tasks,
-} from "../../types/types";
+import { Task, UseGroupTasksTypes, Tasks } from "../../types/types";
 import SearchInput from "../SearchInput/SearchInput";
 
 import TaskSearchItem from "./TaskSearchItem";
@@ -60,15 +55,15 @@ const FilterContainer = styled(Box)`
   margin-bottom: 15px;
 `;
 
-const ButtonFilter = styled.button<FilterButtonType>`
+const ButtonFilter = styled.button<any>`
   color: ${({ theme }) => theme.palette.text.searchItem};
   background-color: ${({ theme, isActive }) => {
     return isActive
       ? theme.palette.background.searchItemActive
       : theme.palette.background.searchItem;
   }};
-  font-size: 16px;
-  padding: 4px 16px;
+  font-size: ${({ $isMobile }) => ($isMobile ? "14px" : "16px")};
+  padding: ${({ $isMobile }) => ($isMobile ? "2px 4px" : "4px 16px")};
   cursor: pointer;
   border-radius: 4px;
   transform: ${({ isActive }) => {
@@ -196,8 +191,15 @@ const SearchModal: FC = () => {
         sortByPeriod={sortByPeriod}
       />
       <FilterContainer>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: isMobile ? "5px" : "20px",
+          }}
+        >
           <ButtonFilter
+            $isMobile={isMobile}
             onClick={() => applyFilter("all tasks", tasks)}
             theme={theme}
             isActive={isActiveButton === "all tasks"}
@@ -205,6 +207,7 @@ const SearchModal: FC = () => {
             All tasks
           </ButtonFilter>
           <ButtonFilter
+            $isMobile={isMobile}
             onClick={() => applyFilter("unfinished tasks", unfinishedTasks)}
             theme={theme}
             isActive={isActiveButton === "unfinished tasks"}
@@ -212,6 +215,7 @@ const SearchModal: FC = () => {
             Unfinished tasks
           </ButtonFilter>
           <ButtonFilter
+            $isMobile={isMobile}
             onClick={() => applyFilter("important tasks", importantAllTasks)}
             theme={theme}
             isActive={isActiveButton === "important tasks"}
@@ -219,6 +223,7 @@ const SearchModal: FC = () => {
             Important tasks
           </ButtonFilter>
           <ButtonFilter
+            $isMobile={isMobile}
             onClick={() => applyFilter("overdue tasks", overdueTasks)}
             theme={theme}
             isActive={isActiveButton === "overdue tasks"}
@@ -226,6 +231,7 @@ const SearchModal: FC = () => {
             Overdue tasks
           </ButtonFilter>
           <ButtonFilter
+            $isMobile={isMobile}
             onClick={() => setIsActiveButton("filter by date")}
             theme={theme}
             isActive={isActiveButton === "filter by date"}

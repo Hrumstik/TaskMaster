@@ -7,14 +7,15 @@ import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 
 import useGroupTasks from "../../hooks/useGroupTasks";
+import useScreenSize from "../../hooks/useScreenSize";
 import { ArrayTasksProps } from "../../types/types";
 import { TaskListItem } from "../TaskListItem/TaskListItem";
 import "./DoneTasksList.css";
 
-const StyledCompletedBox = styled(Box)`
+const StyledCompletedBox = styled(Box)<any>`
   display: flex;
   gap: 22px;
-  padding-left: 32px;
+  padding-left: ${({ $isMobile }) => ($isMobile ? "0px" : "32px")};
 `;
 
 const StyledTitleOfDoneTasks = styled(Typography)`
@@ -22,6 +23,7 @@ const StyledTitleOfDoneTasks = styled(Typography)`
 `;
 
 export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
+  const { isMobile } = useScreenSize();
   const [visibilityOfDoneTasks, setVisibilityOfDoneTasks] =
     useState<boolean>(false);
 
@@ -42,6 +44,7 @@ export const DoneTasksList: React.FC<ArrayTasksProps> = ({ tasksArray }) => {
     <>
       <StyledCompletedBox
         onClick={() => setVisibilityOfDoneTasks(!visibilityOfDoneTasks)}
+        $isMobile={isMobile}
       >
         <StyledTitleOfDoneTasks color="text.primary" fontWeight="bold">
           <IconButton>

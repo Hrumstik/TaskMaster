@@ -19,15 +19,17 @@ const StyledMenuContainer = styled(Box)<any>`
   background-color: ${({ theme }) => theme.palette.background.default};
   height: 100vh;
   box-shadow: 4px 0px 20px -10px rgba(0, 0, 0, 0.25);
-  width: ${(props) => (props.$isMobile ? "8%" : "25%")};
+  width: ${(props) => (props.$isMobile ? "13%" : "20%")};
 `;
 
 const StyledMenuHeader = styled.header<any>`
-  padding-top: 40px;
+  padding-top: ${(props) => (props.$isMobile ? "10px" : "40px")};
   padding-left: 11%;
   padding-right: 10%;
-  display: ${(props) => (props.$isMobile ? "flex" : "block")};
-  justify-content: ${(props) => (props.$isMobile ? "center" : "initial")};
+  display: ${(props) =>
+    props.$isMobile || props.$isTablet ? "flex" : "block"};
+  justify-content: ${(props) =>
+    props.$isMobile || props.$isTablet ? "center" : "initial"};
 `;
 
 const StyledMenuList = styled.ul`
@@ -41,13 +43,17 @@ export default function Menu() {
 
   const { theme } = useGlobalState();
 
-  const { isMobile } = useScreenSize();
+  const { isMobile, isTablet } = useScreenSize();
 
   const iconStyles = { fontSize: 25, color: "icons.primary" };
 
   return (
-    <StyledMenuContainer theme={theme} $isMobile={Boolean(isMobile)}>
-      <StyledMenuHeader $ismobile={Boolean(isMobile)}>
+    <StyledMenuContainer
+      theme={theme}
+      $isMobile={Boolean(isMobile)}
+      $isTablet={isTablet}
+    >
+      <StyledMenuHeader $isMobile={Boolean(isMobile)} $isTablet={isTablet}>
         <IconButton onClick={() => setShowOptions(true)}>
           <MenuOutlinedIcon
             sx={{ fontSize: isMobile ? 25 : 40, color: "icons.primary" }}
@@ -82,6 +88,7 @@ export default function Menu() {
             return <ListItem path={path} text={text} icon={icon} key={text} />;
           })}
         </StyledMenuList>
+
         <Divider variant="middle" />
         <AddTaskButton />
         {error.status && (

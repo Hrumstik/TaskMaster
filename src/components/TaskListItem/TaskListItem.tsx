@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 
+import useScreenSize from "../../hooks/useScreenSize";
 import { TaskListItemProps, Tasks } from "../../types/types";
 import ChangeTaskNameButton from "../ChangeTaskNameButton/ChangeTaskNameButton";
 import ChangeTaskNameInput from "../ChangeTaskNameInput/ChangeTaskNameInput";
@@ -26,7 +27,7 @@ const StyledMainTaskContainer = styled(Box)`
 const StyledBasicTaskContainer = styled(Box)<any>`
   height: 57px;
   background-color: ${({ theme }) => theme.palette.background.paper};
-  padding-left: 32px;
+  padding-left: ${({ $isMobile }) => ($isMobile ? "0px" : "32px")};
   display: flex;
   align-content: center;
   box-shadow: ${({ $focusedTask }) =>
@@ -46,6 +47,7 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
   text,
   checked,
 }) => {
+  const { isMobile } = useScreenSize();
   const [focusedTask, setFocusedTask] = useState<boolean>(false);
 
   const [changingTheNameOfTask, setChangingTheNameOfTask] =
@@ -78,7 +80,11 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
     <StyledMainTaskContainer theme={theme}>
       {!changingTheNameOfTask ? (
         <>
-          <StyledBasicTaskContainer theme={theme} $focusedTask={focusedTask}>
+          <StyledBasicTaskContainer
+            $isMobile={isMobile}
+            theme={theme}
+            $focusedTask={focusedTask}
+          >
             <TaskNameContainer
               text={text}
               idOfTheTask={idOfTheTask}

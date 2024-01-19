@@ -4,20 +4,22 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { Box } from "@mui/material";
 import styled from "styled-components";
 
-import useScreenSize from "../../hooks/useScreenSize";
-import Header from "../Header/Header";
-import Menu from "../Menu/Menu";
-import TasksList from "../TasksList/TasksList";
+import Header from "../components/Header/Header";
+import Menu from "../components/Menu/Menu";
+import TasksList from "../components/TasksList/TasksList";
+import useScreenSize from "../hooks/useScreenSize";
 
 const MainContainer = styled(Box)<any>`
-  width: ${(props) => (props.$isMobile ? "92%" : "75%")};
+  width: ${({ $ismobile }) => ($ismobile ? "75%" : "87%")};
 `;
 
 export default function Main() {
   const { isMobile } = useScreenSize();
 
   return (
-    <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
+    <Box
+      sx={{ bgcolor: "background.paper", display: "flex", height: "100dvh" }}
+    >
       <Menu />
       <MainContainer $isMobile={isMobile}>
         <Header

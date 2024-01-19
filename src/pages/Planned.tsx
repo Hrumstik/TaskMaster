@@ -7,16 +7,16 @@ import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import useFeatures from "../../hooks/useFeatures";
-import useGroupTasks from "../../hooks/useGroupTasks";
-import useRenderTasks from "../../hooks/useRenderTasks";
-import useScreenSize from "../../hooks/useScreenSize";
-import { Task, UseGroupTasksTypes } from "../../types/types";
-import Header from "../Header/Header";
-import InputField from "../inputField/InputField";
-import Menu from "../Menu/Menu";
-import NoTaskScreen from "../NoTaskScreen/NoTaskScreen";
-import { TaskListItem } from "../TaskListItem/TaskListItem";
+import Header from "../components/Header/Header";
+import InputField from "../components/inputField/InputField";
+import Menu from "../components/Menu/Menu";
+import NoTaskScreen from "../components/NoTaskScreen/NoTaskScreen";
+import { TaskListItem } from "../components/TaskListItem/TaskListItem";
+import useFeatures from "../hooks/useFeatures";
+import useGroupTasks from "../hooks/useGroupTasks";
+import useRenderTasks from "../hooks/useRenderTasks";
+import useScreenSize from "../hooks/useScreenSize";
+import { Task, UseGroupTasksTypes } from "../types/types";
 
 const AppContainer = styled(Box)`
   background-color: ${({ theme }) => theme.palette.background.paper};
@@ -24,7 +24,7 @@ const AppContainer = styled(Box)`
 `;
 
 const MainContainer = styled(Box)<any>`
-  width: ${({ $ismobile }) => ($ismobile ? "92%" : "75%")};
+  width: ${({ $ismobile }) => ($ismobile ? "75%" : "87%")};
 `;
 
 const ContentContainer = styled(Box)`
@@ -201,7 +201,7 @@ export default function Planned() {
   return (
     <AppContainer theme={theme}>
       <Menu />
-      <MainContainer $ismobile={isMobile}>
+      <MainContainer $isMobile={Boolean(isMobile)}>
         <Header
           text="Planned"
           icon={

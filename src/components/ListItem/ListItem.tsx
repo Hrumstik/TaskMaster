@@ -13,10 +13,10 @@ const StyledListItem = styled.li`
 `;
 
 function ListItem({ text, path, icon }: ListItemProps) {
-  const { isMobile } = useScreenSize();
-
+  const { isMobile, isTablet } = useScreenSize();
+  console.log(isTablet);
   return (
-    <StyledListItem className="">
+    <StyledListItem>
       <NavLink
         to={path}
         className={
@@ -24,9 +24,25 @@ function ListItem({ text, path, icon }: ListItemProps) {
           // I use CSS here because it's necessary for React Router (NavLink)
         }
       >
-        <Typography variant="h6" component="span" color="text.primary">
-          <IconButton sx={{ mr: "25px" }}>{icon}</IconButton>
-          {isMobile ? null : text}
+        <Typography
+          variant="h6"
+          component="span"
+          color="text.primary"
+          sx={{
+            display: "flex",
+            justifyContent: isTablet || isMobile ? "center" : "start",
+          }}
+        >
+          <IconButton
+            sx={{
+              mr: "25px",
+              display: "flex",
+              justifyContent: isTablet ? "center" : "start",
+            }}
+          >
+            {icon}
+          </IconButton>
+          {isMobile || isTablet ? null : text}
         </Typography>
       </NavLink>
     </StyledListItem>

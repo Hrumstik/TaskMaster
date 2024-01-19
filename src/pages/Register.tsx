@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { Col, Row } from "antd";
 import axios, { AxiosRequestConfig } from "axios";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
@@ -8,22 +9,16 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { BodyRequest } from "../../types/types";
-import { setUser } from "../authentication/usersSlice";
+import { setUser } from "../components/authentication/usersSlice";
+import { BodyRequest } from "../types/types";
 
 const MainContainer = styled(Box)`
   margin-left: auto;
   margin-right: auto;
   margin-top: 20vh;
   height 80vh;
-  width: 30%;
   display: flex;
   flex-direction: column;
-`;
-
-const SignUpButton = styled(Button)`
-  width: 200px;
-  align-self: center;
 `;
 
 const Register: React.FC = () => {
@@ -114,63 +109,83 @@ const Register: React.FC = () => {
 
   return (
     <MainContainer>
-      <Typography
-        sx={{ marginBottom: "20px", alignSelf: "center" }}
-        variant="h1"
-        fontSize={40}
-      >
-        Register a New Account
-      </Typography>
-      <TextField
-        error={Boolean(loginError)}
-        helperText={loginError}
-        sx={{ marginBottom: "20px" }}
-        label="Your login"
-        value={loginValue}
-        onChange={(event) => {
-          setLoginValue(event.target.value);
-        }}
-      ></TextField>
-      <TextField
-        error={Boolean(emailError)}
-        helperText={emailError}
-        sx={{ marginBottom: "20px" }}
-        label="Email adress"
-        value={emailValue}
-        onChange={(event) => {
-          setEmailValue(event.target.value);
-        }}
-      ></TextField>
-      <TextField
-        error={Boolean(passwordError)}
-        helperText={passwordError}
-        sx={{ marginBottom: "20px" }}
-        label="Password"
-        type="password"
-        value={passwordValue}
-        onChange={(event) => {
-          setPasswordValue(event.target.value);
-        }}
-      ></TextField>
-      {failedRegister && (
-        <Typography
-          variant="h2"
-          fontSize={20}
-          sx={{ mb: "20px", color: "red" }}
-        >
-          Something went wrong
-        </Typography>
-      )}
-      <SignUpButton
-        variant="contained"
-        fullWidth={false}
-        onClick={handleRegister}
-      >
-        Sign Up
-      </SignUpButton>
-      <Typography variant="h2" fontSize={20} sx={{ mt: "40px" }}>
-        Already have an account? <Link to="/Login">Then log in.</Link>
-      </Typography>
+      <Row>
+        <Col xs={{ span: 18, offset: 3 }} sm={{ span: 8, offset: 8 }}>
+          <Typography
+            sx={{
+              marginBottom: "20px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+            variant="h1"
+            fontSize={40}
+          >
+            Registration
+          </Typography>
+          <TextField
+            error={Boolean(loginError)}
+            helperText={loginError}
+            sx={{ marginBottom: "20px" }}
+            label="Your login"
+            value={loginValue}
+            fullWidth
+            onChange={(event) => {
+              setLoginValue(event.target.value);
+            }}
+          ></TextField>
+          <TextField
+            error={Boolean(emailError)}
+            fullWidth
+            helperText={emailError}
+            sx={{ marginBottom: "20px" }}
+            label="Email adress"
+            value={emailValue}
+            onChange={(event) => {
+              setEmailValue(event.target.value);
+            }}
+          ></TextField>
+          <TextField
+            error={Boolean(passwordError)}
+            helperText={passwordError}
+            fullWidth
+            sx={{ marginBottom: "20px" }}
+            label="Password"
+            type="password"
+            value={passwordValue}
+            onChange={(event) => {
+              setPasswordValue(event.target.value);
+            }}
+          ></TextField>
+          {failedRegister && (
+            <Typography
+              variant="h2"
+              fontSize={20}
+              sx={{ mb: "20px", color: "red" }}
+            >
+              Something went wrong
+            </Typography>
+          )}
+          <Row>
+            <Col span={12} offset={6}>
+              <Button
+                variant="contained"
+                fullWidth={true}
+                size="large"
+                onClick={handleRegister}
+              >
+                Sign Up
+              </Button>
+            </Col>
+          </Row>
+          <Typography variant="h2" fontSize={20} sx={{ mt: "40px" }}>
+            Already have an account?{" "}
+            <Link to="/Login">
+              <br />
+              Then log in.
+            </Link>
+          </Typography>
+        </Col>
+      </Row>
     </MainContainer>
   );
 };
