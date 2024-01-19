@@ -31,8 +31,7 @@ function ListItem({ text, path, icon }: ListItemProps) {
           sx={{
             overflow: "hidden",
             display: "flex",
-            justifyContent:
-              isTablet || isMobile ? "center important!" : "start",
+            justifyContent: isTablet || isMobile ? "center " : "start",
           }}
         >
           <IconButton

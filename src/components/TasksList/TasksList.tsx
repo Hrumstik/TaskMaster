@@ -34,6 +34,7 @@ function TasksList() {
     sortedAlphabeticallyAllTasksWithImportance,
     isTaskOwnedByCurrentUser,
   } = useGroupTasks(tasks);
+  console.log(tasks);
   const { renderTasks } = useRenderTasks();
   const { sortTasksAlphabeticallyState, showImportantTasksState } =
     useFeatures();
