@@ -35,7 +35,7 @@ const ContentContainer = styled(Box)`
 `;
 
 const DateTitle = styled(Typography)`
-  padding-left: 45px;
+  padding-left: 25px;
 `;
 
 const TasksContainer = styled(Box)`
@@ -43,6 +43,7 @@ const TasksContainer = styled(Box)`
 `;
 
 export default function Planned() {
+  const { isMobile } = useScreenSize();
   const tasks: Task[] = useSelector(({ tasks }) => tasks.tasks);
   const stateOfInput: boolean = useSelector(({ input }) => input);
 
@@ -196,8 +197,6 @@ export default function Planned() {
     isTaskOwnedByCurrentUser(task)
   );
 
-  const { isMobile } = useScreenSize();
-
   return (
     <AppContainer theme={theme}>
       <Menu />
@@ -217,7 +216,7 @@ export default function Planned() {
               {renderingTodayTasks.length &&
               checkTheStatusOfTask(todayTasks) ? (
                 <Box sx={{ mb: "20px" }}>
-                  <DateTitle color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" fontSize={20} variant="h1">
                     Today tasks:
                   </DateTitle>
                   {renderTasks(renderingTodayTasks)}
@@ -227,7 +226,7 @@ export default function Planned() {
               {renderingTommorovTasks.length &&
               checkTheStatusOfTask(tomorrowTasks) ? (
                 <Box>
-                  <DateTitle color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" fontSize={20} variant="h1">
                     Tomorrow tasks:
                   </DateTitle>
                   {renderTasks(renderingTommorovTasks)}
@@ -237,7 +236,7 @@ export default function Planned() {
               {renderingDayAfterTommorovTasks.length &&
               checkTheStatusOfTask(dayAfterTommorowTasks) ? (
                 <Box>
-                  <DateTitle color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" fontSize={20} variant="h1">
                     Day after tomorrow tasks:
                   </DateTitle>
                   {renderTasks(renderingDayAfterTommorovTasks)}
@@ -247,7 +246,7 @@ export default function Planned() {
               {renderingNextWeekTasks.length &&
               checkTheStatusOfTask(nextWeekTasks) ? (
                 <Box>
-                  <DateTitle color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" fontSize={20} variant="h1">
                     Next week tasks:
                   </DateTitle>
                   {renderTasks(renderingNextWeekTasks)}
@@ -257,7 +256,7 @@ export default function Planned() {
               {renderingTasksWithoutDate.length &&
               checkTheStatusOfTask(tasksWithoutDate) ? (
                 <Box>
-                  <DateTitle color="text.primary" variant="h5">
+                  <DateTitle color="text.primary" fontSize={20} variant="h1">
                     Tasks without date:
                   </DateTitle>
                   {renderTasks(renderingTasksWithoutDate)}
@@ -270,7 +269,11 @@ export default function Planned() {
                     if (!task.done) {
                       return (
                         <React.Fragment key={task.id}>
-                          <DateTitle color="text.primary" variant="h5">
+                          <DateTitle
+                            color="text.primary"
+                            fontSize={20}
+                            variant="h1"
+                          >
                             Task for the date {task.date}:
                           </DateTitle>
                           <TaskListItem

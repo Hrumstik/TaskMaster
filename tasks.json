@@ -21,44 +21,22 @@
       "important": false
     },
     {
+      "id": "1103dc10-c885-470f-a34f-400c92604ac0",
+      "userId": [
+        "PWWbcOAoXXbGdOWL11j1ZwAMbDX2"
+      ],
+      "name": "Агула",
+      "date": null,
+      "done": false,
+      "important": false
+    },
+    {
       "id": "2d17f330-c20e-4ca6-8d31-9be691bd84a9",
       "userId": "95MLBrLxLkgjv7fr5LihwJMXSj03",
       "name": "погладить",
       "date": "10.10.2023",
       "done": false,
       "important": true
-    },
-    {
-      "id": "52382cea-e851-4d44-9a3c-8ee6a449eb57",
-      "name": "цук12312312331",
-      "date": null,
-      "done": false,
-      "important": false,
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2"
-    },
-    {
-      "id": "3ee86889-175c-43ab-a904-8981f381f741",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "Аббрааам",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "f34b1ff7-698a-47ca-bf0b-b210d97afc41",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "dasd",
-      "date": null,
-      "done": false,
-      "important": false
-    },
-    {
-      "id": "4c41fb61-f975-48e0-b935-e1fbe1a6fb33",
-      "userId": "FQzuXXN8WvYbW706omDknkx2dYi2",
-      "name": "поговорить с отцом",
-      "date": null,
-      "done": false,
-      "important": false
     }
   ],
   "users": [

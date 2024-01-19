@@ -29,15 +29,16 @@ function ListItem({ text, path, icon }: ListItemProps) {
           component="span"
           color="text.primary"
           sx={{
+            overflow: "hidden",
             display: "flex",
-            justifyContent: isTablet || isMobile ? "center" : "start",
+            justifyContent:
+              isTablet || isMobile ? "center important!" : "start",
           }}
         >
           <IconButton
             sx={{
               mr: "25px",
               display: "flex",
-              justifyContent: isTablet ? "center" : "start",
             }}
           >
             {icon}
