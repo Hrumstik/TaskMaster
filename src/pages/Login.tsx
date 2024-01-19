@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             fullWidth
             value={emailValue}
             onChange={(event) => {
-              setEmailValue(event.target.value);
+              setEmailValue(event.target.value.trim());
             }}
           />
           <TextField
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
             fullWidth
             value={passwordValue}
             onChange={(event) => {
-              setPasswordValue(event.target.value);
+              setPasswordValue(event.target.value.trim());
             }}
           ></TextField>
           {failedLogin && (
