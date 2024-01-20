@@ -63,7 +63,6 @@ const Login: React.FC = () => {
             Please log in
           </Typography>
           <TextField
-            required
             sx={{ marginBottom: "20px" }}
             label="Email adress"
             fullWidth
@@ -79,7 +78,6 @@ const Login: React.FC = () => {
             fullWidth
             value={passwordValue}
             onChange={(event) => setPasswordValue(event.target.value.trim())}
-            required
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
