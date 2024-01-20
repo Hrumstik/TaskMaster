@@ -1,7 +1,7 @@
 # Task Management Web Application
 
 ## Introduction
-The application enables registered and authenticated users to create personal tasks, organize them according to various criteria, and manage these tasks through options like deletion and renaming. Users can also assign tasks to other registered members. This project was created in December 2022, at the beginning of my career path. The project was created using Create React App, which is now considered outdated.
+The application enables registered and authenticated users to create personal tasks, organize them according to various criteria, and manage these tasks through options like deletion and renaming. Users can also assign tasks to other registered members. This project was created at the beginning of my career path. The project was created using Create React App, which is now considered outdated.
 
 ## Technology Stack
 - **React**: A JavaScript library for building user interfaces.
