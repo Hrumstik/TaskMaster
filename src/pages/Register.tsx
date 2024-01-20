@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 
-import { Box, Button, TextField, Typography } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Col, Row } from "antd";
 import axios, { AxiosRequestConfig } from "axios";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -25,6 +34,7 @@ const Register: React.FC = () => {
   const [loginValue, setLoginValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [failedRegister, setFailedRegister] = useState<string | boolean>(false);
   const [loginError, setLoginError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -107,6 +117,7 @@ const Register: React.FC = () => {
       .catch((error) => setFailedRegister(error));
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
   return (
     <MainContainer>
       <Row>
@@ -123,6 +134,7 @@ const Register: React.FC = () => {
             Registration
           </Typography>
           <TextField
+            required
             error={Boolean(loginError)}
             helperText={loginError}
             sx={{ marginBottom: "20px" }}
@@ -132,8 +144,9 @@ const Register: React.FC = () => {
             onChange={(event) => {
               setLoginValue(event.target.value);
             }}
-          ></TextField>
+          />
           <TextField
+            required
             error={Boolean(emailError)}
             fullWidth
             helperText={emailError}
@@ -143,19 +156,30 @@ const Register: React.FC = () => {
             onChange={(event) => {
               setEmailValue(event.target.value);
             }}
-          ></TextField>
+          />
           <TextField
-            error={Boolean(passwordError)}
-            helperText={passwordError}
-            fullWidth
             sx={{ marginBottom: "20px" }}
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
+            helperText={passwordError}
+            fullWidth
             value={passwordValue}
-            onChange={(event) => {
-              setPasswordValue(event.target.value);
+            onChange={(event) => setPasswordValue(event.target.value.trim())}
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
-          ></TextField>
+          />
           {failedRegister && (
             <Typography
               variant="h2"

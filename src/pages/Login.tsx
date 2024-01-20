@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 
-import { Button, TextField, Typography } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Col, Row } from "antd";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
@@ -11,10 +19,12 @@ import { setUser } from "../components/authentication/usersSlice";
 import styles from "./styles/Login.module.css";
 
 const Login: React.FC = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [failedLogin, setFailedLogin] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [failedLogin, setFailedLogin] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleLogin = () => {
     const auth = getAuth();
@@ -53,6 +63,7 @@ const Login: React.FC = () => {
             Please log in
           </Typography>
           <TextField
+            required
             sx={{ marginBottom: "20px" }}
             label="Email adress"
             fullWidth
@@ -64,13 +75,25 @@ const Login: React.FC = () => {
           <TextField
             sx={{ marginBottom: "20px" }}
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             value={passwordValue}
-            onChange={(event) => {
-              setPasswordValue(event.target.value.trim());
+            onChange={(event) => setPasswordValue(event.target.value.trim())}
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
-          ></TextField>
+          />
           {failedLogin && (
             <Typography
               variant="h2"
