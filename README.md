@@ -17,5 +17,11 @@ The application enables registered and authenticated users to create personal ta
    - Clone the repository: `git clone https://github.com/Hrumstik/TaskMaster.git`.
    - Navigate to the project directory and install dependencies: `npm install`.
    - Start the application: `npm start`.
+
+
+
+## Deployment
+The project has been deployed using Vercel and is accessible via the following link - https://task-master-six-gamma.vercel.app/login.
+From time to time, I revisit this project and improve the code that I wrote during my React learning journey.
   
 
